@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComplianceTwin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1a2744;--green:#15803d;--teal:#0d9488;
+  --amber:#b45309;--red:#dc2626;
+  --ai-bg:#f0faf6;--ai-bdr:#b6e4cb;
+  --bg:#fff;--bg2:#f7f6f3;--bg3:#f1f0ec;
+  --txt:#111827;--txt2:#6b7280;--txt3:#9ca3af;
+  --bdr:#e5e7eb;--bdr2:#d1d5db;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  height:100vh;display:flex;overflow:hidden;font-size:13px;color:var(--txt);
+  background:var(--bg);}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+#sb{width:220px;min-width:220px;background:var(--bg2);
+  border-right:.5px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;}
+.sb-logo{padding:12px;border-bottom:.5px solid var(--bdr);
+  display:flex;align-items:center;gap:8px;}
+.sb-logo-icon{width:24px;height:24px;background:var(--navy);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:9px;font-weight:600;flex-shrink:0;}
+.sb-logo-txt{font-size:13px;font-weight:600;color:var(--txt);}
+.sb-lbl{font-size:9px;font-weight:600;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.08em;padding:10px 12px 4px;}
+.ctx-card{margin:0 8px 6px;padding:8px 10px;border:1.5px solid var(--green);
+  border-radius:8px;background:var(--bg);cursor:pointer;}
+.ctx-co{font-size:12px;font-weight:600;}
+.ctx-mkt{font-size:10px;color:var(--txt2);margin-top:1px;}
+.ctx-badge{display:inline-block;margin-top:4px;padding:2px 7px;
+  border-radius:20px;background:var(--bg2);border:.5px solid var(--bdr2);
+  font-size:9px;color:var(--txt2);}
+.sess-list{flex:1;overflow-y:auto;padding:2px 6px;}
+.sess-item{padding:6px 8px;border-radius:7px;cursor:pointer;margin-bottom:1px;}
+.sess-item:hover,.sess-item.active{background:var(--bg3);}
+.sess-title{font-size:11.5px;font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sess-sub{font-size:10px;color:var(--txt3);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.new-btn{margin:8px;padding:7px;border:.5px solid var(--bdr2);
+  border-radius:7px;background:transparent;font-size:11.5px;
+  color:var(--txt2);cursor:pointer;font-family:inherit;text-align:center;}
+.new-btn:hover{background:var(--bg);}
+.user-foot{padding:8px 12px;border-top:.5px solid var(--bdr);
+  display:flex;align-items:center;gap:8px;}
+.user-av{width:26px;height:26px;background:var(--navy);border-radius:50%;
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:600;flex-shrink:0;}
+.user-name{font-size:11.5px;font-weight:500;}
+.user-role-txt{font-size:9.5px;color:var(--txt3);}
+
+/* ── MAIN ────────────────────────────────────────────────── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+#mhdr{padding:10px 18px;border-bottom:.5px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.mhdr-title{font-size:13px;font-weight:600;}
+.mhdr-meta{font-size:10px;color:var(--txt3);margin-top:1px;}
+.hdr-btns{display:flex;gap:6px;}
+.hdr-btn{padding:4px 10px;border:.5px solid var(--bdr2);border-radius:6px;
+  background:var(--bg);font-size:10px;color:var(--txt2);cursor:pointer;font-family:inherit;}
+.hdr-btn:hover{background:var(--bg2);}
+
+/* ── MESSAGES ────────────────────────────────────────────── */
+#msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+#msgs::-webkit-scrollbar{width:3px;}
+#msgs::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px;}
+
+.msg-user{display:flex;justify-content:flex-end;}
+.user-bub{max-width:65%;padding:10px 14px;background:var(--navy);color:#fff;
+  border-radius:14px 14px 3px 14px;font-size:13px;line-height:1.5;}
+
+.msg-ai{display:flex;gap:8px;max-width:94%;}
+.ai-icon{width:26px;height:26px;min-width:26px;background:var(--navy);
+  border-radius:7px;color:#fff;font-size:9px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;flex-shrink:0;}
+.ai-parts{display:flex;flex-direction:column;gap:7px;flex:1;min-width:0;}
+
+/* verdict bubble */
+.vbub{background:var(--ai-bg);border:1px solid var(--ai-bdr);
+  border-radius:3px 12px 12px 12px;padding:11px 14px;font-size:13px;line-height:1.6;}
+.v-yes{color:var(--green);}
+.v-no{color:var(--red);}
+.v-unk{color:var(--amber);}
+.v-info{color:var(--navy);}
+.expand-row{margin-top:8px;display:flex;align-items:center;gap:8px;}
+.expand-btn{padding:3px 8px;border:.5px solid var(--ai-bdr);border-radius:20px;
+  background:var(--bg);font-size:10px;color:var(--txt2);cursor:pointer;font-family:inherit;}
+.expand-btn:hover{background:var(--ai-bg);}
+.expand-meta{font-size:9.5px;color:var(--txt3);}
+.full-a{display:none;margin-top:8px;padding-top:8px;
+  border-top:.5px solid var(--ai-bdr);font-size:12.5px;line-height:1.65;}
+.full-a.open{display:block;}
+
+/* general bubble */
+.gen-bub{background:var(--bg);border:.5px solid var(--bdr);
+  border-radius:3px 12px 12px 12px;padding:11px 14px;font-size:13px;line-height:1.65;}
+
+/* legal card */
+.lc{border:.5px solid var(--bdr);border-radius:10px;overflow:hidden;background:var(--bg);}
+.lc-head{padding:6px 11px;border-bottom:.5px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;}
+.lc-lbl{font-size:8px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.09em;}
+.lc-lex{padding:1px 7px;border:.5px solid var(--teal);border-radius:20px;
+  font-size:9px;color:var(--teal);text-decoration:none;}
+.lc-lex:hover{background:#f0fdf4;}
+.lc-body{padding:7px 11px;}
+.lc-arts{font-size:12px;font-weight:600;}
+.lc-desc{font-size:10.5px;color:var(--txt2);margin-top:2px;line-height:1.4;}
+
+/* reasoning + playbook */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.rcard{border:.5px solid var(--bdr);border-radius:10px;padding:8px 10px;background:var(--bg);}
+.rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.rc-lbl{font-size:8px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;}
+.rc-pass{font-size:10px;color:var(--green);font-weight:600;}
+.pills{display:flex;flex-wrap:wrap;gap:3px;}
+.pill{padding:2px 7px;border-radius:20px;font-size:10px;display:inline-flex;align-items:center;gap:2px;}
+.pill.ok{background:#f0fdf4;border:.5px solid #bbf7d0;color:var(--green);}
+.pill.fail{background:#fef2f2;border:.5px solid #fecaca;color:var(--red);}
+.pill.unk{background:#fffbeb;border:.5px solid #fde68a;color:var(--amber);}
+.pill.excl{font-size:9.5px;color:var(--txt3);background:none;border:none;padding-left:1px;}
+.pb-card{border:.5px solid #fde68a;background:#fffbeb;border-radius:10px;padding:8px 10px;}
+.pb-lbl{font-size:8px;font-weight:600;color:#92400e;text-transform:uppercase;letter-spacing:.08em;}
+.pb-view{font-size:9.5px;color:var(--amber);cursor:pointer;}
+.pb-files{font-size:10.5px;color:#78350f;display:flex;flex-direction:column;gap:2px;margin-top:5px;}
+
+/* follow-up card */
+.fq-card{border:.5px solid #fde68a;background:#fffbeb;border-radius:10px;padding:8px 11px;}
+.fq-lbl{font-size:8px;font-weight:600;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.fq-q{font-size:11.5px;color:#78350f;margin-bottom:2px;}
+
+/* sources */
+.src-toggle{padding:3px 8px;border:.5px solid var(--bdr);border-radius:6px;
+  background:var(--bg2);font-size:10px;color:var(--txt2);cursor:pointer;font-family:inherit;margin-top:2px;}
+.src-list{display:none;margin-top:6px;padding:8px 10px;
+  border:.5px solid var(--bdr);border-radius:8px;background:var(--bg);}
+.src-list.open{display:block;}
+.src-item{padding:5px 0;border-bottom:.5px solid var(--bdr);font-size:10.5px;}
+.src-item:last-child{border-bottom:none;}
+.src-title{font-weight:500;color:var(--txt);}
+.src-score{color:var(--txt3);margin-left:6px;}
+.src-text{color:var(--txt2);margin-top:2px;line-height:1.4;font-size:10px;}
+
+/* loading */
+.ldots{display:flex;gap:3px;align-items:center;}
+.ld{width:5px;height:5px;background:var(--txt3);border-radius:50%;animation:b 1.1s infinite;}
+.ld:nth-child(2){animation-delay:.18s;}.ld:nth-child(3){animation-delay:.36s;}
+@keyframes b{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
+.ld-status{font-size:10.5px;color:var(--txt3);font-style:italic;margin-left:8px;}
+
+/* actions bar */
+#acts{padding:7px 18px;border-top:.5px solid var(--bdr);display:none;flex-wrap:wrap;gap:6px;flex-shrink:0;}
+.act{padding:6px 13px;border-radius:20px;font-size:11.5px;cursor:pointer;font-family:inherit;border:none;}
+.act.pri{background:var(--navy);color:#fff;}
+.act.sec{background:var(--bg);color:var(--txt);border:.5px solid var(--bdr2);}
+.act:hover{opacity:.8;}
+
+/* input */
+#inbar{padding:8px 18px 12px;border-top:.5px solid var(--bdr);
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
+#cin{flex:1;padding:9px 12px;border:.5px solid var(--bdr2);border-radius:8px;
+  font-size:13px;color:var(--txt);outline:none;resize:none;font-family:inherit;
+  line-height:1.4;max-height:100px;overflow-y:auto;background:var(--bg);}
+#cin::placeholder{color:var(--txt3);}
+#cin:focus{border-color:#9ca3af;}
+#sbtn{padding:9px 16px;background:var(--navy);color:#fff;border:none;
+  border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;flex-shrink:0;}
+#sbtn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* welcome */
+#welcome{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:40px 24px;}
+.wt{font-size:16px;font-weight:600;color:var(--txt);margin-bottom:6px;}
+.ws{font-size:13px;max-width:360px;line-height:1.6;color:var(--txt2);}
+.hints{display:flex;flex-direction:column;gap:6px;margin-top:18px;max-width:440px;}
+.hint{padding:9px 13px;border:.5px solid var(--bdr);border-radius:8px;
+  font-size:12px;color:var(--txt2);text-align:left;cursor:pointer;
+  background:var(--bg);font-family:inherit;}
+.hint:hover{background:var(--bg2);border-color:var(--bdr2);}
+.hint-l{font-size:8.5px;font-weight:600;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-icon">[·]</div>
+    <span class="sb-logo-txt">ComplianceTwin</span>
+  </div>
+  <div class="sb-lbl">Active Context</div>
+  <div class="ctx-card" onclick="editCtx()">
+    <div class="ctx-co" id="ctx-co">My Company</div>
+    <div class="ctx-mkt" id="ctx-mkt">EU + US markets</div>
+    <div class="ctx-badge" id="ctx-role">Compliance Manager</div>
+  </div>
+  <div class="sb-lbl">Recent Sessions</div>
+  <div class="sess-list" id="sess-list"></div>
+  <button class="new-btn" onclick="newSess()">+ New session</button>
+  <div class="user-foot">
+    <div class="user-av" id="user-av">?</div>
+    <div>
+      <div class="user-name" id="user-name">User</div>
+      <div class="user-role-txt">Compliance Manager</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+  <div id="mhdr">
+    <div>
+      <div class="mhdr-title" id="mhdr-t">New session</div>
+      <div class="mhdr-meta" id="mhdr-m">Ask a compliance question to begin</div>
+    </div>
+    <div class="hdr-btns">
+      <button class="hdr-btn" onclick="alert('Audit log coming soon')">Audit log ↗</button>
+      <button class="hdr-btn" onclick="alert('Export coming soon')">Export PDF</button>
+    </div>
+  </div>
+
+  <div id="msgs">
+    <div id="welcome">
+      <div style="font-size:24px;margin-bottom:12px;opacity:.4">⚖</div>
+      <div class="wt">ComplianceTwin</div>
+      <div class="ws">EU regulatory scope analysis — symbolic reasoning + AI.<br>Ask about your product or paste a product URL.</div>
+      <div class="hints">
+        <button class="hint" onclick="setQ('Does our AI-powered HR screening tool require a conformity assessment under the EU AI Act?')">
+          <div class="hint-l">Try this</div>
+          Does our AI HR screening tool need EU AI Act conformity assessment?
+        </button>
+        <button class="hint" onclick="setQ('We are a US company selling AI diagnostic software to hospitals in Germany. Does GDPR and MDR apply?')">
+          <div class="hint-l">Try this</div>
+          US company selling AI diagnostic software to German hospitals — GDPR & MDR?
+        </button>
+        <button class="hint" onclick="setQ('What is the EU AI Act and when does it apply?')">
+          <div class="hint-l">General</div>
+          What is the EU AI Act and when does it apply?
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="acts"></div>
+
+  <div id="inbar">
+    <textarea id="cin" placeholder="Ask a compliance question or paste a URL..." rows="1"
+      onkeydown="onKey(event)" oninput="autoH(this)"></textarea>
+    <button id="sbtn" onclick="send()">Send</button>
+  </div>
+</main>
+
+<script>
+// ═══════════════════════════════════════════
+// CONFIG — your HF backend URL
+// ═══════════════════════════════════════════
+const BACKEND = "https://sannawt-compliancetwin.hf.space";
+
+// ═══════════════════════════════════════════
+// EURLEX LINKS
+// ═══════════════════════════════════════════
+const EURLEX = {
+  GDPR:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",
+  EU_AI_ACT: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",
+  MDR:       "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745",
+};
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let SESSION_ID = crypto.randomUUID();
+let msgs       = [];
+let sessions   = [];
+let activeSess = "new";
+let msgCount   = 0;
+let loading    = false;
+let midN       = 0;
+function nid(){ return "m"+(++midN); }
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmt(s){
+  if(!s) return "";
+  return esc(s)
+    .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\n/g,"<br>");
+}
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function autoH(el){ el.style.height="auto"; el.style.height=Math.min(el.scrollHeight,100)+"px"; }
+function onKey(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send(); } }
+function setQ(q){ document.getElementById("cin").value=q; document.getElementById("cin").focus(); }
+
+// ═══════════════════════════════════════════
+// BACKEND CALL
+// ═══════════════════════════════════════════
+async function callBackend(question){
+  const res = await fetch(`${BACKEND}/chat`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ session_id: SESSION_ID, question })
+  });
+  if(!res.ok) throw new Error(`Backend error ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+async function analyzeUrl(url){
+  const res = await fetch(`${BACKEND}/analyze_url`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ session_id: SESSION_ID, url })
+  });
+  if(!res.ok) throw new Error(`URL analysis failed ${res.status}`);
+  return res.json();
+}
+
+// ═══════════════════════════════════════════
+// URL DETECTION
+// ═══════════════════════════════════════════
+function extractUrl(text){
+  const m = text.match(/https?:\/\/[^\s]+/);
+  return m ? m[0] : null;
+}
+
+// ═══════════════════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════════════════
+function pillFor(r, label){
+  if(!r || r==="not_reached") return "";
+  const cls = r==="pass"?"ok": r==="fail"?"fail":"unk";
+  const icon = r==="pass"?"✓": r==="fail"?"✗":"?";
+  return `<span class="pill ${cls}">${esc(cap(label))} ${icon}</span>`;
+}
+
+function renderSources(sources){
+  if(!sources||!sources.length) return "";
+  const id = "src-"+nid();
+  const items = sources.map((s,i)=>`
+    <div class="src-item">
+      <span class="src-title">Source ${i+1}: ${esc(s.doc_title||"Document")}</span>
+      <span class="src-score">${((s.score||0)*100).toFixed(1)}%</span>
+      <div class="src-text">${esc((s.text||"").slice(0,180))}${s.text&&s.text.length>180?"...":""}</div>
+    </div>`).join("");
+  return `
+    <button class="src-toggle" onclick="toggleSrc('${id}')">
+      📚 Transparency log (${sources.length} sources)
+    </button>
+    <div id="${id}" class="src-list">${items}</div>`;
+}
+
+function toggleSrc(id){
+  const el = document.getElementById(id);
+  el.classList.toggle("open");
+}
+
+function toggleFA(id){
+  const el  = document.getElementById("fa-"+id);
+  const btn = document.getElementById("fb-"+id);
+  const open = el.classList.toggle("open");
+  btn.textContent = open ? "Collapse ↑" : "Read full analysis ↓";
+}
+
+// ═══════════════════════════════════════════
+// RENDER COMPLIANCE RESPONSE
+// ═══════════════════════════════════════════
+function renderComplianceResponse(data, msgId){
+  // Fallback for old-style {"answer": ...} response
+  if(data.answer && !data.narrative){
+    return `<div class="gen-bub">${fmt(data.answer)}</div>
+            ${renderSources(data.sources)}`;
+  }
+
+  const n   = data.narrative || {};
+  const sym = data.symbolic  || {};
+  const sources = data.sources || [];
+
+  const vtype = n.verdict_type || "cannot_determine";
+  const vline = n.verdict_line || "";
+  const full  = n.full_analysis || "";
+  const cards = n.legal_basis_cards || [];
+  const actions = n.suggested_actions || [];
+  const followUps = (sym.all_follow_up_questions || []).slice(0,3);
+
+  // Verdict line colour
+  const vcls = vtype==="applies"?"v-yes": vtype==="does_not_apply"?"v-no":
+               vtype==="general"?"v-info":"v-unk";
+
+  // For general answers — simpler layout
+  if(vtype==="general"){
+    return `
+      <div class="vbub">
+        <div class="${vcls}" style="font-size:13.5px;line-height:1.55;">${fmt(vline)}</div>
+        ${full?`<div style="margin-top:8px;font-size:12.5px;line-height:1.65;color:var(--txt);">${fmt(full)}</div>`:""}
+      </div>
+      ${renderSources(sources)}`;
+  }
+
+  // Reasoning pills
+  const applyIds  = sym.instruments_that_apply || [];
+  const allResults= sym.applicability_results || {};
+  const targetId  = applyIds[0] || Object.keys(allResults)[0] || "";
+  const scope     = targetId ? (allResults[targetId]?.scope||{}) : {};
+  const pills     = ["temporal","territorial","material"].map(d=>pillFor(scope[d],d)).join("");
+  const exclOk    = scope.excl==="pass";
+  const passCount = ["temporal","territorial","material"].filter(d=>scope[d]==="pass").length;
+  const total     = ["temporal","territorial","material"].filter(d=>scope[d]&&scope[d]!=="not_reached").length;
+
+  // Legal basis cards HTML
+  const cardsHtml = cards.map(c=>`
+    <div class="lc">
+      <div class="lc-head">
+        <span class="lc-lbl">Legal basis · ${esc(c.instrument_short||c.instrument_id||"")}</span>
+        <a class="lc-lex" href="${esc(EURLEX[c.instrument_id]||'https://eur-lex.europa.eu')}" target="_blank">
+          EUR-Lex ${esc(c.eurlex_article||"")} ↗
+        </a>
+      </div>
+      <div class="lc-body">
+        <div class="lc-arts">${esc(c.articles||"")}</div>
+        <div class="lc-desc">${esc(c.description||"")}</div>
+      </div>
+    </div>`).join("");
+
+  // Follow-up questions — only when cannot_determine, max 3
+  const fqHtml = (vtype==="cannot_determine" && followUps.length) ? `
+    <div class="fq-card">
+      <div class="fq-lbl">⚠ To complete this analysis, please clarify:</div>
+      ${followUps.map(q=>`<div class="fq-q">› ${esc(q)}</div>`).join("")}
+    </div>` : "";
+
+  // Special category warning
+  const specHtml = sym.special_category_flag ? `
+    <div class="fq-card" style="border-color:#fca5a5;background:#fef2f2;">
+      <div class="fq-lbl" style="color:#7f1d1d;">⚠ GDPR Art. 9 — Special category data</div>
+      <div class="fq-q" style="color:#991b1b;">
+        Processing prohibited unless Art. 9(2) exception applies. DPIA required under Art. 35.
+      </div>
+    </div>` : "";
+
+  return `
+    <div class="vbub">
+      <div class="${vcls}" style="font-size:13.5px;line-height:1.55;">${fmt(vline)}</div>
+      ${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>`:""}
+      <div class="expand-row">
+        ${full?`<button class="expand-btn" onclick="toggleFA('${msgId}')"><span id="fb-${msgId}">Read full analysis ↓</span></button>`:""}
+        <span class="expand-meta">
+          ${applyIds.length} regulation${applyIds.length!==1?"s":""} analysed
+          · ${passCount}/${total} scope checks passed
+        </span>
+      </div>
+    </div>
+    ${cardsHtml}
+    <div class="two-col">
+      <div class="rcard">
+        <div class="rc-head">
+          <span class="rc-lbl">Reasoning path</span>
+          <span class="rc-pass">${passCount}/${total} passed</span>
+        </div>
+        <div class="pills">
+          ${pills}
+          <span class="pill excl">Exclusions: ${exclOk?"None":"Triggered"}</span>
+        </div>
+      </div>
+      <div class="pb-card">
+        <div class="rc-head">
+          <span class="pb-lbl">Company playbook</span>
+          <span class="pb-view">View ↗</span>
+        </div>
+        <div class="pb-files">
+          <div>📄 Company_Profile.pdf</div>
+          <div>📄 EU_Market_Strategy.docx</div>
+        </div>
+      </div>
+    </div>
+    ${fqHtml}
+    ${specHtml}
+    ${renderSources(sources)}`;
+}
+
+// ═══════════════════════════════════════════
+// RENDER ALL MESSAGES
+// ═══════════════════════════════════════════
+function renderMsgs(){
+  const el = document.getElementById("msgs");
+
+  if(!msgs.length){
+    el.innerHTML = `<div id="welcome">
+      <div style="font-size:24px;margin-bottom:12px;opacity:.4">⚖</div>
+      <div class="wt">ComplianceTwin</div>
+      <div class="ws">EU regulatory scope analysis — symbolic reasoning + AI.<br>Ask about your product or paste a product URL.</div>
+      <div class="hints">
+        <button class="hint" onclick="setQ('Does our AI-powered HR screening tool require a conformity assessment under the EU AI Act?')">
+          <div class="hint-l">Try this</div>Does our AI HR screening tool need EU AI Act conformity assessment?
+        </button>
+        <button class="hint" onclick="setQ('We are a US company selling AI diagnostic software to hospitals in Germany. Does GDPR and MDR apply?')">
+          <div class="hint-l">Try this</div>US company, AI diagnostic software, German hospitals — GDPR & MDR?
+        </button>
+        <button class="hint" onclick="setQ('What is the EU AI Act and when does it apply?')">
+          <div class="hint-l">General</div>What is the EU AI Act and when does it apply?
+        </button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = msgs.map(m => {
+    if(m.role==="user") return `
+      <div class="msg-user">
+        <div class="user-bub">${esc(m.content)}</div>
+      </div>`;
+
+    if(m.type==="loading") return `
+      <div class="msg-ai">
+        <div class="ai-icon">[·]</div>
+        <div class="ai-parts">
+          <div class="vbub" style="padding:10px 14px;">
+            <div class="ldots">
+              <div class="ld"></div><div class="ld"></div><div class="ld"></div>
+              <span class="ld-status">${esc(m.status||"Analysing...")}</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    return `
+      <div class="msg-ai">
+        <div class="ai-icon">[·]</div>
+        <div class="ai-parts">${renderComplianceResponse(m.data, m.id)}</div>
+      </div>`;
+  }).join("");
+
+  el.scrollTop = el.scrollHeight;
+}
+
+function renderActs(actions){
+  const bar = document.getElementById("acts");
+  if(!actions||!actions.length){ bar.style.display="none"; return; }
+  bar.style.display = "flex";
+  bar.innerHTML = actions.map((a,i)=>
+    `<button class="act ${i===0?"pri":"sec"}" onclick="setQ('${esc(a.replace(/→\s*/,"").replace(/\s*↗/,""))}')">${esc(a)}</button>`
+  ).join("");
+}
+
+function updateHdr(title){
+  if(title) document.getElementById("mhdr-t").textContent = title;
+  document.getElementById("mhdr-m").textContent =
+    `Today · ${msgCount} message${msgCount!==1?"s":""} · session active`;
+}
+
+// ═══════════════════════════════════════════
+// SESSIONS
+// ═══════════════════════════════════════════
+function renderSessions(){
+  document.getElementById("sess-list").innerHTML = sessions.map(s=>`
+    <div class="sess-item${s.id===activeSess?" active":""}" onclick="switchSess('${s.id}')">
+      <div class="sess-title">${esc(s.title)}</div>
+      <div class="sess-sub">${esc(s.sub)}</div>
+    </div>`).join("");
+}
+
+function addSession(title, sub){
+  if(activeSess==="new"){
+    const id = "s"+Date.now();
+    sessions.unshift({id, title, sub});
+    activeSess = id;
+  }
+  renderSessions();
+}
+
+function switchSess(id){
+  activeSess = id;
+  renderSessions();
+}
+
+function newSess(){
+  activeSess = "new";
+  msgs = [];
+  msgCount = 0;
+  SESSION_ID = crypto.randomUUID();
+  document.getElementById("mhdr-t").textContent = "New session";
+  document.getElementById("mhdr-m").textContent = "Ask a compliance question to begin";
+  document.getElementById("acts").style.display = "none";
+  renderSessions();
+  renderMsgs();
+}
+
+// ═══════════════════════════════════════════
+// SEND
+// ═══════════════════════════════════════════
+async function send(){
+  const inp  = document.getElementById("cin");
+  const text = inp.value.trim();
+  if(!text || loading) return;
+  inp.value = ""; inp.style.height = "auto";
+  loading = true;
+  document.getElementById("sbtn").disabled = true;
+  document.getElementById("welcome")?.remove();
+
+  msgs.push({role:"user", content:text, id:nid()});
+  msgCount++;
+  renderMsgs();
+
+  // Check for URL in message and analyze it first
+  const url = extractUrl(text);
+  if(url){
+    const lid = nid();
+    msgs.push({type:"loading", id:lid, status:`Fetching product profile from URL...`});
+    renderMsgs();
+    try{
+      const urlData = await analyzeUrl(url);
+      msgs = msgs.filter(m=>m.id!==lid);
+      // Show profile confirmation
+      msgs.push({
+        role:"assistant",
+        type:"response",
+        id:nid(),
+        data:{
+          narrative:{
+            verdict_type:"general",
+            verdict_line:`Product profile loaded: ${urlData.profile||"Profile generated."}`,
+            full_analysis:"",
+            legal_basis_cards:[],
+            suggested_actions:[]
+          },
+          symbolic:{},
+          sources:[]
+        }
+      });
+      renderMsgs();
+    } catch(e){
+      msgs = msgs.filter(m=>m.id!==lid);
+    }
+  }
+
+  // Now send the question
+  const lid = nid();
+  msgs.push({type:"loading", id:lid, status:"Running symbolic engine..."});
+  renderMsgs();
+
+  try{
+    const data = await callBackend(text);
+    msgs = msgs.filter(m=>m.id!==lid);
+
+    const mid = nid();
+    msgs.push({role:"assistant", type:"response", id:mid, data});
+
+    const n = data.narrative || {};
+    const sessionTitle = n.session_title || text.slice(0,35);
+    addSession(sessionTitle, text.slice(0,50));
+    updateHdr(sessionTitle);
+    renderMsgs();
+    renderActs(n.suggested_actions || []);
+
+  } catch(err){
+    msgs = msgs.filter(m=>m.id!==lid);
+    const mid = nid();
+    msgs.push({
+      role:"assistant", type:"response", id:mid,
+      data:{
+        narrative:{
+          verdict_type:"cannot_determine",
+          verdict_line:`⚠ Could not reach backend: ${err.message}`,
+          full_analysis:`Make sure the ComplianceTwin backend is running at ${BACKEND}`,
+          legal_basis_cards:[],
+          suggested_actions:[]
+        },
+        symbolic:{}, sources:[]
+      }
+    });
+    renderMsgs();
+  }
+
+  loading = false;
+  document.getElementById("sbtn").disabled = false;
+}
+
+// ═══════════════════════════════════════════
+// CONTEXT EDITOR
+// ═══════════════════════════════════════════
+function editCtx(){
+  const co = prompt("Company name:", document.getElementById("ctx-co").textContent);
+  if(co){ document.getElementById("ctx-co").textContent = co; }
+  const mkt = prompt("Markets:", document.getElementById("ctx-mkt").textContent);
+  if(mkt){ document.getElementById("ctx-mkt").textContent = mkt; }
+  const name = prompt("Your name:", document.getElementById("user-name").textContent);
+  if(name){
+    document.getElementById("user-name").textContent = name;
+    document.getElementById("user-av").textContent = name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+  }
+}
+
+// Init
+renderSessions();
+renderMsgs();
+</script>
+</body>
+</html>
