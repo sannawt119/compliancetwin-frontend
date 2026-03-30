@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,7 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .expand-btn{padding:3px 8px;border:.5px solid var(--ai-bdr);border-radius:20px;
   background:var(--bg);font-size:10px;color:var(--txt2);cursor:pointer;font-family:inherit;}
 .expand-btn:hover{background:var(--ai-bg);}
-.expand-meta{font-size:9.5px;color:var(--txt3);}
 .full-a{display:none;margin-top:8px;padding-top:8px;
   border-top:.5px solid var(--ai-bdr);font-size:12.5px;line-height:1.65;}
 .full-a.open{display:block;}
@@ -113,22 +113,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .lc-arts{font-size:12px;font-weight:600;}
 .lc-desc{font-size:10.5px;color:var(--txt2);margin-top:2px;line-height:1.4;}
 
-/* reasoning + playbook */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.rcard{border:.5px solid var(--bdr);border-radius:10px;padding:8px 10px;background:var(--bg);}
-.rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+/* ── REASONING CARD ─────────────────────────────────────── */
+.rcard{border:.5px solid var(--bdr);border-radius:10px;background:var(--bg);overflow:hidden;}
+.rc-head{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;border-bottom:.5px solid var(--bdr);}
 .rc-lbl{font-size:8px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;}
 .rc-pass{font-size:10px;color:var(--green);font-weight:600;}
+.rc-body{padding:8px 10px;display:flex;flex-direction:column;gap:6px;}
+
+/* instrument row inside reasoning card */
+.inst-row{display:flex;flex-direction:column;gap:4px;}
+.inst-name{font-size:9px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;}
 .pills{display:flex;flex-wrap:wrap;gap:3px;}
 .pill{padding:2px 7px;border-radius:20px;font-size:10px;display:inline-flex;align-items:center;gap:2px;}
 .pill.ok{background:#f0fdf4;border:.5px solid #bbf7d0;color:var(--green);}
 .pill.fail{background:#fef2f2;border:.5px solid #fecaca;color:var(--red);}
 .pill.unk{background:#fffbeb;border:.5px solid #fde68a;color:var(--amber);}
-.pill.excl{font-size:9.5px;color:var(--txt3);background:none;border:none;padding-left:1px;}
+.pill.future{background:#eff6ff;border:.5px solid #bfdbfe;color:#1d4ed8;}
+.pill.excl{font-size:9.5px;color:var(--txt3);background:none;border:.5px solid var(--bdr);padding:2px 7px;}
+
+/* trace panel */
+.trace-toggle{font-size:9.5px;color:var(--teal);cursor:pointer;
+  padding:2px 0;display:inline-block;}
+.trace-toggle:hover{text-decoration:underline;}
+.trace-panel{display:none;margin-top:4px;padding:8px 10px;
+  background:var(--bg2);border-radius:7px;font-size:10.5px;line-height:1.6;}
+.trace-panel.open{display:block;}
+.trace-dim{font-size:9px;font-weight:600;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.07em;margin-top:6px;margin-bottom:2px;}
+.trace-dim:first-child{margin-top:0;}
+.trace-entry{display:flex;gap:6px;padding:2px 0;border-bottom:.5px solid var(--bdr);line-height:1.5;}
+.trace-entry:last-child{border-bottom:none;}
+.trace-sym{flex-shrink:0;font-weight:600;width:14px;}
+.trace-sym.pass{color:var(--green);}
+.trace-sym.fail{color:var(--red);}
+.trace-sym.unk{color:var(--amber);}
+.trace-sym.future{color:#1d4ed8;}
+.trace-ev{color:var(--txt);flex:1;}
+.trace-note{font-size:10px;color:var(--teal);margin-top:1px;}
+.trace-cite{font-size:9.5px;color:var(--txt3);margin-top:1px;}
+.governing-tag{display:inline-block;margin-left:4px;padding:0 5px;
+  background:#dbeafe;border-radius:10px;font-size:8.5px;color:#1d4ed8;font-weight:600;}
+.additional-tag{display:inline-block;margin-left:4px;padding:0 5px;
+  background:#f1f5f9;border-radius:10px;font-size:8.5px;color:var(--txt3);font-weight:600;}
+
+/* risk category badge */
+.risk-badge{display:inline-block;padding:1px 6px;border-radius:4px;
+  font-size:9px;font-weight:600;background:#eff6ff;color:#1d4ed8;
+  border:.5px solid #bfdbfe;margin-left:4px;}
+
+/* company playbook */
 .pb-card{border:.5px solid #fde68a;background:#fffbeb;border-radius:10px;padding:8px 10px;}
 .pb-lbl{font-size:8px;font-weight:600;color:#92400e;text-transform:uppercase;letter-spacing:.08em;}
 .pb-view{font-size:9.5px;color:var(--amber);cursor:pointer;}
 .pb-files{font-size:10.5px;color:#78350f;display:flex;flex-direction:column;gap:2px;margin-top:5px;}
+.pb-ctx{font-size:10px;color:#92400e;margin-top:4px;line-height:1.4;}
 
 /* follow-up card */
 .fq-card{border:.5px solid #fde68a;background:#fffbeb;border-radius:10px;padding:8px 11px;}
@@ -259,17 +298,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 <script>
 // ═══════════════════════════════════════════
-// CONFIG — your HF backend URL
+// CONFIG
 // ═══════════════════════════════════════════
 const BACKEND = "https://sannawt-compliancetwin.hf.space";
 
-// ═══════════════════════════════════════════
-// EURLEX LINKS
-// ═══════════════════════════════════════════
 const EURLEX = {
   GDPR:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",
   EU_AI_ACT: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",
   MDR:       "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745",
+};
+
+const INST_LABELS = {
+  GDPR:      "General Data Protection Regulation",
+  EU_AI_ACT: "EU Artificial Intelligence Act",
+  MDR:       "Medical Device Regulation",
 };
 
 // ═══════════════════════════════════════════
@@ -300,13 +342,12 @@ function onKey(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send();
 function setQ(q){ document.getElementById("cin").value=q; document.getElementById("cin").focus(); }
 
 // ═══════════════════════════════════════════
-// BACKEND CALL
+// BACKEND
 // ═══════════════════════════════════════════
 async function callBackend(question){
   const res = await fetch(`${BACKEND}/chat`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ session_id: SESSION_ID, question })
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ session_id:SESSION_ID, question })
   });
   if(!res.ok) throw new Error(`Backend error ${res.status}: ${await res.text()}`);
   return res.json();
@@ -314,32 +355,144 @@ async function callBackend(question){
 
 async function analyzeUrl(url){
   const res = await fetch(`${BACKEND}/analyze_url`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ session_id: SESSION_ID, url })
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ session_id:SESSION_ID, url })
   });
   if(!res.ok) throw new Error(`URL analysis failed ${res.status}`);
   return res.json();
 }
 
-// ═══════════════════════════════════════════
-// URL DETECTION
-// ═══════════════════════════════════════════
 function extractUrl(text){
   const m = text.match(/https?:\/\/[^\s]+/);
   return m ? m[0] : null;
 }
 
 // ═══════════════════════════════════════════
-// RENDER HELPERS
+// TRACE RENDERING
 // ═══════════════════════════════════════════
-function pillFor(r, label){
-  if(!r || r==="not_reached") return "";
-  const cls = r==="pass"?"ok": r==="fail"?"fail":"unk";
-  const icon = r==="pass"?"✓": r==="fail"?"✗":"?";
-  return `<span class="pill ${cls}">${esc(cap(label))} ${icon}</span>`;
+
+/*
+ * Build the detailed trace panel HTML for one instrument.
+ * Reads from symbolic.applicability_results[iid].trace
+ * Groups entries by dimension, renders evidence + citations + notes.
+ */
+function renderTracePanel(iid, result, panelId){
+  const trace = result.trace || [];
+  if(!trace.length) return "";
+
+  // Group by dimension, skip overall pass entries
+  const dims = {};
+  for(const entry of trace){
+    const dim = entry.dimension || "other";
+    if(dim === "overall" && entry.result === "pass") continue;
+    if(!dims[dim]) dims[dim] = [];
+    dims[dim].push(entry);
+  }
+
+  const DIM_ORDER = ["exclusion","temporal","territorial","material","overall"];
+  const DIM_LABELS = {
+    exclusion:   "Exclusions",
+    temporal:    "Temporal scope",
+    territorial: "Territorial scope",
+    material:    "Material scope",
+    overall:     "Overall",
+  };
+
+  const SYM = { pass:"✓", fail:"✗", cannot_determine:"?", prohibited:"⛔", not_reached:"–" };
+  const SYM_CLS = { pass:"pass", fail:"fail", cannot_determine:"unk", prohibited:"fail", not_reached:"unk" };
+
+  let html = `<div id="${panelId}" class="trace-panel">`;
+
+  for(const dim of DIM_ORDER){
+    const entries = dims[dim];
+    if(!entries || !entries.length) continue;
+
+    html += `<div class="trace-dim">${DIM_LABELS[dim]||cap(dim)}</div>`;
+
+    for(const entry of entries){
+      const r   = entry.result || "cannot_determine";
+      const sym = SYM[r] || "?";
+      const cls = SYM_CLS[r] || "unk";
+      const ev  = entry.evidence || "";
+      const note= entry.note || "";
+      const cites = (entry.citations || []).slice(0,3).join("; ");
+
+      // Tag governing/additional path labels
+      let evHtml = esc(ev);
+      if(ev.includes("← GOVERNING DATE")){
+        evHtml = esc(ev.replace(" ← GOVERNING DATE",""))
+          + `<span class="governing-tag">governing date</span>`;
+      }
+      if(ev.includes("[GOVERNING PATH]")){
+        evHtml = esc(ev.replace(" [GOVERNING PATH]",""))
+          + `<span class="governing-tag">governing path</span>`;
+      }
+      if(ev.includes("[ADDITIONAL PATH]")){
+        evHtml = esc(ev.replace(" [ADDITIONAL PATH]",""))
+          + `<span class="additional-tag">+ future path</span>`;
+      }
+
+      html += `<div class="trace-entry">
+        <span class="trace-sym ${cls}">${sym}</span>
+        <div>
+          <div class="trace-ev">${evHtml}</div>
+          ${cites ? `<div class="trace-cite">${esc(cites)}</div>` : ""}
+          ${note  ? `<div class="trace-note">→ ${esc(note)}</div>` : ""}
+        </div>
+      </div>`;
+    }
+  }
+
+  html += "</div>";
+  return html;
 }
 
+/*
+ * Build the scope pills row for one instrument.
+ * Reads from scope_display[iid] for correct exclusion_triggered.
+ */
+function renderScopePills(iid, scopeDisplay, result){
+  const sd = (scopeDisplay || {})[iid] || {};
+  const scope = result.scope || {};
+
+  const dims = ["temporal","territorial","material"];
+  let pills = "";
+
+  for(const d of dims){
+    const r = scope[d];
+    if(!r || r === "not_reached") continue;
+    const cls = r==="pass" ? "ok" : r==="fail" ? "fail" : "unk";
+    const icon= r==="pass" ? "✓" : r==="fail" ? "✗" : "?";
+    pills += `<span class="pill ${cls}">${cap(d)} ${icon}</span>`;
+  }
+
+  // Exclusions: read from scope_display.exclusion_triggered
+  // scope_display comes from build_scope_display() in narrative_patch.py
+  // which reads scope.exclusions correctly — not the trace entries
+  const exclTriggered = sd.exclusion_triggered === true;
+  pills += `<span class="pill excl">Exclusions: ${exclTriggered ? "Triggered" : "None"}</span>`;
+
+  // Risk category badge(s)
+  const riskCats = sd.risk_categories || [];
+  if(riskCats.length > 1){
+    const labels = { high_risk_annex_III:"Annex III", high_risk_annex_I_sector_products:"Annex I",
+                     GPAI_model:"GPAI", prohibited:"Prohibited" };
+    for(const cat of riskCats){
+      pills += `<span class="risk-badge">${labels[cat]||cat}</span>`;
+    }
+  } else if(sd.risk_category){
+    const labels = { high_risk_annex_III:"Annex III High-Risk",
+                     high_risk_annex_I_sector_products:"Annex I High-Risk",
+                     GPAI_model:"GPAI", prohibited:"Prohibited" };
+    pills += `<span class="risk-badge">${labels[sd.risk_category]||sd.risk_category}</span>`;
+  }
+
+  return pills;
+}
+
+// ═══════════════════════════════════════════
+// SOURCES
+// ═══════════════════════════════════════════
 function renderSources(sources){
   if(!sources||!sources.length) return "";
   const id = "src-"+nid();
@@ -350,71 +503,88 @@ function renderSources(sources){
       <div class="src-text">${esc((s.text||"").slice(0,180))}${s.text&&s.text.length>180?"...":""}</div>
     </div>`).join("");
   return `
-    <button class="src-toggle" onclick="toggleSrc('${id}')">
+    <button class="src-toggle" onclick="toggleEl('${id}')">
       📚 Transparency log (${sources.length} sources)
     </button>
     <div id="${id}" class="src-list">${items}</div>`;
 }
 
-function toggleSrc(id){
-  const el = document.getElementById(id);
-  el.classList.toggle("open");
+function toggleEl(id){
+  document.getElementById(id)?.classList.toggle("open");
 }
 
 function toggleFA(id){
   const el  = document.getElementById("fa-"+id);
   const btn = document.getElementById("fb-"+id);
+  if(!el) return;
   const open = el.classList.toggle("open");
   btn.textContent = open ? "Collapse ↑" : "Read full analysis ↓";
+}
+
+function toggleTrace(panelId, toggleId){
+  const panel  = document.getElementById(panelId);
+  const toggle = document.getElementById(toggleId);
+  if(!panel) return;
+  const open = panel.classList.toggle("open");
+  toggle.textContent = open ? "Hide reasoning ↑" : "View reasoning →";
 }
 
 // ═══════════════════════════════════════════
 // RENDER COMPLIANCE RESPONSE
 // ═══════════════════════════════════════════
 function renderComplianceResponse(data, msgId){
-  // Fallback for old-style {"answer": ...} response
+
+  // Fallback for plain answer responses
   if(data.answer && !data.narrative){
-    return `<div class="gen-bub">${fmt(data.answer)}</div>
-            ${renderSources(data.sources)}`;
+    return `<div class="gen-bub">${fmt(data.answer)}</div>${renderSources(data.sources)}`;
   }
 
-  const n   = data.narrative || {};
-  const sym = data.symbolic  || {};
-  const sources = data.sources || [];
+  const n            = data.narrative     || {};
+  const sym          = data.symbolic      || {};
+  const scopeDisplay = data.scope_display || {};
+  const companyCtx   = data.company_context || null;  // null = KG not used
+  const sources      = data.sources       || [];
 
-  const vtype = n.verdict_type || "cannot_determine";
-  const vline = n.verdict_line || "";
-  const full  = n.full_analysis || "";
-  const cards = n.legal_basis_cards || [];
-  const actions = n.suggested_actions || [];
-  const followUps = (sym.all_follow_up_questions || []).slice(0,3);
+  const vtype    = n.verdict_type       || "cannot_determine";
+  const vline    = n.verdict_line       || "";
+  const full     = n.full_analysis      || "";
+  const cards    = n.legal_basis_cards  || [];
+  const followUps= (sym.all_follow_up_questions || []).slice(0,3);
 
-  // Verdict line colour
-  const vcls = vtype==="applies"?"v-yes": vtype==="does_not_apply"?"v-no":
-               vtype==="general"?"v-info":"v-unk";
-
-  // For general answers — simpler layout
-  if(vtype==="general"){
+  // General / explanation / procedure responses
+  if(vtype === "general"){
     return `
       <div class="vbub">
-        <div class="${vcls}" style="font-size:13.5px;line-height:1.55;">${fmt(vline)}</div>
-        ${full?`<div style="margin-top:8px;font-size:12.5px;line-height:1.65;color:var(--txt);">${fmt(full)}</div>`:""}
+        <div class="v-info" style="font-size:13.5px;line-height:1.55;">${fmt(vline)}</div>
+        ${full ? `<div style="margin-top:8px;font-size:12.5px;line-height:1.65;color:var(--txt);">${fmt(full)}</div>` : ""}
       </div>
       ${renderSources(sources)}`;
   }
 
-  // Reasoning pills
-  const applyIds  = sym.instruments_that_apply || [];
-  const allResults= sym.applicability_results || {};
-  const targetId  = applyIds[0] || Object.keys(allResults)[0] || "";
-  const scope     = targetId ? (allResults[targetId]?.scope||{}) : {};
-  const pills     = ["temporal","territorial","material"].map(d=>pillFor(scope[d],d)).join("");
-  const exclOk    = scope.excl==="pass";
-  const passCount = ["temporal","territorial","material"].filter(d=>scope[d]==="pass").length;
-  const total     = ["temporal","territorial","material"].filter(d=>scope[d]&&scope[d]!=="not_reached").length;
+  // Verdict line colour
+  const vcls = vtype==="applies"     ? "v-yes" :
+               vtype==="does_not_apply" ? "v-no"  :
+               vtype==="cannot_determine" ? "v-unk" : "v-info";
 
-  // Legal basis cards HTML
-  const cardsHtml = cards.map(c=>`
+  // ── Summary counts ───────────────────────────────────────────────
+  const applyIds   = sym.instruments_that_apply     || [];
+  const allResults = sym.applicability_results      || {};
+  const allIds     = Object.keys(allResults);
+
+  // Total pass/fail/unknown across all instruments that apply
+  let passCount = 0, totalDims = 0;
+  for(const iid of applyIds){
+    const scope = (allResults[iid]||{}).scope || {};
+    for(const d of ["temporal","territorial","material"]){
+      if(scope[d] && scope[d] !== "not_reached"){
+        totalDims++;
+        if(scope[d] === "pass") passCount++;
+      }
+    }
+  }
+
+  // ── Legal basis cards ─────────────────────────────────────────────
+  const cardsHtml = cards.map(c => `
     <div class="lc">
       <div class="lc-head">
         <span class="lc-lbl">Legal basis · ${esc(c.instrument_short||c.instrument_id||"")}</span>
@@ -428,57 +598,96 @@ function renderComplianceResponse(data, msgId){
       </div>
     </div>`).join("");
 
-  // Follow-up questions — only when cannot_determine, max 3
+  // ── Reasoning card — one section per instrument ───────────────────
+  let reasoningInner = "";
+  for(const iid of allIds){
+    const result   = allResults[iid] || {};
+    const verdict  = result.verdict  || "cannot_determine";
+    const panelId  = `trace-${msgId}-${iid}`;
+    const togId    = `ttog-${msgId}-${iid}`;
+
+    const pillsHtml = renderScopePills(iid, scopeDisplay, result);
+    const traceHtml = renderTracePanel(iid, result, panelId);
+
+    const vIcon = verdict==="applies"         ? "✓" :
+                  verdict==="does_not_apply"   ? "✗" :
+                  verdict==="prohibited"        ? "⛔" : "?";
+    const vColor= verdict==="applies"          ? "var(--green)" :
+                  verdict==="does_not_apply"    ? "var(--red)"   :
+                  verdict==="prohibited"        ? "var(--red)"   : "var(--amber)";
+
+    reasoningInner += `
+      <div class="inst-row">
+        <div style="display:flex;align-items:center;gap:5px;">
+          <span style="font-size:10px;font-weight:600;color:${vColor};">${vIcon}</span>
+          <span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span>
+        </div>
+        <div class="pills">${pillsHtml}</div>
+        ${traceHtml ? `
+          <span class="trace-toggle" id="${togId}"
+            onclick="toggleTrace('${panelId}','${togId}')">View reasoning →</span>
+          ${traceHtml}
+        ` : ""}
+      </div>`;
+  }
+
+  const reasoningCard = allIds.length ? `
+    <div class="rcard">
+      <div class="rc-head">
+        <span class="rc-lbl">Reasoning path</span>
+        <span class="rc-pass">${passCount}/${totalDims} passed</span>
+      </div>
+      <div class="rc-body">${reasoningInner}</div>
+    </div>` : "";
+
+  // ── Company playbook — only when actually used ────────────────────
+  // companyCtx is null when the KG returned nothing (most cases in prototype)
+  const playbookCard = companyCtx ? `
+    <div class="pb-card">
+      <div class="rc-head">
+        <span class="pb-lbl">Company playbook used</span>
+        <span class="pb-view">View ↗</span>
+      </div>
+      <div class="pb-ctx">${esc(companyCtx.slice(0,200))}</div>
+    </div>` : "";
+
+  // ── Follow-up questions — only on cannot_determine ────────────────
   const fqHtml = (vtype==="cannot_determine" && followUps.length) ? `
     <div class="fq-card">
-      <div class="fq-lbl">⚠ To complete this analysis, please clarify:</div>
+      <div class="fq-lbl">To complete this analysis, please clarify:</div>
       ${followUps.map(q=>`<div class="fq-q">› ${esc(q)}</div>`).join("")}
     </div>` : "";
 
-  // Special category warning
+  // ── Special category warning ──────────────────────────────────────
   const specHtml = sym.special_category_flag ? `
     <div class="fq-card" style="border-color:#fca5a5;background:#fef2f2;">
-      <div class="fq-lbl" style="color:#7f1d1d;">⚠ GDPR Art. 9 — Special category data</div>
+      <div class="fq-lbl" style="color:#7f1d1d;">GDPR Art. 9 — Special category data detected</div>
       <div class="fq-q" style="color:#991b1b;">
-        Processing prohibited unless Art. 9(2) exception applies. DPIA required under Art. 35.
+        Processing prohibited unless Art. 9(2) exception applies (e.g. Art. 9(2)(h) for healthcare). DPIA recommended under Art. 35.
       </div>
     </div>` : "";
+
+  // ── Two-column layout: reasoning + playbook ───────────────────────
+  const bottomRow = (playbookCard)
+    ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${reasoningCard}${playbookCard}
+       </div>`
+    : reasoningCard;
 
   return `
     <div class="vbub">
       <div class="${vcls}" style="font-size:13.5px;line-height:1.55;">${fmt(vline)}</div>
-      ${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>`:""}
+      ${full ? `<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>` : ""}
       <div class="expand-row">
-        ${full?`<button class="expand-btn" onclick="toggleFA('${msgId}')"><span id="fb-${msgId}">Read full analysis ↓</span></button>`:""}
+        ${full ? `<button class="expand-btn" onclick="toggleFA('${msgId}')"><span id="fb-${msgId}">Read full analysis ↓</span></button>` : ""}
         <span class="expand-meta">
           ${applyIds.length} regulation${applyIds.length!==1?"s":""} analysed
-          · ${passCount}/${total} scope checks passed
+          · ${passCount}/${totalDims} scope checks passed
         </span>
       </div>
     </div>
     ${cardsHtml}
-    <div class="two-col">
-      <div class="rcard">
-        <div class="rc-head">
-          <span class="rc-lbl">Reasoning path</span>
-          <span class="rc-pass">${passCount}/${total} passed</span>
-        </div>
-        <div class="pills">
-          ${pills}
-          <span class="pill excl">Exclusions: ${exclOk?"None":"Triggered"}</span>
-        </div>
-      </div>
-      <div class="pb-card">
-        <div class="rc-head">
-          <span class="pb-lbl">Company playbook</span>
-          <span class="pb-view">View ↗</span>
-        </div>
-        <div class="pb-files">
-          <div>📄 Company_Profile.pdf</div>
-          <div>📄 EU_Market_Strategy.docx</div>
-        </div>
-      </div>
-    </div>
+    ${bottomRow}
     ${fqHtml}
     ${specHtml}
     ${renderSources(sources)}`;
@@ -544,7 +753,8 @@ function renderActs(actions){
   if(!actions||!actions.length){ bar.style.display="none"; return; }
   bar.style.display = "flex";
   bar.innerHTML = actions.map((a,i)=>
-    `<button class="act ${i===0?"pri":"sec"}" onclick="setQ('${esc(a.replace(/→\s*/,"").replace(/\s*↗/,""))}')">${esc(a)}</button>`
+    `<button class="act ${i===0?"pri":"sec"}"
+      onclick="setQ('${esc(a.replace(/→\s*/,"").replace(/\s*↗/,""))}')">${esc(a)}</button>`
   ).join("");
 }
 
@@ -574,21 +784,15 @@ function addSession(title, sub){
   renderSessions();
 }
 
-function switchSess(id){
-  activeSess = id;
-  renderSessions();
-}
+function switchSess(id){ activeSess=id; renderSessions(); }
 
 function newSess(){
-  activeSess = "new";
-  msgs = [];
-  msgCount = 0;
-  SESSION_ID = crypto.randomUUID();
-  document.getElementById("mhdr-t").textContent = "New session";
-  document.getElementById("mhdr-m").textContent = "Ask a compliance question to begin";
-  document.getElementById("acts").style.display = "none";
-  renderSessions();
-  renderMsgs();
+  activeSess="new"; msgs=[]; msgCount=0;
+  SESSION_ID=crypto.randomUUID();
+  document.getElementById("mhdr-t").textContent="New session";
+  document.getElementById("mhdr-m").textContent="Ask a compliance question to begin";
+  document.getElementById("acts").style.display="none";
+  renderSessions(); renderMsgs();
 }
 
 // ═══════════════════════════════════════════
@@ -597,102 +801,78 @@ function newSess(){
 async function send(){
   const inp  = document.getElementById("cin");
   const text = inp.value.trim();
-  if(!text || loading) return;
-  inp.value = ""; inp.style.height = "auto";
-  loading = true;
-  document.getElementById("sbtn").disabled = true;
+  if(!text||loading) return;
+  inp.value=""; inp.style.height="auto";
+  loading=true;
+  document.getElementById("sbtn").disabled=true;
   document.getElementById("welcome")?.remove();
 
-  msgs.push({role:"user", content:text, id:nid()});
+  msgs.push({role:"user",content:text,id:nid()});
   msgCount++;
   renderMsgs();
 
-  // Check for URL in message and analyze it first
+  // URL detection — profile product before asking question
   const url = extractUrl(text);
   if(url){
-    const lid = nid();
-    msgs.push({type:"loading", id:lid, status:`Fetching product profile from URL...`});
+    const lid=nid();
+    msgs.push({type:"loading",id:lid,status:"Fetching product profile from URL..."});
     renderMsgs();
     try{
       const urlData = await analyzeUrl(url);
-      msgs = msgs.filter(m=>m.id!==lid);
-      // Show profile confirmation
-      msgs.push({
-        role:"assistant",
-        type:"response",
-        id:nid(),
-        data:{
-          narrative:{
-            verdict_type:"general",
-            verdict_line:`Product profile loaded: ${urlData.profile||"Profile generated."}`,
-            full_analysis:"",
-            legal_basis_cards:[],
-            suggested_actions:[]
-          },
-          symbolic:{},
-          sources:[]
-        }
-      });
+      msgs=msgs.filter(m=>m.id!==lid);
+      msgs.push({role:"assistant",type:"response",id:nid(),data:{
+        narrative:{verdict_type:"general",
+          verdict_line:`Product profile loaded: ${urlData.profile||"Profile generated."}`,
+          full_analysis:"",legal_basis_cards:[],suggested_actions:[]},
+        symbolic:{},sources:[]
+      }});
       renderMsgs();
-    } catch(e){
-      msgs = msgs.filter(m=>m.id!==lid);
-    }
+    } catch(e){ msgs=msgs.filter(m=>m.id!==lid); }
   }
 
-  // Now send the question
-  const lid = nid();
-  msgs.push({type:"loading", id:lid, status:"Running symbolic engine..."});
+  const lid=nid();
+  msgs.push({type:"loading",id:lid,status:"Running symbolic engine..."});
   renderMsgs();
 
   try{
     const data = await callBackend(text);
-    msgs = msgs.filter(m=>m.id!==lid);
-
-    const mid = nid();
-    msgs.push({role:"assistant", type:"response", id:mid, data});
-
-    const n = data.narrative || {};
-    const sessionTitle = n.session_title || text.slice(0,35);
-    addSession(sessionTitle, text.slice(0,50));
+    msgs=msgs.filter(m=>m.id!==lid);
+    const mid=nid();
+    msgs.push({role:"assistant",type:"response",id:mid,data});
+    const n=data.narrative||{};
+    const sessionTitle=n.session_title||text.slice(0,35);
+    addSession(sessionTitle,text.slice(0,50));
     updateHdr(sessionTitle);
     renderMsgs();
-    renderActs(n.suggested_actions || []);
-
+    renderActs(n.suggested_actions||[]);
   } catch(err){
-    msgs = msgs.filter(m=>m.id!==lid);
-    const mid = nid();
-    msgs.push({
-      role:"assistant", type:"response", id:mid,
-      data:{
-        narrative:{
-          verdict_type:"cannot_determine",
-          verdict_line:`⚠ Could not reach backend: ${err.message}`,
-          full_analysis:`Make sure the ComplianceTwin backend is running at ${BACKEND}`,
-          legal_basis_cards:[],
-          suggested_actions:[]
-        },
-        symbolic:{}, sources:[]
-      }
-    });
+    msgs=msgs.filter(m=>m.id!==lid);
+    msgs.push({role:"assistant",type:"response",id:nid(),data:{
+      narrative:{verdict_type:"cannot_determine",
+        verdict_line:`Could not reach backend: ${err.message}`,
+        full_analysis:`Make sure the ComplianceTwin backend is running at ${BACKEND}`,
+        legal_basis_cards:[],suggested_actions:[]},
+      symbolic:{},sources:[]
+    }});
     renderMsgs();
   }
 
-  loading = false;
-  document.getElementById("sbtn").disabled = false;
+  loading=false;
+  document.getElementById("sbtn").disabled=false;
 }
 
 // ═══════════════════════════════════════════
 // CONTEXT EDITOR
 // ═══════════════════════════════════════════
 function editCtx(){
-  const co = prompt("Company name:", document.getElementById("ctx-co").textContent);
-  if(co){ document.getElementById("ctx-co").textContent = co; }
-  const mkt = prompt("Markets:", document.getElementById("ctx-mkt").textContent);
-  if(mkt){ document.getElementById("ctx-mkt").textContent = mkt; }
-  const name = prompt("Your name:", document.getElementById("user-name").textContent);
+  const co=prompt("Company name:",document.getElementById("ctx-co").textContent);
+  if(co) document.getElementById("ctx-co").textContent=co;
+  const mkt=prompt("Markets:",document.getElementById("ctx-mkt").textContent);
+  if(mkt) document.getElementById("ctx-mkt").textContent=mkt;
+  const name=prompt("Your name:",document.getElementById("user-name").textContent);
   if(name){
-    document.getElementById("user-name").textContent = name;
-    document.getElementById("user-av").textContent = name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+    document.getElementById("user-name").textContent=name;
+    document.getElementById("user-av").textContent=name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
   }
 }
 
