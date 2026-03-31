@@ -156,6 +156,46 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-ev{color:var(--txt);line-height:1.55;}
 .trace-note{font-size:9.5px;color:var(--blue);margin-top:2px;}
 .trace-cite{font-size:9px;color:var(--txt4);margin-top:1px;font-family:var(--mono);}
+
+/* EUR-Lex chips in verdict bubble */
+.lex-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.lex-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;
+  border:1px solid var(--bdr2);border-radius:20px;
+  font-size:9.5px;font-weight:600;color:var(--blue);text-decoration:none;
+  background:var(--blue-lt);transition:.12s;}
+.lex-chip:hover{background:rgba(45,107,228,.15);}
+
+/* Next steps section */
+.step-row{display:grid;grid-template-columns:20px 1fr auto;gap:8px;
+  align-items:start;padding:7px 0;border-bottom:1px solid var(--bdr);}
+.step-row:last-child{border-bottom:none;}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--blue);
+  color:#fff;font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-action{font-size:11.5px;color:var(--txt);line-height:1.5;}
+.step-basis{font-size:9.5px;color:var(--txt3);margin-top:2px;font-family:var(--mono);}
+.step-timing{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;
+  white-space:nowrap;flex-shrink:0;}
+.st-immediate{background:var(--red-l);color:var(--red);}
+.st-before{background:var(--amber-l);color:var(--amber);}
+.st-ongoing{background:var(--green-l);color:var(--green);}
+
+/* Cannot-determine conditional card */
+.cond-card{padding:12px 14px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue-lt),rgba(255,255,255,.8));
+  border:1px solid var(--bdr2);}
+.cond-title{font-size:8px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--blue);margin-bottom:8px;}
+.cond-scope-row{display:flex;align-items:center;gap:6px;
+  padding:4px 0;font-size:11px;color:var(--txt2);}
+.cond-scope-row .cs-dim{font-weight:600;color:var(--txt);min-width:90px;}
+.cond-if{margin-top:10px;padding:8px 10px;border-radius:8px;
+  background:rgba(45,107,228,.06);border:1px solid var(--bdr);
+  font-size:11.5px;color:var(--txt2);line-height:1.6;}
+.cond-if strong{color:var(--txt);}
+.cond-q{margin-top:10px;padding:8px 10px;border-radius:8px;
+  background:var(--amber-l);border:1px solid rgba(217,119,6,.2);
+  font-size:11.5px;color:#78350f;font-weight:600;}
 .trace-overall{margin:10px 10px 8px;padding:10px 12px;border-radius:8px;border:1px solid;}
 .trace-overall.overall-pass{background:var(--green-l);border-color:rgba(5,150,105,.2);}
 .trace-overall.overall-fail{background:var(--red-l);border-color:rgba(220,38,38,.15);}
@@ -501,42 +541,113 @@ function renderComplianceResponse(data,msgId){
   const n=data.narrative||{},sym=data.symbolic||{},sd=data.scope_display||{},cc=data.company_context||null;
   const vtype=n.verdict_type||"cannot_determine",vline=n.verdict_line||"",full=n.full_analysis||"";
   const cards=n.legal_basis_cards||[],fups=(sym.all_follow_up_questions||[]).slice(0,3);
+  const nextSteps=n.next_steps||[];
+  const clarQ=n.clarifying_question||null;
 
+  // Simple layouts
   if(vtype==="general"||vtype==="context_update")
     return `<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
 
   const applyIds=sym.instruments_that_apply||[],allRes=sym.applicability_results||{};
   let passCount=0,totalDims=0;
   for(const iid of applyIds){const scope=(allRes[iid]||{}).scope||{};for(const d of ["temporal","territorial","material"])if(scope[d]&&scope[d]!=="not_reached"){totalDims++;if(scope[d]==="pass")passCount++;}}
+  const nInst=Object.keys(allRes).length;
 
-  // HERO — full analysis shown by default
-  const heroBub=`<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div><div><span class="fa-toggle" id="fb-${msgId}" onclick="toggleFA('${msgId}')">Collapse ↑</span></div>`:""}<div class="expand-meta"><span>${applyIds.length} regulation${applyIds.length!==1?"s":""} analysed</span>${totalDims?`<span class="em-dot"></span><span>${passCount}/${totalDims} scope checks passed</span>`:""}</div></div>`;
+  // EUR-Lex chips from legal_basis_cards (links only — no separate section)
+  const lexChips=cards.length?`<div class="lex-chips">${cards.map(c=>{
+    const url=c.eurlex_url||(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu");
+    const label=`${c.instrument_short||c.instrument_id}${c.eurlex_article?" · "+c.eurlex_article:""}`;
+    return `<a class="lex-chip" href="${esc(url)}" target="_blank">${esc(label)} ↗</a>`;
+  }).join("")}</div>`:"";
 
-  // LEGAL BASIS — collapsed
-  const nCards=cards.length;
-  const lcInner=cards.map(c=>`<div class="lc"><div class="lc-head"><span class="lc-lbl">Legal basis</span><a class="lc-lex" href="${esc(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu")}" target="_blank">EUR-Lex ↗</a></div><div class="lc-body"><div class="lc-arts">${esc(fmtCitation(c.articles||"", c.instrument_id))}</div><div class="lc-desc">${esc(c.description||"")}</div></div></div>`).join("");
-  const lcSec=nCards?`<div><div class="sec-toggle" onclick="toggleSec('lc-${msgId}')"><span class="sec-lbl"><span class="sec-pip pip-blue"></span>Legal basis · ${nCards} article${nCards!==1?"s":""}</span><span class="sec-right"><span class="sec-tag">${cards.map(c=>c.instrument_short||c.instrument_id).join(" · ")}</span><span class="sec-arr" id="arr-lc-${msgId}">▾</span></span></div><div id="sec-lc-${msgId}" class="sec-body">${lcInner}</div></div>`:"";
+  // ── HERO VERDICT BUBBLE ────────────────────────────────────────────────────
+  const heroBub=`<div class="vbub ${vbubCls(vtype)}">
+    ${vbadge(vtype)}
+    <div class="verdict-line">${fmt(vline)}</div>
+    ${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>
+    <div><span class="fa-toggle" id="fb-${msgId}" onclick="toggleFA('${msgId}')">Collapse ↑</span></div>`:""}
+    ${lexChips}
+    <div class="expand-meta">
+      <span>${nInst} instrument${nInst!==1?"s":""} evaluated</span>
+      ${totalDims?`<span class="em-dot"></span><span>${passCount}/${totalDims} scope checks passed</span>`:""}
+    </div>
+  </div>`;
 
-  // REASONING — collapsed
+  // ── CANNOT DETERMINE — conditional scope card ──────────────────────────────
+  let condCard="";
+  if(vtype==="cannot_determine"&&nInst>0){
+    const SCOPE_LABELS={temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope"};
+    const DIM_COLORS={pass:"var(--green)",fail:"var(--red)",cannot_determine:"var(--amber)",unknown:"var(--txt4)"};
+    const DIM_ICONS={pass:"✓",fail:"✗",cannot_determine:"–",unknown:"–"};
+    let scopeRows="";
+    for(const iid of Object.keys(allRes)){
+      const res=allRes[iid]||{},scope=res.scope||{};
+      const iLabel=INST_LABELS[iid]||iid;
+      scopeRows+=`<div style="margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--txt);margin-bottom:4px;">${esc(iLabel)}</div>`;
+      for(const d of ["temporal","territorial","material"]){
+        const r=scope[d]||"unknown";
+        const col=DIM_COLORS[r]||DIM_COLORS.unknown;
+        const ico=DIM_ICONS[r]||"–";
+        const lbl=r==="pass"?"Satisfied":r==="fail"?"Not satisfied":"Requires clarification";
+        scopeRows+=`<div class="cond-scope-row"><span class="cs-dim">${SCOPE_LABELS[d]}</span><span style="color:${col};font-weight:700;">${ico}</span><span style="margin-left:4px;">${lbl}</span></div>`;
+      }
+      scopeRows+="</div>";
+    }
+    const condIf=fups.length?`<div class="cond-if">Based on the information available, if the outstanding question${fups.length>1?"s are":"is"} resolved favourably, the applicable regulation${nInst>1?"s":""} would be confirmed. <strong>The key question${fups.length>1?"s":""} to answer:</strong></div>`:""
+    const condQs=fups.map(q=>`<div class="cond-q">› ${esc(q)}</div>`).join("");
+    condCard=`<div class="cond-card">
+      <div class="cond-title">Scope analysis — information needed</div>
+      ${scopeRows}
+      ${condIf}${condQs}
+    </div>`;
+  }
+
+  // ── SCOPE ANALYSIS (renamed + reordered, no duplicate legal basis) ─────────
   let rows="";
   for(const iid of Object.keys(allRes)){
     const res=allRes[iid]||{},verdict=res.verdict||"cannot_determine";
     const panelId=`trace-${msgId}-${iid}`,togId=`ttog-${msgId}-${iid}`;
     const dotCls=verdict==="applies"?"idot-yes":verdict==="does_not_apply"?"idot-no":"idot-unk";
     const th=renderTracePanel(iid,res,panelId);
-    rows+=`<div class="inst-row"><div class="inst-hdr"><div class="idot ${dotCls}"></div><span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span></div><div class="pills">${renderScopePills(iid,sd,res)}</div>${th?`<span class="trace-toggle" id="${togId}" onclick="toggleTrace('${panelId}','${togId}')">▼ View reasoning</span>${th}`:""}</div>`;
+    rows+=`<div class="inst-row"><div class="inst-hdr"><div class="idot ${dotCls}"></div><span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span></div><div class="pills">${renderScopePills(iid,sd,res)}</div>${th?`<span class="trace-toggle" id="${togId}" onclick="toggleTrace('${panelId}','${togId}')">▼ View scope detail</span>${th}`:""}</div>`;
   }
   const pbCard=cc?`<div class="pb-card"><div class="pb-head"><span class="pb-lbl">Company playbook used</span><span class="pb-view">View ↗</span></div><div class="pb-ctx">${esc(cc.slice(0,220))}</div></div>`:"";
   const reasonInner=pbCard?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="rcard"><div class="rcard-body">${rows}</div></div>${pbCard}</div>`:`<div class="rcard"><div class="rcard-body">${rows}</div></div>`;
-  const rpSec=Object.keys(allRes).length?`<div><div class="sec-toggle" onclick="toggleSec('rp-${msgId}')"><span class="sec-lbl"><span class="sec-pip pip-green"></span>Reasoning path</span><span class="sec-right"><span class="sec-tag">${passCount}/${totalDims} passed</span><span class="sec-arr" id="arr-rp-${msgId}">▾</span></span></div><div id="sec-rp-${msgId}" class="sec-body">${reasonInner}</div></div>`:"";
 
-  const fqHtml=(vtype==="cannot_determine"&&fups.length)?`<div class="alert-card alert-clarify"><div class="alert-lbl">To complete this analysis, please clarify:</div>${fups.map(q=>`<div class="alert-q">› ${esc(q)}</div>`).join("")}</div>`:"";
-  const specHtml=sym.special_category_flag?`<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data detected</div><div class="alert-q">Processing prohibited unless Art. 9(2) exception applies.</div></div>`:"";
+  const rpSec=nInst?`<div>
+    <div class="sec-toggle" onclick="toggleSec('rp-${msgId}')">
+      <span class="sec-lbl"><span class="sec-pip pip-green"></span>Scope analysis · ${nInst} instrument${nInst!==1?"s":""} evaluated</span>
+      <span class="sec-right"><span class="sec-tag">${passCount}/${totalDims} checks passed</span><span class="sec-arr" id="arr-rp-${msgId}">▾</span></span>
+    </div>
+    <div id="sec-rp-${msgId}" class="sec-body">${reasonInner}</div>
+  </div>`:"";
 
-  return `${heroBub}${lcSec}${rpSec}${fqHtml}${specHtml}${renderSources(data.sources||[])}`;
+  // ── NEXT STEPS ─────────────────────────────────────────────────────────────
+  let nsSec="";
+  if(nextSteps.length){
+    const TIMING_CLS={Immediate:"st-immediate","Before market placement":"st-before",Ongoing:"st-ongoing"};
+    const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
+      <div class="step-num">${i+1}</div>
+      <div><div class="step-action">${esc(s.action||"")}</div><div class="step-basis">${esc(s.basis||"")}</div></div>
+      <div class="step-timing ${TIMING_CLS[s.timing]||"st-ongoing"}">${esc(s.timing||"Ongoing")}</div>
+    </div>`).join("");
+    nsSec=`<div>
+      <div class="sec-toggle" onclick="toggleSec('ns-${msgId}')">
+        <span class="sec-lbl"><span class="sec-pip" style="background:var(--blue)"></span>Recommended next steps · ${nextSteps.length}</span>
+        <span class="sec-right"><span class="sec-arr" id="arr-ns-${msgId}">▾</span></span>
+      </div>
+      <div id="sec-ns-${msgId}" class="sec-body">
+        <div class="rcard"><div class="rcard-body">${stepRows}</div></div>
+      </div>
+    </div>`;
+  }
+
+  // ── ALERTS ─────────────────────────────────────────────────────────────────
+  const specHtml=sym.special_category_flag?`<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data detected</div><div class="alert-q">Processing prohibited unless Art. 9(2) exception applies (e.g. Art. 9(2)(h) for healthcare).</div></div>`:"";
+
+  return `${heroBub}${condCard}${rpSec}${nsSec}${specHtml}${renderSources(data.sources||[])}`;
 }
 
-// ── WELCOME ───────────────────────────────────────────────
 function welcomeHTML(){
   return `<div id="welcome">
     <div><svg width="240" height="52" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
