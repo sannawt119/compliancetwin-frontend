@@ -156,6 +156,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-ev{color:var(--txt);line-height:1.55;}
 .trace-note{font-size:9.5px;color:var(--blue);margin-top:2px;}
 .trace-cite{font-size:9px;color:var(--txt4);margin-top:1px;font-family:var(--mono);}
+.trace-overall{margin:10px 10px 8px;padding:10px 12px;border-radius:8px;border:1px solid;}
+.trace-overall.overall-pass{background:var(--green-l);border-color:rgba(5,150,105,.2);}
+.trace-overall.overall-fail{background:var(--red-l);border-color:rgba(220,38,38,.15);}
+.trace-overall.overall-unk{background:var(--amber-l);border-color:rgba(217,119,6,.15);}
+.overall-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.trace-overall.overall-pass .overall-lbl{color:var(--green);}
+.trace-overall.overall-fail .overall-lbl{color:var(--red);}
+.trace-overall.overall-unk .overall-lbl{color:var(--amber);}
+.overall-text{font-size:11px;line-height:1.65;color:var(--txt2);}
 
 /* PLAYBOOK */
 .pb-card{background:var(--cloud0);border:1px solid rgba(45,107,228,.2);border-radius:var(--r);padding:10px 13px;box-shadow:var(--sh-xs);}
@@ -315,13 +324,53 @@ const BACKEND="https://sannawt-compliancetwin.hf.space";
 const EURLEX={GDPR:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",EU_AI_ACT:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",MDR:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745"};
 const INST_LABELS={GDPR:"General Data Protection Regulation",EU_AI_ACT:"EU Artificial Intelligence Act",MDR:"Medical Device Regulation"};
 
+const INST_FULL={GDPR:"the GDPR",EU_AI_ACT:"the EU AI Act",MDR:"the MDR"};
+
+function fmtDate(iso){
+  if(!iso) return iso;
+  const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return iso.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g,(_,y,m,d)=>`${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`);
+}
+
+function fmtCitation(s, iid){
+  if(!s) return s;
+  const law = INST_FULL[iid] || "";
+  // Expand Art. → Article, keep recitals as-is, append law name
+  let out = s
+    .replace(/\bArt\.\s*/g,"Article ")
+    .replace(/\bAnnex\b/g,"Annex");
+  if(law && !out.toLowerCase().includes("of the") && !out.toLowerCase().includes("of "+law.toLowerCase())){
+    out = out + " of " + law;
+  }
+  return out;
+}
+
+function fmtTraceNote(note){
+  if(!note) return "";
+  return fmtDate(note)
+    .replace(/Obligations under high_risk_annex_III/g,"Note: obligations for High-Risk AI systems (Annex III)")
+    .replace(/Obligations under high_risk_annex_I_sector_products/g,"Note: obligations for AI safety components in regulated products (Annex I)")
+    .replace(/high_risk_annex_III/g,"High-Risk AI (Annex III)")
+    .replace(/high_risk_annex_I_sector_products/g,"High-Risk AI (Annex I — safety component)")
+    .replace(/GPAI_model/g,"General Purpose AI model");
+}
+
+function fmtTraceEvidence(ev){
+  if(!ev) return "";
+  return fmtDate(ev)
+    .replace(/high_risk_annex_III/g,"High-Risk AI (Annex III)")
+    .replace(/high_risk_annex_I_sector_products/g,"High-Risk AI (Annex I)")
+    .replace(/GPAI_model/g,"GPAI")
+    .replace(/← GOVERNING DATE/g,"← governing date");
+}
+
 // ── STATE ────────────────────────────────────────────────
 let SESSION_ID=crypto.randomUUID(),msgs=[],sessions=[],activeSess="new",msgCount=0,loading=false,midN=0;
 const nid=()=>"m"+(++midN);
 
 // ── UTILS ────────────────────────────────────────────────
 const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const fmt=s=>s?esc(s).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
+const fmt=s=>s?fmtDate(esc(s)).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
 const autoH=el=>{el.style.height="auto";el.style.height=Math.min(el.scrollHeight,100)+"px";};
 const onKey=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
 const setQ=q=>{document.getElementById("cin").value=q;document.getElementById("cin").focus();};
@@ -363,10 +412,16 @@ const extractUrl=t=>{const m=t.match(/https?:\/\/[^\s]+/);return m?m[0]:null;};
 function renderTracePanel(iid,result,panelId){
   const trace=result.trace||[];if(!trace.length) return "";
   const dims={};
-  for(const e of trace){const d=e.dimension||"other";if(d==="overall"&&e.result==="pass")continue;(dims[d]=dims[d]||[]).push(e);}
-  const ORDER=["exclusion","temporal","territorial","material","overall"];
-  const DLBL={exclusion:"Exclusions",temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope",overall:"Overall"};
-  const SYM={pass:"✓",fail:"✗",cannot_determine:"?",prohibited:"⛔",not_reached:"–"};
+  // Separate overall entry for special rendering
+  let overallEntry = null;
+  for(const e of trace){
+    const d=e.dimension||"other";
+    if(d==="overall"){ overallEntry=e; continue; }
+    (dims[d]=dims[d]||[]).push(e);
+  }
+  const ORDER=["temporal","territorial","material","exclusion"];
+  const DLBL={temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope",exclusion:"Exclusions"};
+  const SYM={pass:"✓",fail:"✗",cannot_determine:"–",prohibited:"⛔",not_reached:"–"};
   const CLS={pass:"ts-pass",fail:"ts-fail",cannot_determine:"ts-unk",prohibited:"ts-fail",not_reached:"ts-unk"};
   let html=`<div id="${panelId}" class="trace-panel">`;
   for(const dim of ORDER){
@@ -374,13 +429,37 @@ function renderTracePanel(iid,result,panelId){
     html+=`<div class="trace-dim-hdr">${DLBL[dim]||dim}</div>`;
     for(const e of entries){
       const r=e.result||"cannot_determine";
-      let ev=esc(e.evidence||"");
-      if(e.evidence?.includes("← GOVERNING DATE"))ev=esc(e.evidence.replace(" ← GOVERNING DATE",""))+`<span class="governing-tag">governing date</span>`;
-      if(e.evidence?.includes("[GOVERNING PATH]"))ev=esc(e.evidence.replace(" [GOVERNING PATH]",""))+`<span class="governing-tag">governing path</span>`;
-      if(e.evidence?.includes("[ADDITIONAL PATH]"))ev=esc(e.evidence.replace(" [ADDITIONAL PATH]",""))+`<span class="additional-tag">+ future path</span>`;
-      const cites=(e.citations||[]).slice(0,3).join("; ");
-      html+=`<div class="trace-entry"><span class="trace-sym ${CLS[r]||"ts-unk"}">${SYM[r]||"?"}</span><div><div class="trace-ev">${ev}</div>${cites?`<div class="trace-cite">${esc(cites)}</div>`:""}${e.note?`<div class="trace-note">→ ${esc(e.note)}</div>`:""}</div></div>`;
+      // Format evidence: dates, tag labels, governing markers
+      let ev = fmtTraceEvidence(esc(e.evidence||""));
+      if(e.evidence?.includes("← GOVERNING DATE"))
+        ev=fmtDate(esc(e.evidence.replace(" ← GOVERNING DATE","")))+`<span class="governing-tag">governing date</span>`;
+      if(e.evidence?.includes("[GOVERNING PATH]"))
+        ev=fmtDate(esc(e.evidence.replace(" [GOVERNING PATH]","")))+`<span class="governing-tag">governing path</span>`;
+      if(e.evidence?.includes("[ADDITIONAL PATH]"))
+        ev=fmtDate(esc(e.evidence.replace(" [ADDITIONAL PATH]","")))+`<span class="additional-tag">+ future path</span>`;
+      // Format citations: "Art. 113 of the EU AI Act" style
+      const rawCites=(e.citations||[]).slice(0,3);
+      const cites=rawCites.map(c=>fmtCitation(c,iid)).join("; ");
+      const note = fmtTraceNote(e.note||"");
+      html+=`<div class="trace-entry">
+        <span class="trace-sym ${CLS[r]||"ts-unk"}">${SYM[r]||"–"}</span>
+        <div>
+          <div class="trace-ev">${ev}</div>
+          ${cites?`<div class="trace-cite">${esc(cites)}</div>`:""}
+          ${note?`<div class="trace-note">→ ${esc(note)}</div>`:""}
+        </div>
+      </div>`;
     }
+  }
+  // Overall assessment — rendered as a clear summary paragraph, not a trace row
+  if(overallEntry){
+    const r=overallEntry.result||"cannot_determine";
+    const overallCls = r==="pass"?"overall-pass":r==="fail"?"overall-fail":"overall-unk";
+    const overallLbl = r==="pass"?"Regulation applies":"Regulation does not apply";
+    html+=`<div class="trace-overall ${overallCls}">
+      <div class="overall-lbl">${overallLbl}</div>
+      <div class="overall-text">${fmt(fmtDate(overallEntry.evidence||""))}</div>
+    </div>`;
   }
   return html+"</div>";
 }
@@ -408,9 +487,9 @@ function renderSources(sources){
 
 // ── VERDICT HELPERS ───────────────────────────────────────
 function vbadge(vtype){
-  const M={applies:{cls:"vb-yes",i:"✓",t:"Applies"},does_not_apply:{cls:"vb-no",i:"✗",t:"Does not apply"},cannot_determine:{cls:"vb-unk",i:"?",t:"Cannot determine"},general:{cls:"vb-info",i:"ℹ",t:"Information"},context_update:{cls:"vb-ctx",i:"→",t:"Context saved"}};
+  const M={applies:{cls:"vb-yes",i:"✓",t:"Applies"},does_not_apply:{cls:"vb-no",i:"✗",t:"Does not apply"},cannot_determine:{cls:"vb-unk",i:"",t:"More information needed"},general:{cls:"vb-info",i:"",t:"Information"},context_update:{cls:"vb-ctx",i:"→",t:"Context saved"}};
   const v=M[vtype]||M.cannot_determine;
-  return `<div class="vbadge ${v.cls}">${v.i} ${v.t}</div>`;
+  return `<div class="vbadge ${v.cls}">${v.i?v.i+' ':''}${v.t}</div>`;
 }
 const vbubCls=vtype=>({applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",general:"v-info",context_update:"v-info"}[vtype]||"v-info");
 
@@ -435,7 +514,7 @@ function renderComplianceResponse(data,msgId){
 
   // LEGAL BASIS — collapsed
   const nCards=cards.length;
-  const lcInner=cards.map(c=>`<div class="lc"><div class="lc-head"><span class="lc-lbl">Legal basis · ${esc(c.instrument_short||c.instrument_id||"")}</span><a class="lc-lex" href="${esc(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu")}" target="_blank">EUR-Lex ${esc(c.eurlex_article||"")} ↗</a></div><div class="lc-body"><div class="lc-arts">${esc(c.articles||"")}</div><div class="lc-desc">${esc(c.description||"")}</div></div></div>`).join("");
+  const lcInner=cards.map(c=>`<div class="lc"><div class="lc-head"><span class="lc-lbl">Legal basis</span><a class="lc-lex" href="${esc(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu")}" target="_blank">EUR-Lex ↗</a></div><div class="lc-body"><div class="lc-arts">${esc(fmtCitation(c.articles||"", c.instrument_id))}</div><div class="lc-desc">${esc(c.description||"")}</div></div></div>`).join("");
   const lcSec=nCards?`<div><div class="sec-toggle" onclick="toggleSec('lc-${msgId}')"><span class="sec-lbl"><span class="sec-pip pip-blue"></span>Legal basis · ${nCards} article${nCards!==1?"s":""}</span><span class="sec-right"><span class="sec-tag">${cards.map(c=>c.instrument_short||c.instrument_id).join(" · ")}</span><span class="sec-arr" id="arr-lc-${msgId}">▾</span></span></div><div id="sec-lc-${msgId}" class="sec-body">${lcInner}</div></div>`:"";
 
   // REASONING — collapsed
@@ -469,9 +548,9 @@ function welcomeHTML(){
     <div class="wt">EU regulatory scope analysis</div>
     <div class="ws">Symbolic reasoning engine + AI explanation.<br>Every verdict is cited, traceable and auditable.</div>
     <div class="hint-grid">
-      <button class="hint" onclick="setQ('Does our AI-powered HR screening tool require a conformity assessment under the EU AI Act?')"><div class="hint-l">Applicability</div>AI HR screening — EU AI Act conformity assessment?</button>
-      <button class="hint" onclick="setQ('We are a US company selling AI diagnostic software to hospitals in Germany. Does GDPR and MDR apply?')"><div class="hint-l">Multi-regulation</div>US company, AI diagnostics, German hospitals — GDPR & MDR?</button>
-      <button class="hint hint-full" onclick="setQ('What is the EU AI Act and when does it apply?')"><div class="hint-l">Explanation</div>What is the EU AI Act and when does it apply?</button>
+      <button class="hint" onclick="setQ('Does our AI HR screening application require conformity assessment under the EU AI Act?'); send()"><div class="hint-l">Applicability</div>AI HR screening — does it require EU AI Act conformity assessment?</button>
+      <button class="hint" onclick="setQ('We are a US company selling AI diagnostic software to hospitals in Germany. Does GDPR and MDR apply?'); send()"><div class="hint-l">Multi-regulation</div>US company, AI diagnostics, German hospitals — GDPR & MDR?</button>
+      <button class="hint hint-full" onclick="setQ('What is the EU AI Act and when does it apply?'); send()"><div class="hint-l">Explanation</div>What is the EU AI Act and when does it apply?</button>
     </div>
   </div>`;
 }
