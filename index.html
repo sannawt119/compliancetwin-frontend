@@ -167,7 +167,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Next steps section */
 .step-row{display:grid;grid-template-columns:20px 1fr auto;gap:8px;
-  align-items:start;padding:7px 0;border-bottom:1px solid var(--bdr);}
+  align-items:start;padding:7px 0;border-bottom:1px solid var(--bdr);transition:.12s;border-radius:6px;padding-left:4px;}
+.step-row:hover{background:var(--blue-lt);}
 .step-row:last-child{border-bottom:none;}
 .step-num{width:20px;height:20px;border-radius:50%;background:var(--blue);
   color:#fff;font-size:9px;font-weight:800;
@@ -375,11 +376,19 @@ function fmtDate(iso){
 function fmtCitation(s, iid){
   if(!s) return s;
   const law = INST_FULL[iid] || "";
-  // Expand Art. → Article, keep recitals as-is, append law name
+  // Expand Art. → Article
   let out = s
     .replace(/\bArt\.\s*/g,"Article ")
     .replace(/\bAnnex\b/g,"Annex");
-  if(law && !out.toLowerCase().includes("of the") && !out.toLowerCase().includes("of "+law.toLowerCase())){
+  // Only append law name if the citation doesn't already reference a law
+  // and if it looks like a pure article/recital reference (not a note/description)
+  const looksLikeCitation = /^(Article|Recital|Annex|MDCG|IEC|ISO|EDPB)/i.test(out.trim());
+  const alreadyHasLaw = out.toLowerCase().includes("of the") ||
+    out.toLowerCase().includes("gdpr") ||
+    out.toLowerCase().includes("mdr") ||
+    out.toLowerCase().includes("ai act") ||
+    out.toLowerCase().includes("ivdr");
+  if(law && looksLikeCitation && !alreadyHasLaw){
     out = out + " of " + law;
   }
   return out;
@@ -495,10 +504,27 @@ function renderTracePanel(iid,result,panelId){
   if(overallEntry){
     const r=overallEntry.result||"cannot_determine";
     const overallCls = r==="pass"?"overall-pass":r==="fail"?"overall-fail":"overall-unk";
-    const overallLbl = r==="pass"?"Regulation applies":"Regulation does not apply";
+    // Check if failure is due to temporal only — use conditional language
+    const temporalFailed = (dims["temporal"]||[]).some(e=>e.result==="fail");
+    const territorOrMatPassed = (dims["territorial"]||[]).some(e=>e.result==="pass") &&
+                                (dims["material"]||[]).some(e=>e.result==="pass");
+    let overallLbl, overallEvidence;
+    if(r==="fail" && temporalFailed && territorOrMatPassed){
+      overallLbl = "Does not apply yet — but would apply once in force";
+      overallEvidence = fmt(fmtDate(overallEntry.evidence||"")) +
+        `<div style="margin-top:6px;padding:6px 8px;border-radius:6px;background:rgba(45,107,228,.07);font-size:11px;color:var(--txt2);">
+          <strong>Conditional note:</strong> Territorial and material scope are both satisfied. Once the applicable date is reached, the obligations will apply in full and a conformity assessment or equivalent compliance steps will be required.
+        </div>`;
+    } else if(r==="pass"){
+      overallLbl = "Regulation applies";
+      overallEvidence = fmt(fmtDate(overallEntry.evidence||""));
+    } else {
+      overallLbl = r==="cannot_determine"?"Assessment incomplete":"Regulation does not apply";
+      overallEvidence = fmt(fmtDate(overallEntry.evidence||""));
+    }
     html+=`<div class="trace-overall ${overallCls}">
       <div class="overall-lbl">${overallLbl}</div>
-      <div class="overall-text">${fmt(fmtDate(overallEntry.evidence||""))}</div>
+      <div class="overall-text">${overallEvidence}</div>
     </div>`;
   }
   return html+"</div>";
@@ -626,11 +652,17 @@ function renderComplianceResponse(data,msgId){
   let nsSec="";
   if(nextSteps.length){
     const TIMING_CLS={Immediate:"st-immediate","Before market placement":"st-before",Ongoing:"st-ongoing"};
-    const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
-      <div class="step-num">${i+1}</div>
-      <div><div class="step-action">${esc(s.action||"")}</div><div class="step-basis">${esc(s.basis||"")}</div></div>
-      <div class="step-timing ${TIMING_CLS[s.timing]||"st-ongoing"}">${esc(s.timing||"Ongoing")}</div>
-    </div>`).join("");
+    const stepRows=nextSteps.map((s,i)=>{
+      const q=s.action||"";
+      return `<div class="step-row" style="cursor:pointer;" onclick="setQ('${esc(q)}'); send()" title="Click to ask ComplianceTwin about this step">
+        <div class="step-num">${i+1}</div>
+        <div>
+          <div class="step-action">${esc(q)} <span style="font-size:9px;color:var(--blue);margin-left:4px;">→ ask ↗</span></div>
+          <div class="step-basis">${esc(s.basis||"")}</div>
+        </div>
+        <div class="step-timing ${TIMING_CLS[s.timing]||"st-ongoing"}">${esc(s.timing||"Ongoing")}</div>
+      </div>`;
+    }).join("");
     nsSec=`<div>
       <div class="sec-toggle" onclick="toggleSec('ns-${msgId}')">
         <span class="sec-lbl"><span class="sec-pip" style="background:var(--blue)"></span>Recommended next steps · ${nextSteps.length}</span>
