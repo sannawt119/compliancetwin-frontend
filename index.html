@@ -438,6 +438,114 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .rich-p{font-size:13px;color:var(--txt2);line-height:1.78;margin:4px 0;}
 .rich-p:empty{display:none;}
 
+/* ── OBLIGATIONS CARD ────────────────────────────────────── */
+.ob-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;
+  box-shadow:var(--sh-md);border-left:3px solid var(--blue);overflow:hidden;}
+.ob-card-head{padding:14px 18px 12px;}
+.ob-card-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;
+  background:var(--blue-lt);color:var(--blue);}
+.ob-card-title{font-size:14px;font-weight:500;color:var(--txt);line-height:1.6;margin-bottom:4px;}
+.ob-card-sub{font-size:11.5px;color:var(--txt3);margin-bottom:10px;}
+/* Collapsible toggle row */
+.ob-toggle-row{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 18px;background:var(--cloud1);border-top:1px solid var(--bdr);
+  cursor:pointer;user-select:none;transition:.12s;}
+.ob-toggle-row:hover{background:var(--blue-lt);}
+.ob-toggle-lbl{font-size:11px;font-weight:700;color:var(--txt2);display:flex;align-items:center;gap:7px;}
+.ob-toggle-count{padding:1px 8px;border-radius:20px;background:var(--blue-lt);color:var(--blue);
+  font-size:9.5px;font-weight:700;font-family:var(--mono);}
+.ob-toggle-arr{font-size:10px;color:var(--txt4);transition:transform .2s;}
+.ob-toggle-arr.open{transform:rotate(180deg);}
+/* List body */
+.ob-list-body{display:none;padding:4px 0 8px;}
+.ob-list-body.open{display:block;}
+.ob-list-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;
+  padding:9px 18px;border-bottom:1px solid rgba(45,107,228,.06);}
+.ob-list-item:last-child{border-bottom:none;}
+.ob-list-item:hover{background:var(--cloud1);}
+.ob-list-num{width:22px;height:22px;border-radius:50%;background:var(--blue-lt);color:var(--blue);
+  font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;font-family:var(--mono);}
+.ob-list-text{font-size:12px;color:var(--txt2);line-height:1.6;}
+.ob-list-text strong{color:var(--txt);}
+/* Article citation chip inside list item */
+.ob-art-chip{display:inline-flex;align-items:center;margin-left:6px;padding:1px 7px;
+  border-radius:5px;background:var(--blue-lt);color:var(--blue);
+  font-size:9px;font-weight:700;font-family:var(--mono);border:1px solid rgba(45,107,228,.2);}
+/* Action proposals */
+.ob-actions{padding:12px 18px;border-top:1px solid var(--bdr);background:var(--cloud1);
+  display:flex;gap:8px;flex-wrap:wrap;}
+.ob-action-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;
+  border-radius:20px;border:1px solid var(--bdr2);background:var(--cloud0);
+  font-family:var(--font);font-size:11.5px;font-weight:600;cursor:pointer;
+  color:var(--txt2);transition:.12s;}
+.ob-action-btn:hover{background:var(--blue-lt);border-color:var(--blue);color:var(--blue);}
+.ob-action-btn.primary{background:linear-gradient(135deg,var(--blue-dk),var(--blue));
+  color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(45,107,228,.25);}
+.ob-action-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(45,107,228,.3);}
+
+/* ── REASONING TRACE ──────────────────────────────────────── */
+.rt-wrap{display:flex;flex-direction:column;gap:6px;}
+.rt-header{display:flex;align-items:center;gap:8px;padding:4px 2px 6px;}
+.rt-header-icon{font-size:14px;color:var(--txt4);}
+.rt-header-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--txt3);}
+.rt-header-sub{font-size:10px;color:var(--txt4);margin-left:4px;}
+
+.rt-reg-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;box-shadow:var(--sh-xs);}
+.rt-reg-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none;transition:.12s;}
+.rt-reg-header:hover{background:var(--cloud1);}
+.rt-reg-header-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.rt-reg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.rt-dot-gdpr{background:#185FA5;}
+.rt-dot-aia{background:#3C3489;}
+.rt-dot-mdr{background:#27500A;}
+.rt-reg-name{font-size:12.5px;font-weight:700;color:var(--txt);}
+.rt-verdict-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;}
+.rt-pill-yes{background:var(--green-l);color:var(--green);border:1px solid rgba(5,150,105,.2);}
+.rt-pill-def{background:var(--def-lt);color:var(--def);border:1px solid rgba(30,58,138,.2);}
+.rt-pill-no {background:var(--red-l);color:var(--red);border:1px solid rgba(220,38,38,.15);}
+.rt-pill-unk{background:var(--amber-l);color:var(--amber);border:1px solid rgba(217,119,6,.15);}
+.rt-missing-count{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:700;background:rgba(217,119,6,.1);color:var(--amber);border:1px solid rgba(217,119,6,.18);}
+.rt-arr{font-size:10px;color:var(--txt4);transition:transform .2s;flex-shrink:0;}
+.rt-arr.open{transform:rotate(180deg);}
+
+.rt-reg-body{display:none;border-top:1px solid var(--bdr);}
+.rt-reg-body.open{display:block;}
+
+/* Dimension rows */
+.rt-dim-row{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(45,107,228,.06);gap:10px;}
+.rt-dim-row:last-of-type{border-bottom:none;}
+.rt-row-pass{background:rgba(5,150,105,.025);}
+.rt-row-def {background:rgba(30,58,138,.025);}
+.rt-row-fail{background:rgba(220,38,38,.025);}
+.rt-row-unk {background:rgba(217,119,6,.025);}
+.rt-dim-left{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0;}
+.rt-sym{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.rt-sym-pass{background:var(--green-l);color:var(--green);}
+.rt-sym-def {background:var(--def-lt);color:var(--def);}
+.rt-sym-fail{background:var(--red-l);color:var(--red);}
+.rt-sym-unk {background:var(--amber-l);color:var(--amber);}
+.rt-dim-name{font-size:12px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.rt-dim-art{font-size:9px;font-weight:700;font-family:var(--mono);color:var(--blue);padding:1px 6px;border-radius:5px;background:var(--blue-lt);}
+.rt-dim-ev{font-size:11px;color:var(--txt3);line-height:1.55;margin-top:3px;}
+.rt-dim-cites{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.rt-cite{font-size:9px;font-family:var(--mono);color:var(--txt4);padding:1px 6px;background:var(--cloud2);border-radius:4px;}
+.rt-missing-flag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:9.5px;font-weight:700;background:#fef3c7;color:#92400e;border:1px solid #fbbf24;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+
+/* Missing facts banner at bottom of card body */
+.rt-missing-banner{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
+  background:#fffbeb;border-top:2px solid #f59e0b;
+  font-size:11.5px;color:#78350f;line-height:1.6;}
+.rt-missing-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.rt-missing-text strong{color:#92400e;}
+
+/* Undisclosed row highlight */
+.rt-row-unk{background:rgba(245,158,11,.04);}
+.rt-row-unk .rt-dim-name{color:var(--txt);}
+
+/* ── REASONING TRACE END ──────────────────────────────────── */
+
 /* ── INFO FOOTER ──────────────────────────────────────────── */
 .info-footer{margin-top:10px;padding:12px 16px;border-radius:10px;border:1px solid var(--bdr);background:var(--cloud1);}
 .if-note{font-size:12px;color:var(--txt3);line-height:1.65;margin-bottom:10px;}
@@ -791,42 +899,84 @@ function renderPreliminary(n){
   </div>`;
 }
 
-// ── INFO FOOTER ───────────────────────────────────────────────────
-function renderInfoFooter(n){
-  const note=n.info_note||"";
-  if(!note) return "";
-  return`<div class="info-footer">
-    <div class="if-note">${esc(note)}</div>
-    <div class="if-actions">
-      <button class="if-btn primary" onclick="sendText('I would like to provide more information about our product')">Provide more information ↗</button>
-      <button class="if-btn" onclick="sendText('Can I upload our intended use statement?')">Upload intended use statement</button>
-      <button class="if-btn" onclick="sendText('Can I connect our company documents?')">Connect company documents</button>
-    </div>
-  </div>`;
-}
+// Info footer removed — no suggested action buttons
 
-// Normalize malformed backend responses where full_analysis contains embedded JSON + list
+// Deep-extract content from malformed backend responses.
+// The backend sometimes concatenates a JSON header with the actual list content
+// producing strings like: { "verdict_line": "...", "full_analysis": "preamble" 1. Item...
 function normalizeBackendResponse(data){
   if(!data) return data;
   const n = data.narrative;
   if(!n) return data;
 
-  // If full_analysis starts with a { it's a JSON-embedded blob — extract it
-  const fa = String(n.full_analysis || "").trim();
-  if(fa.startsWith("{")){
-    // Try to pull out the real preamble from inside full_analysis value
-    const innerMatch = fa.match(/"full_analysis"\s*:\s*"([^"]*)"/i);
-    const preamble = innerMatch ? innerMatch[1] : "";
-    // The list content comes after the last JSON key-value before the list
-    const listStart = fa.search(/(?:\n|")\s*"?\s*1[.)]\s+\S/);
-    const listContent = listStart !== -1 ? fa.slice(listStart).replace(/^["]+/,"").trim() : "";
-    n.full_analysis = [preamble, listContent].filter(Boolean).join("\n");
+  // Helper: extract numbered list items from ANY string, however mangled
+  function extractListItems(raw){
+    if(!raw) return [];
+    const s = String(raw).replace(/\\n/g,"\n");
+    const items = [];
+    // Match patterns: 1. text, 1) text, "1. text, even mid-string
+    const rx = /(?:^|[\n"]\s*)(\d+)[.)]\s+([^\n"]+)/gm;
+    let m;
+    while((m = rx.exec(s)) !== null){
+      const text = m[2].replace(/["}\s]+$/,"").trim();
+      if(text) items.push({num: parseInt(m[1]), text});
+    }
+    // Deduplicate by num, keep first occurrence
+    const seen = new Set();
+    return items.filter(i => { if(seen.has(i.num)) return false; seen.add(i.num); return true; });
   }
 
-  // If verdict_line also contains a JSON blob, clean it too
-  if((n.verdict_line || "").trim().startsWith("{")){
-    const m = (n.verdict_line || "").match(/"verdict_line"\s*:\s*"([^"]*)"/i);
+  // Helper: extract a clean preamble sentence from a JSON-contaminated string
+  function extractPreamble(raw){
+    if(!raw) return "";
+    const s = String(raw).trim();
+    // Pull value of "full_analysis" key if present
+    const m = s.match(/"full_analysis"\s*:\s*"([^"]+)"/i);
+    if(m) return m[1].trim();
+    // Or "verdict_line" value if full_analysis not found
+    const m2 = s.match(/"verdict_line"\s*:\s*"([^"]+)"/i);
+    if(m2) return m2[1].trim();
+    // Strip JSON prefix and return first sentence
+    const stripped = s.replace(/^\{[^}]{0,600}\}\s*/s,"").trim();
+    const firstLine = stripped.split(/\n/)[0].replace(/^["{\s]+/,"").replace(/[}"]+$/,"").trim();
+    return firstLine.match(/^\d+[.)]/) ? "" : firstLine; // don't return a list item as preamble
+  }
+
+  const fa = String(n.full_analysis || "").trim();
+  const vl = String(n.verdict_line || "").trim();
+
+  // Case 1: full_analysis looks like placeholder or is very short / generic
+  const isPlaceholder = /^(numbered steps|key obligations|here is|the following|below are|obligations include)/i.test(fa)
+    || fa.length < 60;
+
+  // Case 2: full_analysis or verdict_line contains embedded JSON blob
+  const hasJsonBlob = fa.startsWith("{") || vl.startsWith("{");
+
+  // Collect list items from ALL available string fields in the response
+  const allText = [
+    fa, vl,
+    String(data.answer||""),
+    // Sometimes the whole response payload gets stringified into one field
+  ].join("\n");
+
+  const items = extractListItems(allText);
+
+  if(items.length > 0){
+    // We found actual list content — store it for the renderer
+    n._extracted_list = items;
+    // Fix the preamble
+    if(isPlaceholder || hasJsonBlob){
+      const preamble = extractPreamble(fa) || extractPreamble(vl);
+      n.full_analysis = preamble || fa;
+    }
+  }
+
+  // Fix verdict_line if it contains a JSON blob
+  if(hasJsonBlob){
+    const m = vl.match(/"verdict_line"\s*:\s*"([^"]+)"/i);
     if(m) n.verdict_line = m[1];
+    else n.verdict_line = vl.replace(/^\{[^}]{0,400}\}\s*/s,"").split("\n")[0]
+      .replace(/^["{\s]+/,"").replace(/[}"]+$/,"").trim() || "Here are the key obligations:";
   }
 
   return data;
@@ -1230,8 +1380,138 @@ function buildTracePanel(msgId,iid,res){
   </div>`;
 }
 
+// ── REASONING TRACE ───────────────────────────────────────────────
+function renderReasoningTrace(msgId, orderedIids, allRes){
+  const cards = orderedIids.map((iid, idx) => {
+    const res = allRes[iid] || {};
+    const verdict = res.verdict || "cannot_determine";
+    const scope = res.scope || {};
+    const trace = res.trace || [];
+    const dUntil = res.deferred_until;
+    const openByDefault = idx === 0;
+
+    // ── Verdict header badge ──
+    const VBADGE = {
+      applies:         `<span class="rt-verdict-pill rt-pill-yes">✓ Applies</span>`,
+      deferred:        `<span class="rt-verdict-pill rt-pill-def">⏳ Deferred${dUntil ? " — " + fmtIsoDate(dUntil) : ""}</span>`,
+      does_not_apply:  `<span class="rt-verdict-pill rt-pill-no">✗ Does not apply</span>`,
+      cannot_determine:`<span class="rt-verdict-pill rt-pill-unk">– Uncertain</span>`,
+      prohibited:      `<span class="rt-verdict-pill rt-pill-no">⛔ Prohibited</span>`,
+    }[verdict] || `<span class="rt-verdict-pill rt-pill-unk">${esc(verdict)}</span>`;
+
+    // ── Dimension rows ──
+    function traceFor(dim, hint){
+      return trace.find(e => e.dimension === dim && (!hint || (e.predicate||"").includes(hint)))
+          || trace.find(e => e.dimension === dim && e.result !== "not_reached");
+    }
+
+    function dimRow(label, art, entryResult, entryEvidence, entryCites){
+      const r = entryResult || "cannot_determine";
+      const isMissing = r === "cannot_determine";
+      const rowCls = r === "pass" ? "rt-row-pass"
+                   : r === "deferred" ? "rt-row-def"
+                   : r === "fail" ? "rt-row-fail"
+                   : "rt-row-unk";
+      const sym = r === "pass" ? "✓" : r === "deferred" ? "⏳" : r === "fail" ? "✗" : "?";
+      const symCls = r === "pass" ? "rt-sym-pass" : r === "deferred" ? "rt-sym-def" : r === "fail" ? "rt-sym-fail" : "rt-sym-unk";
+      const cites = (entryCites || []).slice(0, 2).map(c => `<span class="rt-cite">${esc(String(c))}</span>`).join("");
+      const evidence = (entryEvidence || "").slice(0, 200);
+      return `<div class="rt-dim-row ${rowCls}">
+        <div class="rt-dim-left">
+          <span class="rt-sym ${symCls}">${sym}</span>
+          <div>
+            <div class="rt-dim-name">${label}${art ? `<span class="rt-dim-art">${art}</span>` : ""}</div>
+            ${evidence ? `<div class="rt-dim-ev">${esc(evidence)}${entryEvidence.length > 200 ? "…" : ""}</div>` : ""}
+            ${cites ? `<div class="rt-dim-cites">${cites}</div>` : ""}
+          </div>
+        </div>
+        ${isMissing ? `<span class="rt-missing-flag">⚠ Not disclosed</span>` : ""}
+      </div>`;
+    }
+
+    // Build temporal row
+    const tempE = traceFor("temporal");
+    const tempRow = dimRow(
+      "Temporal scope",
+      iid === "EU_AI_ACT" ? "Art. 113" : iid === "MDR" ? "Art. 123(1)" : "Art. 99(2)",
+      scope.temporal, tempE?.evidence || "", tempE?.citations
+    );
+
+    // Build territorial row
+    const terrE = traceFor("territorial", "territorial_connector") || traceFor("territorial");
+    const terrRow = dimRow(
+      "Territorial scope",
+      iid === "EU_AI_ACT" ? "Art. 2(1)" : iid === "MDR" ? "Art. 2(28)" : "Art. 3",
+      scope.territorial, terrE?.evidence || "", terrE?.citations
+    );
+
+    // Build material row
+    const matE = traceFor("material", "is_ai_system") || traceFor("material", "is_personal_data")
+               || traceFor("material", "manufacturer_claims") || traceFor("material");
+    const matLabel = {EU_AI_ACT: "AI system (Art. 3(1))", GDPR: "Personal data (Art. 4(1))", MDR: "Medical device (Art. 2(1))"}[iid] || "Material scope";
+    const matArt = {EU_AI_ACT: "Art. 3(1)", GDPR: "Art. 4(1)", MDR: "Art. 2(1)"}[iid] || "";
+    const matRow = dimRow(matLabel, matArt, scope.material, matE?.evidence || "", matE?.citations);
+
+    // AI Act extras
+    let extraRows = "";
+    if(iid === "EU_AI_ACT"){
+      const riskE = traceFor("material", "risk_classification");
+      if(riskE && riskE.result !== "not_reached"){
+        const riskCat = res.risk_category || "";
+        const RISK_L = {high_risk_annex_III:"High-risk · Annex III §5", high_risk_annex_I_sector_products:"High-risk · Annex I", GPAI_model:"GPAI model", prohibited:"Prohibited"};
+        extraRows += dimRow("Risk classification", "Art. 6(2), Annex III", riskE.result, riskE.evidence || (RISK_L[riskCat] || riskCat), riskE.citations);
+      }
+      const art5E = trace.find(e => (e.predicate||"").includes("prohibited_practices_check"));
+      if(art5E){
+        extraRows += dimRow("Art. 5 — Prohibited practices", "Art. 5", art5E.result,
+          art5E.result === "pass" ? "No prohibited conditions triggered." : "A prohibited AI practice identified.", art5E.citations);
+      }
+    }
+    if(iid === "MDR"){
+      const r11E = trace.find(e => (e.predicate||"").toLowerCase().includes("rule_11"));
+      if(r11E) extraRows += dimRow("Rule 11 — SaMD classification", "Annex VIII", r11E.result, r11E.evidence || "", r11E.citations);
+    }
+
+    // Count missing facts
+    const missingCount = [scope.temporal, scope.territorial, scope.material]
+      .filter(v => !v || v === "cannot_determine").length;
+
+    const bodyId = `rt-body-${msgId}-${iid}`;
+    const arrId  = `rt-arr-${msgId}-${iid}`;
+
+    return `<div class="rt-reg-card">
+      <div class="rt-reg-header" onclick="toggleRtCard('${bodyId}','${arrId}')">
+        <div class="rt-reg-header-left">
+          <span class="rt-reg-dot rt-dot-${iid === "GDPR" ? "gdpr" : iid === "EU_AI_ACT" ? "aia" : "mdr"}"></span>
+          <span class="rt-reg-name">${esc(INST_LABELS[iid] || iid)}</span>
+          ${VBADGE}
+          ${missingCount > 0 ? `<span class="rt-missing-count">⚠ ${missingCount} fact${missingCount > 1 ? "s" : ""} not disclosed</span>` : ""}
+        </div>
+        <span class="rt-arr${openByDefault ? " open" : ""}" id="${arrId}">▾</span>
+      </div>
+      <div class="rt-reg-body${openByDefault ? " open" : ""}" id="${bodyId}">
+        ${tempRow}${terrRow}${matRow}${extraRows}
+        ${missingCount > 0 ? `<div class="rt-missing-banner">
+          <span class="rt-missing-icon">⚠</span>
+          <span class="rt-missing-text"><strong>${missingCount} dimension${missingCount > 1 ? "s" : ""} could not be assessed</strong> — the relevant facts were not disclosed or are ambiguous. To complete this analysis, provide the missing information above.</span>
+        </div>` : ""}
+      </div>
+    </div>`;
+  }).join("");
+
+  return `<div class="rt-wrap">
+    <div class="rt-header">
+      <span class="rt-header-icon">≡</span>
+      <span class="rt-header-label">Reasoning trace</span>
+      <span class="rt-header-sub">${orderedIids.length} regulation${orderedIids.length > 1 ? "s" : ""} analysed</span>
+    </div>
+    ${cards}
+  </div>`;
+}
+
 // ── MAIN RENDER ───────────────────────────────────────────────────
 function renderComplianceResponse(data,msgId){
+  // Bare answer (no narrative envelope)
   if(data.answer&&!data.narrative)
     return`<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
 
@@ -1240,85 +1520,63 @@ function renderComplianceResponse(data,msgId){
   const vtype=n.verdict_type||"cannot_determine";
   const vline=n.verdict_line||"";
   const full=n.full_analysis||"";
-  const cards=n.legal_basis_cards||[];
-  const nextSteps=n.next_steps||[];
 
-  if(vtype==="indicative") return renderIndicative(n);
-  if(vtype==="gathering")  return renderGathering(n);
+  // Stage-based layouts (early return)
+  if(vtype==="indicative")  return renderIndicative(n);
+  if(vtype==="gathering")   return renderGathering(n);
   if(vtype==="preliminary") return renderPreliminary(n);
 
-  if(vtype==="general"||vtype==="context_update")
-    return`<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmtRich(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
+  // General / context_update → clean LLM answer, no symbolic card
+  if(vtype==="general"||vtype==="context_update"){
+    const cleanFull = sanitizeAnalysis(full);
+    const hasContent = cleanFull && cleanFull.trim().length > 0;
+    return`<div class="vbub ${vbubCls(vtype)}">
+      ${vbadge(vtype)}
+      <div class="verdict-line">${fmt(vline)}</div>
+      ${hasContent ? `<div class="full-a">${fmtRich(cleanFull)}</div>` : ""}
+    </div>${renderSources(data.sources||[])}`;
+  }
 
+  // ── Applicability verdict layout ──────────────────────────────────
   const allRes=sym.applicability_results||{};
   const iids=Object.keys(allRes);
+  const INST_ORDER=["GDPR","EU_AI_ACT","MDR"];
+  const orderedIids=[...INST_ORDER.filter(i=>iids.includes(i)),...iids.filter(i=>!INST_ORDER.includes(i))];
 
   const vcCls={applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",deferred:"v-def",prohibited:"v-no"}[vtype]||"v-info";
 
-  const paras=(full||"").split(/\n\n+/);
-  const firstParaRaw=sanitizeAnalysis(paras[0]||"");
-  const restParaRaw=sanitizeAnalysis(paras.slice(1).join("\n\n"));
-  const firstPara=fmtRich(firstParaRaw);
-  const restPara=fmtRich(restParaRaw);
-
+  // EUR-Lex links from legal_basis_cards
+  const cards=n.legal_basis_cards||[];
   const EURLEX_DEFAULTS={
-    GDPR:      {label:"GDPR — Regulation (EU) 2016/679",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
-    EU_AI_ACT: {label:"EU AI Act — Regulation (EU) 2024/1689", url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689"},
-    MDR:       {label:"MDR — Regulation (EU) 2017/745",         url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32017R0745"},
+    GDPR:      {label:"GDPR — Reg. (EU) 2016/679",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
+    EU_AI_ACT: {label:"EU AI Act — Reg. (EU) 2024/1689", url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689"},
+    MDR:       {label:"MDR — Reg. (EU) 2017/745",         url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32017R0745"},
   };
   const lexLinks=[];
   cards.forEach(c=>{
     const url=c.eurlex_url||(EURLEX_DEFAULTS[c.instrument_id]?.url||"");
-    const label=c.instrument_short||c.instrument_id;
     const art=c.eurlex_article||"";
-    if(url) lexLinks.push({url,label:art?`${label} · ${art}`:label});
+    const label=(c.instrument_short||c.instrument_id)+(art?" · "+art:"");
+    if(url) lexLinks.push({url,label});
   });
-  iids.forEach(iid=>{
-    if(!cards.find(c=>c.instrument_id===iid)&&EURLEX_DEFAULTS[iid]){
-      const d=EURLEX_DEFAULTS[iid];
-      lexLinks.push({url:d.url,label:d.label});
-    }
+  orderedIids.forEach(iid=>{
+    if(!cards.find(c=>c.instrument_id===iid)&&EURLEX_DEFAULTS[iid])
+      lexLinks.push(EURLEX_DEFAULTS[iid]);
   });
   const lexHtml=lexLinks.length
-    ?`<div class="vc-lex">${lexLinks.map(l=>`<a class="vc-lex-link" href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join("")}</div>`
-    :"";
+    ?`<div class="vc-lex">${lexLinks.map(l=>`<a class="vc-lex-link" href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join("")}</div>`:"";
 
-  const INST_ORDER=["GDPR","EU_AI_ACT","MDR"];
-  const orderedIids=[...INST_ORDER.filter(i=>iids.includes(i)),...iids.filter(i=>!INST_ORDER.includes(i))];
+  // Summary text (first paragraph only, clean)
+  const summaryText = fmt(sanitizeAnalysis(full).split(/\n\n+/)[0]||"");
 
-  const firstApply=orderedIids.find(i=>allRes[i]?.verdict==="applies");
-  const firstDeferred=orderedIids.find(i=>allRes[i]?.verdict==="deferred");
-  const defaultTab=firstApply||firstDeferred||orderedIids[0];
-  _activeTab[msgId]=defaultTab;
-
-  function verdictPillCls(v){return{applies:"rtb-pill-ok",deferred:"rtb-pill-def",does_not_apply:"rtb-pill-no",prohibited:"rtb-pill-no"}[v]||"rtb-pill-unk";}
-  function verdictPillLabel(v,d){return{applies:"✓ Applies",deferred:`◷ Deferred${d?" — "+fmtIsoDate(d):""}`,does_not_apply:"✗ Not applicable",prohibited:"⛔ Prohibited",cannot_determine:"– Uncertain"}[v]||v;}
-
-  const tabButtons=orderedIids.map(iid=>{
-    const res=allRes[iid]||{};
-    const verdict=res.verdict||"cannot_determine";
-    const dUntil=res.deferred_until;
-    const isActive=iid===defaultTab;
-    const baseCls=`reg-tab-btn rtb-${iid==="EU_AI_ACT"?"aia":iid.toLowerCase()}`;
-    const activeCls=isActive?" "+regTabActiveCls(iid):"";
-    return`<button class="${baseCls}${activeCls}" data-msg="${msgId}" data-iid="${iid}" onclick="switchRegTab('${msgId}','${iid}')">
-      <span class="rtb-dot"></span>
-      ${esc(INST_LABELS[iid]||iid)}
-      <span class="rtb-pill ${verdictPillCls(verdict)}">${verdictPillLabel(verdict,dUntil)}</span>
-    </button>`;
-  }).join("");
-
-  const tracePanels=orderedIids.map(iid=>buildTracePanel(msgId,iid,allRes[iid]||{})).join("");
-
-  // Next steps
+  // Next steps section
+  const nextSteps=n.next_steps||[];
   let nsSec="";
   if(nextSteps.length){
-    const TIMING_CLS=(t)=>{
+    const TIMING_CLS=t=>{
       if(!t) return"st-ongoing";
       const tl=t.toLowerCase();
-      if(tl.includes("immediate")) return"st-immediate";
-      if(tl.includes("before")||/\d{4}/.test(t)) return"st-before";
-      return"st-ongoing";
+      return tl.includes("immediate")?"st-immediate":tl.includes("before")||/\d{4}/.test(t)?"st-before":"st-ongoing";
     };
     const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
       <div class="step-num">${i+1}</div>
@@ -1340,18 +1598,21 @@ function renderComplianceResponse(data,msgId){
     <div class="verdict-card ${vcCls}">
       ${vbadge(vtype)}
       <div class="vc-verdict-line">${fmt(vline)}</div>
-      <div class="vc-analysis">${firstPara}</div>
-      ${restPara?`<div class="vc-more" id="vc-more-${msgId}">${restPara}</div>
-      <button class="vc-expand" id="vc-exp-${msgId}" onclick="toggleVcMore('${msgId}')">Read full analysis ↓</button>`:""}
+      ${summaryText ? `<div class="vc-analysis">${summaryText}</div>` : ""}
       ${lexHtml}
-      ${iids.length?`<div class="vc-sep"></div>
-      <div class="reg-tab-strip">${tabButtons}</div>
-      ${tracePanels}`:""}
     </div>
+    ${orderedIids.length ? renderReasoningTrace(msgId, orderedIids, allRes) : ""}
     ${nsSec}
     ${renderSources(data.sources||[])}
-    ${renderInfoFooter(n)}
   `;
+}
+
+function toggleRtCard(bodyId, arrId){
+  const body = document.getElementById(bodyId);
+  const arr  = document.getElementById(arrId);
+  if(!body) return;
+  body.classList.toggle("open");
+  if(arr) arr.classList.toggle("open");
 }
 
 function toggleVcMore(msgId){
@@ -1394,12 +1655,10 @@ function renderMsgs(){
   el.scrollTop=el.scrollHeight;
 }
 
-function renderActs(actions){
+function renderActs(){
+  // Suggested action buttons permanently removed
   const bar=document.getElementById("acts");
-  if(!actions?.length){bar.style.display="none";return;}
-  bar.style.display="flex";
-  window._acts=actions;
-  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="window._acts&&(document.getElementById('cin').value=window._acts[${i}]);send()">${esc(a)}</button>`).join("");
+  if(bar) bar.style.display="none";
 }
 
 function updateHdr(t){
