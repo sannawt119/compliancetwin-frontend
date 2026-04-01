@@ -17,6 +17,8 @@
   --red:#dc2626;--red-l:rgba(220,38,38,.08);
   --amber:#d97706;--amber-l:rgba(217,119,6,.09);
   --purple:#7c3aed;--purple-l:rgba(124,58,237,.09);
+  /* NEW: deferred — navy/indigo, distinct from cannot_determine amber */
+  --def:#1e3a8a;--def-mid:#2d55c8;--def-l:rgba(30,58,138,.08);--def-lt:#eef2ff;
   --bdr:rgba(45,107,228,.11);--bdr2:rgba(45,107,228,.2);
   --glass:rgba(255,255,255,.8);
   --sh-xs:0 1px 3px rgba(15,29,78,.05),0 0 0 1px rgba(45,107,228,.07);
@@ -33,7 +35,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 #poly-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:visible;opacity:.6;}
 #sb,#main{position:relative;z-index:1;}
 
-/* SIDEBAR */
+/* ── SIDEBAR ─────────────────────────────────────────────── */
 #sb{width:244px;min-width:244px;background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;}
 .sb-logo{padding:14px 14px 12px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;}
 .sb-sec{padding:11px 14px 3px;font-size:9px;font-weight:700;color:var(--txt4);text-transform:uppercase;letter-spacing:.1em;}
@@ -57,7 +59,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .user-name{font-size:12px;font-weight:700;color:var(--txt);}
 .user-role{font-size:9.5px;color:var(--txt4);}
 
-/* MAIN */
+/* ── MAIN ────────────────────────────────────────────────── */
 #main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 #mhdr{padding:10px 22px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .mhdr-l{display:flex;align-items:center;gap:10px;}
@@ -69,7 +71,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hdr-btn{padding:5px 12px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.7);font-size:10.5px;color:var(--txt2);cursor:pointer;font-family:var(--font);transition:.12s;}
 .hdr-btn:hover{background:var(--blue-lt);border-color:var(--bdr2);}
 
-/* MESSAGES */
+/* ── MESSAGES ────────────────────────────────────────────── */
 #msgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
 #msgs::-webkit-scrollbar{width:4px;}
 #msgs::-webkit-scrollbar-thumb{background:var(--cloud4);border-radius:2px;}
@@ -80,17 +82,23 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .ai-icon svg{width:100%;height:100%;display:block;}
 .ai-parts{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;}
 
-/* VERDICT BUBBLE — hero, always large */
+/* ── VERDICT BUBBLE ─────────────────────────────────────── */
 .vbub{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;padding:16px 18px;box-shadow:var(--sh-md);}
-.vbub.v-yes{border-left:3px solid var(--green);background:linear-gradient(135deg,rgba(5,150,105,.04) 0%,#fff 45%);}
-.vbub.v-no {border-left:3px solid var(--red);  background:linear-gradient(135deg,rgba(220,38,38,.04) 0%,#fff 45%);}
-.vbub.v-unk{border-left:3px solid var(--amber); background:linear-gradient(135deg,rgba(217,119,6,.04) 0%,#fff 45%);}
-.vbub.v-info{border-left:3px solid var(--blue); background:linear-gradient(135deg,rgba(45,107,228,.04) 0%,#fff 45%);}
+.vbub.v-yes {border-left:3px solid var(--green); background:linear-gradient(135deg,rgba(5,150,105,.04) 0%,#fff 45%);}
+.vbub.v-no  {border-left:3px solid var(--red);   background:linear-gradient(135deg,rgba(220,38,38,.04) 0%,#fff 45%);}
+.vbub.v-unk {border-left:3px solid var(--amber);  background:linear-gradient(135deg,rgba(217,119,6,.04) 0%,#fff 45%);}
+.vbub.v-info{border-left:3px solid var(--blue);   background:linear-gradient(135deg,rgba(45,107,228,.04) 0%,#fff 45%);}
+/* NEW: DEFERRED — navy left border, indigo tint */
+.vbub.v-def {border-left:3px solid var(--def);    background:linear-gradient(135deg,rgba(30,58,138,.04) 0%,#fff 45%);}
+
 .vbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;}
-.vb-yes{background:var(--green-l);color:var(--green);}
-.vb-no {background:var(--red-l);  color:var(--red);}
-.vb-unk{background:var(--amber-l);color:var(--amber);}
+.vb-yes {background:var(--green-l); color:var(--green);}
+.vb-no  {background:var(--red-l);   color:var(--red);}
+.vb-unk {background:var(--amber-l); color:var(--amber);}
 .vb-info,.vb-ctx{background:var(--blue-lt);color:var(--blue);}
+/* NEW */
+.vb-def {background:var(--def-l);   color:var(--def); border:1px solid rgba(30,58,138,.2);}
+
 .verdict-line{font-size:14px;line-height:1.65;color:var(--txt);font-weight:500;}
 .full-a{margin-top:13px;padding-top:12px;border-top:1px solid rgba(45,107,228,.1);font-size:13px;line-height:1.78;color:var(--txt2);}
 .full-a.collapsed{display:none;}
@@ -99,13 +107,30 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .expand-meta{margin-top:10px;font-size:10px;color:var(--txt4);display:flex;align-items:center;gap:7px;}
 .em-dot{width:3px;height:3px;border-radius:50%;background:var(--txt4);}
 
-/* COLLAPSIBLE SECONDARY SECTIONS */
+/* NEW: deferred date chip inside verdict bubble */
+.deferred-chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 12px;
+  border-radius:8px;background:var(--def-lt);border:1px solid rgba(30,58,138,.18);}
+.deferred-chip-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--def);opacity:.7;}
+.deferred-chip-date{font-size:12px;font-weight:700;color:var(--def);font-family:var(--mono);}
+
+/* NEW: multi-regulation summary strip */
+.reg-summary{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.reg-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
+  font-size:10px;font-weight:700;border:1px solid transparent;}
+.reg-chip-applies  {background:var(--green-l);color:var(--green); border-color:rgba(5,150,105,.2);}
+.reg-chip-deferred {background:var(--def-l);  color:var(--def);   border-color:rgba(30,58,138,.2);}
+.reg-chip-no       {background:var(--red-l);  color:var(--red);   border-color:rgba(220,38,38,.15);}
+.reg-chip-unk      {background:var(--amber-l);color:var(--amber); border-color:rgba(217,119,6,.15);}
+.reg-chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ── COLLAPSIBLE SECTIONS ────────────────────────────────── */
 .sec-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;cursor:pointer;background:rgba(255,255,255,.65);border:1px solid var(--bdr);transition:.12s;user-select:none;backdrop-filter:blur(8px);}
 .sec-toggle:hover{background:var(--blue-lt);border-color:var(--bdr2);}
 .sec-lbl{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:600;color:var(--txt2);}
 .sec-pip{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 .pip-blue{background:var(--blue);}
 .pip-green{background:var(--green);}
+.pip-def{background:var(--def);}
 .sec-right{display:flex;align-items:center;gap:8px;}
 .sec-tag{font-size:9px;font-weight:700;color:var(--txt4);font-family:var(--mono);}
 .sec-arr{font-size:9px;color:var(--txt4);transition:transform .2s;}
@@ -113,7 +138,34 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .sec-body{display:none;flex-direction:column;gap:7px;padding:3px 0 2px;}
 .sec-body.open{display:flex;}
 
-/* LEGAL CARDS */
+/* ── ASSESSMENT TABLE (NEW) ─────────────────────────────── */
+.atbl-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
+.atbl{width:100%;border-collapse:collapse;font-size:11px;}
+.atbl thead th{padding:7px 11px;background:var(--cloud1);border-bottom:1px solid var(--bdr);
+  font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--txt4);
+  text-align:left;white-space:nowrap;}
+.atbl tbody tr{border-bottom:1px solid var(--bdr);}
+.atbl tbody tr:last-child{border-bottom:none;}
+.atbl tbody tr:hover{background:var(--cloud1);}
+.atbl td{padding:8px 11px;vertical-align:top;line-height:1.5;}
+.atbl-cat{font-weight:600;color:var(--txt);font-size:11px;min-width:130px;}
+.atbl-sub{font-size:9.5px;color:var(--txt4);margin-top:2px;}
+.atbl-assess{min-width:80px;}
+.atbl-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;
+  font-size:9px;font-weight:700;white-space:nowrap;}
+.ab-yes {background:var(--green-l); color:var(--green);}
+.ab-no  {background:var(--red-l);   color:var(--red);}
+.ab-unk {background:var(--amber-l); color:var(--amber);}
+.ab-def {background:var(--def-l);   color:var(--def);}
+.ab-pass{background:rgba(5,150,105,.07);color:var(--green);}
+.ab-na  {background:var(--cloud2);  color:var(--txt4);}
+.atbl-basis{font-family:var(--mono);font-size:9.5px;color:var(--blue);min-width:120px;}
+.atbl-reason{font-size:11px;color:var(--txt2);max-width:220px;}
+.atbl-outcome{font-size:10.5px;color:var(--txt2);max-width:160px;}
+.atbl-section-hdr td{background:var(--cloud2);padding:5px 11px;
+  font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);}
+
+/* ── LEGAL CARDS ─────────────────────────────────────────── */
 .lc{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
 .lc-head{padding:7px 13px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;background:var(--cloud1);}
 .lc-lbl{font-size:8px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.12em;}
@@ -123,7 +175,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .lc-arts{font-size:12.5px;font-weight:800;color:var(--txt);font-family:var(--mono);}
 .lc-desc{font-size:10.5px;color:var(--txt2);margin-top:3px;line-height:1.5;}
 
-/* REASONING */
+/* ── SCOPE ANALYSIS (REASONING) ─────────────────────────── */
 .rcard{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
 .rcard-body{padding:10px 13px;display:flex;flex-direction:column;gap:10px;}
 .inst-row{padding-bottom:9px;border-bottom:1px solid rgba(45,107,228,.08);}
@@ -133,12 +185,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .idot-yes{background:var(--green);box-shadow:0 0 0 2px var(--green-l);}
 .idot-no {background:var(--red);  box-shadow:0 0 0 2px var(--red-l);}
 .idot-unk{background:var(--amber);box-shadow:0 0 0 2px var(--amber-l);}
+.idot-def{background:var(--def);  box-shadow:0 0 0 2px var(--def-l);}   /* NEW */
 .inst-name{font-size:11px;font-weight:700;color:var(--txt);}
+/* NEW: deferred date tag inline with inst name */
+.inst-deferred-tag{margin-left:6px;padding:1px 7px;border-radius:6px;
+  font-size:8px;font-weight:700;background:var(--def-lt);color:var(--def);font-family:var(--mono);}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;}
 .pill{padding:2px 9px;border-radius:20px;font-size:9.5px;font-weight:600;display:inline-flex;align-items:center;gap:3px;border:1px solid transparent;}
 .pill.ok  {background:var(--green-l);color:var(--green);border-color:rgba(5,150,105,.18);}
 .pill.fail{background:var(--red-l);  color:var(--red);  border-color:rgba(220,38,38,.14);}
 .pill.unk {background:var(--amber-l);color:var(--amber);border-color:rgba(217,119,6,.14);}
+.pill.def {background:var(--def-l);  color:var(--def);  border-color:rgba(30,58,138,.18);}  /* NEW */
 .pill.excl{background:var(--cloud2); color:var(--txt3); border-color:var(--bdr);}
 .risk-badge{padding:1px 8px;border-radius:5px;font-size:9px;font-weight:700;background:var(--blue-lt);color:var(--blue);border:1px solid rgba(45,107,228,.2);font-family:var(--mono);}
 .risk-badge.ai{background:var(--purple-l);color:var(--purple);border-color:rgba(124,58,237,.2);}
@@ -152,12 +209,35 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-entry{padding:6px 11px;border-bottom:1px solid var(--bdr);display:grid;grid-template-columns:16px 1fr;gap:7px;font-size:10.5px;align-items:start;}
 .trace-entry:last-child{border-bottom:none;}
 .trace-sym{font-weight:800;line-height:1.5;}
-.ts-pass{color:var(--green);}.ts-fail{color:var(--red);}.ts-unk{color:var(--amber);}
+.ts-pass{color:var(--green);}.ts-fail{color:var(--red);}.ts-unk{color:var(--amber);}.ts-def{color:var(--def);}
 .trace-ev{color:var(--txt);line-height:1.55;}
 .trace-note{font-size:9.5px;color:var(--blue);margin-top:2px;}
 .trace-cite{font-size:9px;color:var(--txt4);margin-top:1px;font-family:var(--mono);}
 
-/* EUR-Lex chips in verdict bubble */
+/* NEW: Art.5 prohibited check pass chip */
+.art5-pass{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:3px 10px;
+  border-radius:20px;background:var(--green-l);border:1px solid rgba(5,150,105,.18);
+  font-size:9.5px;font-weight:600;color:var(--green);}
+
+/* ── OBLIGATIONS TABS (NEW) ─────────────────────────────── */
+.ob-tabs-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
+.ob-tab-bar{display:flex;border-bottom:1px solid var(--bdr);background:var(--cloud1);}
+.ob-tab{padding:7px 14px;font-size:10px;font-weight:700;color:var(--txt3);cursor:pointer;
+  border-bottom:2px solid transparent;transition:.12s;user-select:none;}
+.ob-tab:hover{color:var(--txt);}
+.ob-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--cloud0);}
+.ob-panel{display:none;padding:10px 13px;}
+.ob-panel.active{display:block;}
+.ob-list{display:flex;flex-direction:column;gap:5px;}
+.ob-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;
+  padding:6px 9px;border-radius:8px;background:var(--cloud1);border:1px solid var(--bdr);}
+.ob-item:hover{background:var(--blue-lt);border-color:var(--bdr2);}
+.ob-label{font-size:11px;font-weight:600;color:var(--txt);}
+.ob-desc{font-size:10px;color:var(--txt3);margin-top:2px;line-height:1.4;}
+.ob-art{font-size:9px;font-weight:700;font-family:var(--mono);color:var(--blue);
+  padding:1px 7px;border-radius:5px;background:var(--blue-lt);white-space:nowrap;flex-shrink:0;}
+
+/* ── EUR-LEX CHIPS ──────────────────────────────────────── */
 .lex-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
 .lex-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;
   border:1px solid var(--bdr2);border-radius:20px;
@@ -165,10 +245,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:var(--blue-lt);transition:.12s;}
 .lex-chip:hover{background:rgba(45,107,228,.15);}
 
-/* Next steps section */
+/* ── NEXT STEPS ─────────────────────────────────────────── */
 .step-row{display:grid;grid-template-columns:20px 1fr auto;gap:8px;
-  align-items:start;padding:7px 0;border-bottom:1px solid var(--bdr);transition:.12s;border-radius:6px;padding-left:4px;}
-.step-row:hover{background:var(--blue-lt);}
+  align-items:start;padding:7px 0;border-bottom:1px solid var(--bdr);}
 .step-row:last-child{border-bottom:none;}
 .step-num{width:20px;height:20px;border-radius:50%;background:var(--blue);
   color:#fff;font-size:9px;font-weight:800;
@@ -177,11 +256,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .step-basis{font-size:9.5px;color:var(--txt3);margin-top:2px;font-family:var(--mono);}
 .step-timing{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;
   white-space:nowrap;flex-shrink:0;}
-.st-immediate{background:var(--red-l);color:var(--red);}
-.st-before{background:var(--amber-l);color:var(--amber);}
-.st-ongoing{background:var(--green-l);color:var(--green);}
+.st-immediate{background:var(--red-l);  color:var(--red);}
+.st-before   {background:var(--amber-l);color:var(--amber);}
+.st-ongoing  {background:var(--green-l);color:var(--green);}
+/* NEW: deferred timing */
+.st-deferred {background:var(--def-l);  color:var(--def);}
 
-/* Cannot-determine conditional card */
+/* ── CANNOT-DETERMINE CARD ──────────────────────────────── */
 .cond-card{padding:12px 14px;border-radius:12px;
   background:linear-gradient(135deg,var(--blue-lt),rgba(255,255,255,.8));
   border:1px solid var(--bdr2);}
@@ -201,29 +282,24 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-overall.overall-pass{background:var(--green-l);border-color:rgba(5,150,105,.2);}
 .trace-overall.overall-fail{background:var(--red-l);border-color:rgba(220,38,38,.15);}
 .trace-overall.overall-unk{background:var(--amber-l);border-color:rgba(217,119,6,.15);}
+.trace-overall.overall-def{background:var(--def-l);border-color:rgba(30,58,138,.2);}   /* NEW */
 .overall-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
 .trace-overall.overall-pass .overall-lbl{color:var(--green);}
 .trace-overall.overall-fail .overall-lbl{color:var(--red);}
-.trace-overall.overall-unk .overall-lbl{color:var(--amber);}
+.trace-overall.overall-unk  .overall-lbl{color:var(--amber);}
+.trace-overall.overall-def  .overall-lbl{color:var(--def);}   /* NEW */
 .overall-text{font-size:11px;line-height:1.65;color:var(--txt2);}
 
-/* PLAYBOOK */
-.pb-card{background:var(--cloud0);border:1px solid rgba(45,107,228,.2);border-radius:var(--r);padding:10px 13px;box-shadow:var(--sh-xs);}
-.pb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
-.pb-lbl{font-size:8px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.12em;}
-.pb-view{font-size:9.5px;color:var(--blue);cursor:pointer;font-weight:600;}
-.pb-ctx{font-size:10.5px;color:var(--txt2);line-height:1.5;}
-
-/* ALERTS */
+/* ── ALERTS ─────────────────────────────────────────────── */
 .alert-card{padding:10px 14px;border-radius:10px;border:1px solid;}
 .alert-clarify{background:linear-gradient(135deg,var(--amber-l),#fff);border-color:rgba(217,119,6,.22);}
-.alert-art9{background:linear-gradient(135deg,var(--red-l),#fff);border-color:rgba(220,38,38,.18);}
+.alert-art9   {background:linear-gradient(135deg,var(--red-l),#fff);  border-color:rgba(220,38,38,.18);}
 .alert-lbl{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px;}
 .alert-clarify .alert-lbl{color:#92400e;}.alert-art9 .alert-lbl{color:#991b1b;}
 .alert-q{font-size:11.5px;margin-bottom:2px;}
 .alert-clarify .alert-q{color:#78350f;}.alert-art9 .alert-q{color:#7f1d1d;}
 
-/* SOURCES */
+/* ── SOURCES ─────────────────────────────────────────────── */
 .src-toggle{padding:4px 11px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.6);font-size:10px;color:var(--txt3);cursor:pointer;font-family:var(--font);transition:.12s;font-weight:500;}
 .src-toggle:hover{background:var(--blue-lt);color:var(--blue);}
 .src-list{display:none;margin-top:6px;padding:9px 11px;border:1px solid var(--bdr);border-radius:9px;background:var(--cloud0);}
@@ -234,14 +310,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .src-score{color:var(--txt4);margin-left:6px;font-family:var(--mono);font-size:10px;}
 .src-text{color:var(--txt2);margin-top:2px;line-height:1.45;font-size:10px;}
 
-/* LOADING */
+/* ── LOADING ─────────────────────────────────────────────── */
 .ldots{display:flex;gap:4px;align-items:center;}
 .ld{width:6px;height:6px;background:var(--cloud4);border-radius:50%;animation:bounce 1.1s infinite;}
 .ld:nth-child(2){animation-delay:.18s;}.ld:nth-child(3){animation-delay:.36s;}
 @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);}}
 .ld-status{font-size:10.5px;color:var(--txt4);font-style:italic;margin-left:10px;}
 
-/* ACTIONS */
+/* ── ACTIONS ─────────────────────────────────────────────── */
 #acts{padding:8px 22px;border-top:1px solid var(--bdr);display:none;flex-wrap:wrap;gap:6px;flex-shrink:0;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);}
 .act{padding:6px 15px;border-radius:20px;font-size:11.5px;cursor:pointer;font-family:var(--font);border:none;transition:.12s;font-weight:600;}
 .act.pri{background:linear-gradient(135deg,var(--blue-dk),var(--blue));color:#fff;box-shadow:0 2px 8px rgba(45,107,228,.25);}
@@ -249,7 +325,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .act.sec{background:rgba(255,255,255,.8);color:var(--txt);border:1px solid var(--bdr);}
 .act.sec:hover{background:var(--blue-lt);border-color:var(--bdr2);}
 
-/* INPUT */
+/* ── INPUT ───────────────────────────────────────────────── */
 #inbar{padding:10px 22px 14px;border-top:1px solid var(--bdr);display:flex;gap:9px;align-items:flex-end;flex-shrink:0;background:rgba(255,255,255,.78);backdrop-filter:blur(20px);}
 #cin{flex:1;padding:11px 15px;border:1.5px solid var(--bdr2);border-radius:12px;font-size:13px;color:var(--txt);outline:none;resize:none;font-family:var(--font);line-height:1.4;max-height:100px;overflow-y:auto;background:var(--cloud0);transition:.15s;font-weight:500;}
 #cin::placeholder{color:var(--txt4);font-weight:400;}
@@ -258,7 +334,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 #sbtn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(45,107,228,.35);}
 #sbtn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
 
-/* WELCOME */
+/* ── WELCOME ─────────────────────────────────────────────── */
 #welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
 .wt{font-size:14px;font-weight:500;color:var(--txt2);margin-top:14px;margin-bottom:5px;}
 .ws{font-size:13px;max-width:360px;line-height:1.7;color:var(--txt3);}
@@ -324,14 +400,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 </main>
 
 <script>
-// ── ICON (brackets + dot only, no text) ─────────────────
+// ── ICON ──────────────────────────────────────────────────────────
 const ICON_SVG=`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 7L9 7L9 41L18 41" stroke="#0F1D4E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M30 7L39 7L39 41L30 41" stroke="#2D6BE4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="24" cy="24" r="4" fill="#2D6BE4"/>
 </svg>`;
 
-// ── POLYGON CLOUD MESH ───────────────────────────────────
+// ── POLYGON BACKGROUND ────────────────────────────────────────────
 (function(){
   const svg=document.getElementById("poly-bg");
   const W=window.innerWidth,H=window.innerHeight;
@@ -360,70 +436,37 @@ const ICON_SVG=`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/20
   }
 })();
 
-// ── CONFIG ───────────────────────────────────────────────
+// ── CONFIG ────────────────────────────────────────────────────────
 const BACKEND="https://sannawt-compliancetwin.hf.space";
-const EURLEX={GDPR:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",EU_AI_ACT:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",MDR:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745"};
-const INST_LABELS={GDPR:"General Data Protection Regulation",EU_AI_ACT:"EU Artificial Intelligence Act",MDR:"Medical Device Regulation"};
+const EURLEX={
+  GDPR:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",
+  EU_AI_ACT: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",
+  MDR:       "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745",
+};
+const INST_LABELS={
+  GDPR:      "General Data Protection Regulation",
+  EU_AI_ACT: "EU Artificial Intelligence Act",
+  MDR:       "Medical Device Regulation",
+};
+const INST_SHORT={GDPR:"GDPR",EU_AI_ACT:"EU AI Act",MDR:"MDR"};
 
-const INST_FULL={GDPR:"the GDPR",EU_AI_ACT:"the EU AI Act",MDR:"the MDR"};
-
-function fmtDate(iso){
-  if(!iso) return iso;
-  const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  return iso.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g,(_,y,m,d)=>`${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`);
-}
-
-function fmtCitation(s, iid){
-  if(!s) return s;
-  const law = INST_FULL[iid] || "";
-  // Expand Art. → Article
-  let out = s
-    .replace(/\bArt\.\s*/g,"Article ")
-    .replace(/\bAnnex\b/g,"Annex");
-  // Only append law name if the citation doesn't already reference a law
-  // and if it looks like a pure article/recital reference (not a note/description)
-  const looksLikeCitation = /^(Article|Recital|Annex|MDCG|IEC|ISO|EDPB)/i.test(out.trim());
-  const alreadyHasLaw = out.toLowerCase().includes("of the") ||
-    out.toLowerCase().includes("gdpr") ||
-    out.toLowerCase().includes("mdr") ||
-    out.toLowerCase().includes("ai act") ||
-    out.toLowerCase().includes("ivdr");
-  if(law && looksLikeCitation && !alreadyHasLaw){
-    out = out + " of " + law;
-  }
-  return out;
-}
-
-function fmtTraceNote(note){
-  if(!note) return "";
-  return fmtDate(note)
-    .replace(/Obligations under high_risk_annex_III/g,"Note: obligations for High-Risk AI systems (Annex III)")
-    .replace(/Obligations under high_risk_annex_I_sector_products/g,"Note: obligations for AI safety components in regulated products (Annex I)")
-    .replace(/high_risk_annex_III/g,"High-Risk AI (Annex III)")
-    .replace(/high_risk_annex_I_sector_products/g,"High-Risk AI (Annex I — safety component)")
-    .replace(/GPAI_model/g,"General Purpose AI model");
-}
-
-function fmtTraceEvidence(ev){
-  if(!ev) return "";
-  return fmtDate(ev)
-    .replace(/high_risk_annex_III/g,"High-Risk AI (Annex III)")
-    .replace(/high_risk_annex_I_sector_products/g,"High-Risk AI (Annex I)")
-    .replace(/GPAI_model/g,"GPAI")
-    .replace(/← GOVERNING DATE/g,"← governing date");
-}
-
-// ── STATE ────────────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────────────────────
 let SESSION_ID=crypto.randomUUID(),msgs=[],sessions=[],activeSess="new",msgCount=0,loading=false,midN=0;
 const nid=()=>"m"+(++midN);
 
-// ── UTILS ────────────────────────────────────────────────
+// ── UTILS ─────────────────────────────────────────────────────────
 const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const fmt=s=>s?fmtDate(esc(s)).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
+const fmt=s=>s?esc(s).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
 const autoH=el=>{el.style.height="auto";el.style.height=Math.min(el.scrollHeight,100)+"px";};
 const onKey=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
 const setQ=q=>{document.getElementById("cin").value=q;document.getElementById("cin").focus();};
 const toggleEl=id=>document.getElementById(id)?.classList.toggle("open");
+
+function fmtDate(iso){
+  if(!iso) return iso;
+  const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return String(iso).replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g,(_,y,m,d)=>`${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`);
+}
 
 function toggleFA(id){
   const el=document.getElementById("fa-"+id),btn=document.getElementById("fb-"+id);
@@ -441,10 +484,14 @@ function toggleTrace(pid,tid){
   const p=document.getElementById(pid),t=document.getElementById(tid);
   if(!p) return;
   const o=p.classList.toggle("open");
-  t.innerHTML=o?"▲ Hide reasoning":"▼ View reasoning";
+  t.innerHTML=o?"▲ Hide reasoning":"▼ View scope detail";
+}
+function switchObTab(wrap,role){
+  wrap.querySelectorAll(".ob-tab").forEach(t=>t.classList.toggle("active",t.dataset.role===role));
+  wrap.querySelectorAll(".ob-panel").forEach(p=>p.classList.toggle("active",p.dataset.role===role));
 }
 
-// ── BACKEND ──────────────────────────────────────────────
+// ── BACKEND ───────────────────────────────────────────────────────
 async function callBackend(q){
   const r=await fetch(`${BACKEND}/chat`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session_id:SESSION_ID,question:q})});
   if(!r.ok) throw new Error(`${r.status}: ${await r.text()}`);
@@ -457,215 +504,407 @@ async function analyzeUrl(url){
 }
 const extractUrl=t=>{const m=t.match(/https?:\/\/[^\s]+/);return m?m[0]:null;};
 
-// ── TRACE ────────────────────────────────────────────────
+// ── TRACE RENDERER ────────────────────────────────────────────────
 function renderTracePanel(iid,result,panelId){
   const trace=result.trace||[];if(!trace.length) return "";
   const dims={};
-  // Separate overall entry for special rendering
-  let overallEntry = null;
+  let overallEntry=null;
   for(const e of trace){
     const d=e.dimension||"other";
-    if(d==="overall"){ overallEntry=e; continue; }
+    if(d==="overall"){overallEntry=e;continue;}
     (dims[d]=dims[d]||[]).push(e);
   }
   const ORDER=["temporal","territorial","material","exclusion"];
-  const DLBL={temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope",exclusion:"Exclusions"};
-  const SYM={pass:"✓",fail:"✗",cannot_determine:"–",prohibited:"⛔",not_reached:"–"};
-  const CLS={pass:"ts-pass",fail:"ts-fail",cannot_determine:"ts-unk",prohibited:"ts-fail",not_reached:"ts-unk"};
+  const DLBL={temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope",exclusion:"Exclusions & checks"};
+  const SYM={pass:"✓",fail:"✗",cannot_determine:"–",prohibited:"⛔",not_reached:"–",deferred:"⏳"};
+  const CLS={pass:"ts-pass",fail:"ts-fail",cannot_determine:"ts-unk",prohibited:"ts-fail",not_reached:"ts-unk",deferred:"ts-def"};
   let html=`<div id="${panelId}" class="trace-panel">`;
   for(const dim of ORDER){
     const entries=dims[dim];if(!entries?.length) continue;
     html+=`<div class="trace-dim-hdr">${DLBL[dim]||dim}</div>`;
     for(const e of entries){
       const r=e.result||"cannot_determine";
-      // Format evidence: dates, tag labels, governing markers
-      let ev = fmtTraceEvidence(esc(e.evidence||""));
-      if(e.evidence?.includes("← GOVERNING DATE"))
-        ev=fmtDate(esc(e.evidence.replace(" ← GOVERNING DATE","")))+`<span class="governing-tag">governing date</span>`;
-      if(e.evidence?.includes("[GOVERNING PATH]"))
-        ev=fmtDate(esc(e.evidence.replace(" [GOVERNING PATH]","")))+`<span class="governing-tag">governing path</span>`;
-      if(e.evidence?.includes("[ADDITIONAL PATH]"))
-        ev=fmtDate(esc(e.evidence.replace(" [ADDITIONAL PATH]","")))+`<span class="additional-tag">+ future path</span>`;
-      // Format citations: "Art. 113 of the EU AI Act" style
+      const ev=esc(e.evidence||"");
       const rawCites=(e.citations||[]).slice(0,3);
-      const cites=rawCites.map(c=>fmtCitation(c,iid)).join("; ");
-      const note = fmtTraceNote(e.note||"");
+      const cites=rawCites.map(c=>esc(c)).join("; ");
+      const note=esc(e.note||"");
       html+=`<div class="trace-entry">
         <span class="trace-sym ${CLS[r]||"ts-unk"}">${SYM[r]||"–"}</span>
         <div>
           <div class="trace-ev">${ev}</div>
-          ${cites?`<div class="trace-cite">${esc(cites)}</div>`:""}
-          ${note?`<div class="trace-note">→ ${esc(note)}</div>`:""}
+          ${cites?`<div class="trace-cite">${cites}</div>`:""}
+          ${note?`<div class="trace-note">→ ${note}</div>`:""}
         </div>
       </div>`;
     }
   }
-  // Overall assessment — rendered as a clear summary paragraph, not a trace row
   if(overallEntry){
     const r=overallEntry.result||"cannot_determine";
-    const overallCls = r==="pass"?"overall-pass":r==="fail"?"overall-fail":"overall-unk";
-    // Check if failure is due to temporal only — use conditional language
-    const temporalFailed = (dims["temporal"]||[]).some(e=>e.result==="fail");
-    const territorOrMatPassed = (dims["territorial"]||[]).some(e=>e.result==="pass") &&
-                                (dims["material"]||[]).some(e=>e.result==="pass");
-    let overallLbl, overallEvidence;
-    if(r==="fail" && temporalFailed && territorOrMatPassed){
-      overallLbl = "Does not apply yet — but would apply once in force";
-      overallEvidence = fmt(fmtDate(overallEntry.evidence||"")) +
-        `<div style="margin-top:6px;padding:6px 8px;border-radius:6px;background:rgba(45,107,228,.07);font-size:11px;color:var(--txt2);">
-          <strong>Conditional note:</strong> Territorial and material scope are both satisfied. Once the applicable date is reached, the obligations will apply in full and a conformity assessment or equivalent compliance steps will be required.
-        </div>`;
-    } else if(r==="pass"){
-      overallLbl = "Regulation applies";
-      overallEvidence = fmt(fmtDate(overallEntry.evidence||""));
-    } else {
-      overallLbl = r==="cannot_determine"?"Assessment incomplete":"Regulation does not apply";
-      overallEvidence = fmt(fmtDate(overallEntry.evidence||""));
-    }
+    const overallCls=r==="pass"?"overall-pass":r==="fail"?"overall-fail":r==="deferred"?"overall-def":"overall-unk";
+    const overallLbl=r==="pass"?"Regulation applies":r==="deferred"?"In scope — obligations deferred":r==="fail"?"Regulation does not apply":"Cannot determine";
     html+=`<div class="trace-overall ${overallCls}">
       <div class="overall-lbl">${overallLbl}</div>
-      <div class="overall-text">${overallEvidence}</div>
+      <div class="overall-text">${fmt(overallEntry.evidence||"")}</div>
     </div>`;
   }
   return html+"</div>";
 }
 
+// ── SCOPE PILLS ───────────────────────────────────────────────────
 function renderScopePills(iid,sd,result){
   const scope=result.scope||{};let pills="";
   for(const d of ["temporal","territorial","material"]){
     const r=scope[d];if(!r||r==="not_reached")continue;
-    pills+=`<span class="pill ${r==="pass"?"ok":r==="fail"?"fail":"unk"}">${d[0].toUpperCase()+d.slice(1)} ${r==="pass"?"✓":r==="fail"?"✗":"?"}</span>`;
+    const cls=r==="pass"?"ok":r==="fail"?"fail":r==="deferred"?"def":"unk";
+    const sym=r==="pass"?"✓":r==="fail"?"✗":r==="deferred"?"⏳":"?";
+    pills+=`<span class="pill ${cls}">${d[0].toUpperCase()+d.slice(1)} ${sym}</span>`;
   }
   const excl=(sd||{})[iid]?.exclusion_triggered===true;
   pills+=`<span class="pill excl">Excl. ${excl?"Triggered":"None"}</span>`;
   const cats=((sd||{})[iid]?.risk_categories)||[];
-  if(cats.length>1){const L={high_risk_annex_III:"Annex III",high_risk_annex_I_sector_products:"Annex I",GPAI_model:"GPAI",prohibited:"Prohibited"};cats.forEach(c=>pills+=`<span class="risk-badge${c.includes("annex_I_sector")?" ai":""}">${L[c]||c}</span>`);}
-  else if((sd||{})[iid]?.risk_category){const L={high_risk_annex_III:"Annex III HR",high_risk_annex_I_sector_products:"Annex I HR",GPAI_model:"GPAI",prohibited:"Prohibited"};pills+=`<span class="risk-badge">${L[(sd||{})[iid].risk_category]||(sd||{})[iid].risk_category}</span>`;}
+  const L={high_risk_annex_III:"Annex III",high_risk_annex_I_sector_products:"Annex I",GPAI_model:"GPAI",prohibited:"Prohibited"};
+  if(cats.length>1) cats.forEach(c=>pills+=`<span class="risk-badge${c.includes("annex_I_sector")?" ai":""}">${L[c]||c}</span>`);
+  else if((sd||{})[iid]?.risk_category) pills+=`<span class="risk-badge">${L[(sd||{})[iid].risk_category]||(sd||{})[iid].risk_category}</span>`;
   return pills;
 }
 
-// ── SOURCES ──────────────────────────────────────────────
+// ── OBLIGATIONS TABS ──────────────────────────────────────────────
+function renderObligationTabs(obligations,wrapId){
+  if(!obligations||!Object.keys(obligations).length) return "";
+  const roles=Object.keys(obligations);
+  if(!roles.length) return "";
+  const ROLE_LABEL={provider:"Provider obligations",deployer:"Deployer obligations",manufacturer:"Manufacturer obligations"};
+  const ROLE_COLOR={provider:"var(--blue)",deployer:"var(--purple)",manufacturer:"var(--green)"};
+  let tabsHtml=roles.map((r,i)=>`<div class="ob-tab${i===0?" active":""}" data-role="${r}" onclick="switchObTab(document.getElementById('${wrapId}'),'${r}')">${ROLE_LABEL[r]||r} <span style="font-family:var(--mono);font-size:8px;color:var(--txt4)">(${obligations[r].length})</span></div>`).join("");
+  let panelsHtml=roles.map((r,i)=>{
+    const items=obligations[r]||[];
+    const itemsHtml=items.map(ob=>{
+      const label=ob.label||ob;
+      const desc=ob.description||"";
+      const art=ob.article||"";
+      return `<div class="ob-item">
+        <div><div class="ob-label">${esc(label)}</div>${desc?`<div class="ob-desc">${esc(desc.slice(0,100))}${desc.length>100?"…":""}</div>`:""}</div>
+        ${art?`<div class="ob-art">${esc(art)}</div>`:""}
+      </div>`;
+    }).join("");
+    return `<div class="ob-panel${i===0?" active":""}" data-role="${r}"><div class="ob-list">${itemsHtml}</div></div>`;
+  }).join("");
+  return `<div class="ob-tabs-wrap" id="${wrapId}">
+    <div class="ob-tab-bar">${tabsHtml}</div>
+    ${panelsHtml}
+  </div>`;
+}
+
+// ── ASSESSMENT TABLE ──────────────────────────────────────────────
+function renderAssessmentTable(symbolic,sd){
+  const results=symbolic.applicability_results||{};
+  const deferred=symbolic.deferred_instruments||[];
+  const rows=[];
+
+  for(const iid of Object.keys(results)){
+    const res=results[iid];
+    const verdict=res.verdict||"cannot_determine";
+    const scope=res.scope||{};
+    const risk=res.risk_category;
+    const dUntil=res.deferred_until;
+    const trace=res.trace||[];
+    const inst=INST_SHORT[iid]||iid;
+
+    // Section header per instrument
+    rows.push(`<tr class="atbl-section-hdr"><td colspan="5">${INST_LABELS[iid]||iid}</td></tr>`);
+
+    // Temporal row
+    const tempR=scope.temporal||"cannot_determine";
+    const tempEntry=trace.find(e=>e.dimension==="temporal"&&e.result!=="not_reached");
+    const tempEvidence=tempEntry?.evidence||"";
+    let tempBadge,tempOutcome;
+    if(tempR==="pass"){
+      tempBadge=`<span class="atbl-badge ab-yes">✓ Satisfied</span>`;
+      tempOutcome="In force — obligations active";
+    } else if(tempR==="deferred"){
+      tempBadge=`<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtDate(dUntil):""}`;
+      tempOutcome=`No immediate obligation. Prepare now for ${dUntil?fmtDate(dUntil):"obligation date"}.`;
+    } else if(tempR==="fail"){
+      tempBadge=`<span class="atbl-badge ab-no">✗ Not satisfied</span>`;
+      tempOutcome="Regulation not yet in force for this category";
+    } else {
+      tempBadge=`<span class="atbl-badge ab-unk">– Unknown</span>`;
+      tempOutcome="Provide deployment date";
+    }
+    const tempCites=(tempEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    rows.push(`<tr>
+      <td class="atbl-cat">Temporal scope<div class="atbl-sub">Date of application</div></td>
+      <td class="atbl-assess">${tempBadge}</td>
+      <td>${tempCites}</td>
+      <td class="atbl-reason">${esc(tempEvidence.slice(0,120))}${tempEvidence.length>120?"…":""}</td>
+      <td class="atbl-outcome">${esc(tempOutcome)}</td>
+    </tr>`);
+
+    // Territorial row
+    const terrR=scope.territorial||"cannot_determine";
+    const terrEntry=trace.find(e=>e.dimension==="territorial"&&e.result==="pass")||trace.find(e=>e.dimension==="territorial");
+    const terrBadge=terrR==="pass"?`<span class="atbl-badge ab-yes">✓ Satisfied</span>`:terrR==="fail"?`<span class="atbl-badge ab-no">✗ Not satisfied</span>`:`<span class="atbl-badge ab-unk">– Unknown</span>`;
+    const terrCites=(terrEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    rows.push(`<tr>
+      <td class="atbl-cat">Territorial scope<div class="atbl-sub">Geographic reach</div></td>
+      <td class="atbl-assess">${terrBadge}</td>
+      <td>${terrCites}</td>
+      <td class="atbl-reason">${esc((terrEntry?.evidence||"").slice(0,120))}</td>
+      <td class="atbl-outcome">${terrR==="pass"?`${inst} applies regardless of provider location`:"No EU connection established"}</td>
+    </tr>`);
+
+    // Material / risk row
+    const matR=scope.material||"cannot_determine";
+    const matEntry=trace.find(e=>e.dimension==="material"&&e.predicate&&e.predicate.includes("risk_classification"))||trace.find(e=>e.dimension==="material"&&e.result==="pass");
+    const riskLabel=risk?({high_risk_annex_III:"High-risk (Annex III)",high_risk_annex_I_sector_products:"High-risk (Annex I)",GPAI_model:"GPAI model",prohibited:"PROHIBITED",limited_or_minimal_risk:"Limited risk"}[risk]||risk):"";
+    const matBadge=matR==="pass"?`<span class="atbl-badge ab-yes">✓ ${riskLabel||"In scope"}</span>`:matR==="fail"?`<span class="atbl-badge ab-no">✗ Not in scope</span>`:`<span class="atbl-badge ab-unk">– Unknown</span>`;
+    const matCites=(matEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    rows.push(`<tr>
+      <td class="atbl-cat">Material scope${riskLabel?`<div class="atbl-sub">${riskLabel}</div>`:"<div class='atbl-sub'>Subject-matter</div>"}</td>
+      <td class="atbl-assess">${matBadge}</td>
+      <td>${matCites}</td>
+      <td class="atbl-reason">${esc((matEntry?.evidence||"").slice(0,120))}</td>
+      <td class="atbl-outcome">${matR==="pass"?(risk?"Risk category confirmed — obligations apply":inst+" in scope"):"Does not meet material requirements"}</td>
+    </tr>`);
+
+    // Prohibited check (AI Act only)
+    if(iid==="EU_AI_ACT"){
+      const art5Entry=trace.find(e=>e.predicate&&e.predicate.includes("prohibited_practices_check"));
+      if(art5Entry){
+        const art5Cls=art5Entry.result==="pass"?"ab-pass":"ab-no";
+        const art5Label=art5Entry.result==="pass"?"✓ Not prohibited":"⛔ PROHIBITED";
+        rows.push(`<tr>
+          <td class="atbl-cat">Prohibited practices<div class="atbl-sub">Art. 5 check</div></td>
+          <td class="atbl-assess"><span class="atbl-badge ${art5Cls}">${art5Label}</span></td>
+          <td><span class="atbl-basis">Art. 5 EU AI Act</span></td>
+          <td class="atbl-reason">${art5Entry.result==="pass"?"No Art. 5 prohibited condition triggered":"A prohibited AI practice has been identified"}</td>
+          <td class="atbl-outcome">${art5Entry.result==="pass"?"Proceed to risk classification":"Deployment not permitted under current design"}</td>
+        </tr>`);
+      }
+    }
+
+    // Overall verdict row
+    const verdictBadge={
+      applies:         `<span class="atbl-badge ab-yes">✓ Applies</span>`,
+      deferred:        `<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtDate(dUntil):""}</span>`,
+      does_not_apply:  `<span class="atbl-badge ab-no">✗ Does not apply</span>`,
+      cannot_determine:`<span class="atbl-badge ab-unk">– Cannot determine</span>`,
+      prohibited:      `<span class="atbl-badge ab-no">⛔ Prohibited</span>`,
+    }[verdict]||`<span class="atbl-badge ab-unk">${esc(verdict)}</span>`;
+    const verdictOutcome={
+      applies:        "Full compliance required",
+      deferred:       `Prepare now — mandatory from ${dUntil?fmtDate(dUntil):"obligation date"}`,
+      does_not_apply: "No obligations at this time",
+      cannot_determine:"Provide missing facts to determine",
+      prohibited:     "Deployment not permitted",
+    }[verdict]||"";
+    rows.push(`<tr style="font-weight:600">
+      <td class="atbl-cat">Overall verdict</td>
+      <td class="atbl-assess" colspan="2">${verdictBadge}</td>
+      <td class="atbl-reason" colspan="2">${esc(verdictOutcome)}</td>
+    </tr>`);
+  }
+
+  if(!rows.length) return "";
+  return `<div class="atbl-wrap">
+    <table class="atbl">
+      <thead><tr>
+        <th>Category</th><th>Assessment</th><th>Legal basis</th>
+        <th>Reasoning</th><th>Outcome</th>
+      </tr></thead>
+      <tbody>${rows.join("")}</tbody>
+    </table>
+  </div>`;
+}
+
+// ── MULTI-REG SUMMARY STRIP ───────────────────────────────────────
+function renderRegSummary(symbolic){
+  const results=symbolic.applicability_results||{};
+  const deferred=symbolic.deferred_instruments||[];
+  const applies=symbolic.instruments_that_apply||[];
+  const nApply=symbolic.instruments_that_dont_apply||[];
+  const uncertain=symbolic.cannot_determine_instruments||[];
+
+  const chips=Object.keys(results).map(iid=>{
+    const verdict=results[iid]?.verdict||"cannot_determine";
+    const short=INST_SHORT[iid]||iid;
+    const cls=verdict==="applies"?"reg-chip-applies":verdict==="deferred"?"reg-chip-deferred":verdict==="does_not_apply"?"reg-chip-no":verdict==="prohibited"?"reg-chip-no":"reg-chip-unk";
+    const sym=verdict==="applies"?"✓":verdict==="deferred"?"⏳":verdict==="does_not_apply"?"✗":verdict==="prohibited"?"⛔":"?";
+    return `<span class="reg-chip ${cls}"><span class="reg-chip-dot"></span>${sym} ${short}</span>`;
+  }).join("");
+
+  if(!chips) return "";
+  return `<div class="reg-summary">${chips}</div>`;
+}
+
+// ── SOURCES ───────────────────────────────────────────────────────
 function renderSources(sources){
   if(!sources?.length) return "";
   const id="src-"+nid();
   return `<button class="src-toggle" onclick="toggleEl('${id}')">📚 Transparency log (${sources.length} sources)</button><div id="${id}" class="src-list">${sources.map((s,i)=>`<div class="src-item"><span class="src-title">Source ${i+1}: ${esc(s.doc_title||"Document")}</span><span class="src-score">${((s.score||0)*100).toFixed(1)}%</span><div class="src-text">${esc((s.text||"").slice(0,160))}${(s.text?.length>160)?"…":""}</div></div>`).join("")}</div>`;
 }
 
-// ── VERDICT HELPERS ───────────────────────────────────────
+// ── VERDICT HELPERS ───────────────────────────────────────────────
 function vbadge(vtype){
-  const M={applies:{cls:"vb-yes",i:"✓",t:"Applies"},does_not_apply:{cls:"vb-no",i:"✗",t:"Does not apply"},cannot_determine:{cls:"vb-unk",i:"",t:"More information needed"},general:{cls:"vb-info",i:"",t:"Information"},context_update:{cls:"vb-ctx",i:"→",t:"Context saved"}};
+  const M={
+    applies:         {cls:"vb-yes", i:"✓",  t:"Applies"},
+    does_not_apply:  {cls:"vb-no",  i:"✗",  t:"Does not apply"},
+    cannot_determine:{cls:"vb-unk", i:"",   t:"More information needed"},
+    general:         {cls:"vb-info",i:"",   t:"Information"},
+    context_update:  {cls:"vb-ctx", i:"→",  t:"Context saved"},
+    deferred:        {cls:"vb-def", i:"⏳", t:"In scope — obligations deferred"},  /* NEW */
+    prohibited:      {cls:"vb-no",  i:"⛔", t:"Prohibited"},
+  };
   const v=M[vtype]||M.cannot_determine;
-  return `<div class="vbadge ${v.cls}">${v.i?v.i+' ':''}${v.t}</div>`;
+  return `<div class="vbadge ${v.cls}">${v.i?v.i+" ":""}${v.t}</div>`;
 }
-const vbubCls=vtype=>({applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",general:"v-info",context_update:"v-info"}[vtype]||"v-info");
+const vbubCls=vtype=>({
+  applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",
+  general:"v-info",context_update:"v-info",
+  deferred:"v-def",   /* NEW */
+  prohibited:"v-no",
+}[vtype]||"v-info");
 
-// ── MAIN RENDER ───────────────────────────────────────────
+// ── MAIN RENDER ───────────────────────────────────────────────────
 function renderComplianceResponse(data,msgId){
   if(data.answer&&!data.narrative)
     return `<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
 
-  const n=data.narrative||{},sym=data.symbolic||{},sd=data.scope_display||{},cc=data.company_context||null;
-  const vtype=n.verdict_type||"cannot_determine",vline=n.verdict_line||"",full=n.full_analysis||"";
-  const cards=n.legal_basis_cards||[],fups=(sym.all_follow_up_questions||[]).slice(0,3);
+  const n=data.narrative||{},sym=data.symbolic||{},sd=data.scope_display||{};
+  const vtype=n.verdict_type||"cannot_determine";
+  const vline=n.verdict_line||"";
+  const full=n.full_analysis||"";
+  const cards=n.legal_basis_cards||[];
   const nextSteps=n.next_steps||[];
-  const clarQ=n.clarifying_question||null;
+  const deferredUntil=n.deferred_until||null;
+  const deferred=sym.deferred_instruments||[];
+  const applies=sym.instruments_that_apply||[];
 
-  // Simple layouts
+  // Simple / general layouts
   if(vtype==="general"||vtype==="context_update")
     return `<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
 
-  const applyIds=sym.instruments_that_apply||[],allRes=sym.applicability_results||{};
-  let passCount=0,totalDims=0;
-  for(const iid of applyIds){const scope=(allRes[iid]||{}).scope||{};for(const d of ["temporal","territorial","material"])if(scope[d]&&scope[d]!=="not_reached"){totalDims++;if(scope[d]==="pass")passCount++;}}
+  const allRes=sym.applicability_results||{};
   const nInst=Object.keys(allRes).length;
 
-  // EUR-Lex chips from legal_basis_cards (links only — no separate section)
+  // Scope check counts
+  let passCount=0,totalDims=0;
+  for(const iid of Object.keys(allRes)){
+    const scope=(allRes[iid]||{}).scope||{};
+    for(const d of ["temporal","territorial","material"]){
+      if(scope[d]&&scope[d]!=="not_reached"){
+        totalDims++;
+        if(scope[d]==="pass"||scope[d]==="deferred") passCount++;
+      }
+    }
+  }
+
+  // EUR-Lex chips from legal_basis_cards
   const lexChips=cards.length?`<div class="lex-chips">${cards.map(c=>{
     const url=c.eurlex_url||(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu");
     const label=`${c.instrument_short||c.instrument_id}${c.eurlex_article?" · "+c.eurlex_article:""}`;
     return `<a class="lex-chip" href="${esc(url)}" target="_blank">${esc(label)} ↗</a>`;
   }).join("")}</div>`:"";
 
-  // ── HERO VERDICT BUBBLE ────────────────────────────────────────────────────
+  // Multi-reg summary strip (only when multiple instruments evaluated)
+  const regSummary=nInst>1?renderRegSummary(sym):"";
+
+  // Deferred date chip (inside verdict bubble for DEFERRED)
+  let deferredChip="";
+  if(vtype==="deferred"&&deferredUntil){
+    deferredChip=`<div class="deferred-chip">
+      <span class="deferred-chip-label">Obligations active from</span>
+      <span class="deferred-chip-date">${fmtDate(deferredUntil)}</span>
+    </div>`;
+  }
+
+  // ── HERO VERDICT BUBBLE ──────────────────────────────────────────
   const heroBub=`<div class="vbub ${vbubCls(vtype)}">
+    ${regSummary}
     ${vbadge(vtype)}
     <div class="verdict-line">${fmt(vline)}</div>
+    ${deferredChip}
     ${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>
     <div><span class="fa-toggle" id="fb-${msgId}" onclick="toggleFA('${msgId}')">Collapse ↑</span></div>`:""}
     ${lexChips}
     <div class="expand-meta">
       <span>${nInst} instrument${nInst!==1?"s":""} evaluated</span>
-      ${totalDims?`<span class="em-dot"></span><span>${passCount}/${totalDims} scope checks passed</span>`:""}
+      ${totalDims?`<span class="em-dot"></span><span>${passCount}/${totalDims} scope checks confirmed</span>`:""}
     </div>
   </div>`;
 
-  // ── CANNOT DETERMINE — conditional scope card ──────────────────────────────
-  let condCard="";
-  if(vtype==="cannot_determine"&&nInst>0){
-    const SCOPE_LABELS={temporal:"Temporal scope",territorial:"Territorial scope",material:"Material scope"};
-    const DIM_COLORS={pass:"var(--green)",fail:"var(--red)",cannot_determine:"var(--amber)",unknown:"var(--txt4)"};
-    const DIM_ICONS={pass:"✓",fail:"✗",cannot_determine:"–",unknown:"–"};
-    let scopeRows="";
-    for(const iid of Object.keys(allRes)){
-      const res=allRes[iid]||{},scope=res.scope||{};
-      const iLabel=INST_LABELS[iid]||iid;
-      scopeRows+=`<div style="margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--txt);margin-bottom:4px;">${esc(iLabel)}</div>`;
-      for(const d of ["temporal","territorial","material"]){
-        const r=scope[d]||"unknown";
-        const col=DIM_COLORS[r]||DIM_COLORS.unknown;
-        const ico=DIM_ICONS[r]||"–";
-        const lbl=r==="pass"?"Satisfied":r==="fail"?"Not satisfied":"Requires clarification";
-        scopeRows+=`<div class="cond-scope-row"><span class="cs-dim">${SCOPE_LABELS[d]}</span><span style="color:${col};font-weight:700;">${ico}</span><span style="margin-left:4px;">${lbl}</span></div>`;
-      }
-      scopeRows+="</div>";
-    }
-    const condIf=fups.length?`<div class="cond-if">Based on the information available, if the outstanding question${fups.length>1?"s are":"is"} resolved favourably, the applicable regulation${nInst>1?"s":""} would be confirmed. <strong>The key question${fups.length>1?"s":""} to answer:</strong></div>`:""
-    const condQs=fups.map(q=>`<div class="cond-q">› ${esc(q)}</div>`).join("");
-    condCard=`<div class="cond-card">
-      <div class="cond-title">Scope analysis — information needed</div>
-      ${scopeRows}
-      ${condIf}${condQs}
+  // ── ASSESSMENT TABLE ─────────────────────────────────────────────
+  const assessTable=nInst?`<div>
+    <div class="sec-toggle" onclick="toggleSec('at-${msgId}')">
+      <span class="sec-lbl"><span class="sec-pip pip-blue"></span>Assessment table</span>
+      <span class="sec-right"><span class="sec-tag">per dimension</span><span class="sec-arr" id="arr-at-${msgId}">▾</span></span>
+    </div>
+    <div id="sec-at-${msgId}" class="sec-body">
+      ${renderAssessmentTable(sym,sd)}
+    </div>
+  </div>`:"";
+
+  // ── SCOPE ANALYSIS (collapsible) ─────────────────────────────────
+  let scopeRows="";
+  for(const iid of Object.keys(allRes)){
+    const res=allRes[iid]||{};
+    const verdict=res.verdict||"cannot_determine";
+    const dUntil=res.deferred_until;
+    const obligations=res.obligations||sd[iid]?.obligations||{};
+    const panelId=`trace-${msgId}-${iid}`,togId=`ttog-${msgId}-${iid}`;
+    const dotCls=verdict==="applies"?"idot-yes":verdict==="deferred"?"idot-def":verdict==="does_not_apply"?"idot-no":"idot-unk";
+    const th=renderTracePanel(iid,res,panelId);
+
+    // Obligations tabs for this instrument
+    const obWrapId=`ob-${msgId}-${iid}`;
+    const obTabs=renderObligationTabs(obligations,obWrapId);
+
+    scopeRows+=`<div class="inst-row">
+      <div class="inst-hdr">
+        <div class="idot ${dotCls}"></div>
+        <span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span>
+        ${verdict==="deferred"&&dUntil?`<span class="inst-deferred-tag">active from ${fmtDate(dUntil)}</span>`:""}
+      </div>
+      <div class="pills">${renderScopePills(iid,sd,res)}</div>
+      ${th?`<span class="trace-toggle" id="${togId}" onclick="toggleTrace('${panelId}','${togId}')">▼ View scope detail</span>${th}`:""}
+      ${obTabs}
     </div>`;
   }
 
-  // ── SCOPE ANALYSIS (renamed + reordered, no duplicate legal basis) ─────────
-  let rows="";
-  for(const iid of Object.keys(allRes)){
-    const res=allRes[iid]||{},verdict=res.verdict||"cannot_determine";
-    const panelId=`trace-${msgId}-${iid}`,togId=`ttog-${msgId}-${iid}`;
-    const dotCls=verdict==="applies"?"idot-yes":verdict==="does_not_apply"?"idot-no":"idot-unk";
-    const th=renderTracePanel(iid,res,panelId);
-    rows+=`<div class="inst-row"><div class="inst-hdr"><div class="idot ${dotCls}"></div><span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span></div><div class="pills">${renderScopePills(iid,sd,res)}</div>${th?`<span class="trace-toggle" id="${togId}" onclick="toggleTrace('${panelId}','${togId}')">▼ View scope detail</span>${th}`:""}</div>`;
-  }
-  const pbCard=cc?`<div class="pb-card"><div class="pb-head"><span class="pb-lbl">Company playbook used</span><span class="pb-view">View ↗</span></div><div class="pb-ctx">${esc(cc.slice(0,220))}</div></div>`:"";
-  const reasonInner=pbCard?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="rcard"><div class="rcard-body">${rows}</div></div>${pbCard}</div>`:`<div class="rcard"><div class="rcard-body">${rows}</div></div>`;
-
   const rpSec=nInst?`<div>
     <div class="sec-toggle" onclick="toggleSec('rp-${msgId}')">
-      <span class="sec-lbl"><span class="sec-pip pip-green"></span>Scope analysis · ${nInst} instrument${nInst!==1?"s":""} evaluated</span>
-      <span class="sec-right"><span class="sec-tag">${passCount}/${totalDims} checks passed</span><span class="sec-arr" id="arr-rp-${msgId}">▾</span></span>
+      <span class="sec-lbl"><span class="sec-pip pip-green"></span>Scope analysis · ${nInst} instrument${nInst!==1?"s":""}</span>
+      <span class="sec-right"><span class="sec-tag">${passCount}/${totalDims} confirmed</span><span class="sec-arr" id="arr-rp-${msgId}">▾</span></span>
     </div>
-    <div id="sec-rp-${msgId}" class="sec-body">${reasonInner}</div>
+    <div id="sec-rp-${msgId}" class="sec-body">
+      <div class="rcard"><div class="rcard-body">${scopeRows}</div></div>
+    </div>
   </div>`:"";
 
-  // ── NEXT STEPS ─────────────────────────────────────────────────────────────
+  // ── NEXT STEPS ───────────────────────────────────────────────────
   let nsSec="";
   if(nextSteps.length){
-    const TIMING_CLS={Immediate:"st-immediate","Before market placement":"st-before",Ongoing:"st-ongoing"};
-    const stepRows=nextSteps.map((s,i)=>{
-      const q=s.action||"";
-      return `<div class="step-row" style="cursor:pointer;" onclick="setQ('${esc(q)}'); send()" title="Click to ask ComplianceTwin about this step">
-        <div class="step-num">${i+1}</div>
-        <div>
-          <div class="step-action">${esc(q)} <span style="font-size:9px;color:var(--blue);margin-left:4px;">→ ask ↗</span></div>
-          <div class="step-basis">${esc(s.basis||"")}</div>
-        </div>
-        <div class="step-timing ${TIMING_CLS[s.timing]||"st-ongoing"}">${esc(s.timing||"Ongoing")}</div>
-      </div>`;
-    }).join("");
+    const TIMING_MAP=(t)=>{
+      if(!t) return "st-ongoing";
+      const tl=t.toLowerCase();
+      if(tl.includes("immediate")) return "st-immediate";
+      if(tl.includes("before")) return vtype==="deferred"?"st-deferred":"st-before";
+      if(tl.includes("ongoing")) return "st-ongoing";
+      // If it contains a date — treat as deferred
+      if(/\d{4}/.test(t)) return "st-deferred";
+      return "st-before";
+    };
+    const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
+      <div class="step-num">${i+1}</div>
+      <div><div class="step-action">${fmt(s.action||"")}</div><div class="step-basis">${esc(s.basis||"")}</div></div>
+      <div class="step-timing ${TIMING_MAP(s.timing)}">${esc(s.timing||"Ongoing")}</div>
+    </div>`).join("");
+
+    const stepLabel=vtype==="deferred"?"Preparation steps — begin now":"Recommended next steps";
+    const stepPip=vtype==="deferred"?"pip-def":"pip-blue";
     nsSec=`<div>
       <div class="sec-toggle" onclick="toggleSec('ns-${msgId}')">
-        <span class="sec-lbl"><span class="sec-pip" style="background:var(--blue)"></span>Recommended next steps · ${nextSteps.length}</span>
+        <span class="sec-lbl"><span class="sec-pip ${stepPip}"></span>${stepLabel} · ${nextSteps.length}</span>
         <span class="sec-right"><span class="sec-arr" id="arr-ns-${msgId}">▾</span></span>
       </div>
       <div id="sec-ns-${msgId}" class="sec-body">
@@ -674,12 +913,13 @@ function renderComplianceResponse(data,msgId){
     </div>`;
   }
 
-  // ── ALERTS ─────────────────────────────────────────────────────────────────
-  const specHtml=sym.special_category_flag?`<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data detected</div><div class="alert-q">Processing prohibited unless Art. 9(2) exception applies (e.g. Art. 9(2)(h) for healthcare).</div></div>`:"";
+  // ── ALERTS ───────────────────────────────────────────────────────
+  const specHtml=sym.special_category_flag?`<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data detected</div><div class="alert-q">Processing is prohibited unless an Art. 9(2) exception applies. For healthcare contexts, Art. 9(2)(h) (medical diagnosis/treatment under professional responsibility) is the most relevant exception. A DPIA under Art. 35 GDPR is mandatory.</div></div>`:"";
 
-  return `${heroBub}${condCard}${rpSec}${nsSec}${specHtml}${renderSources(data.sources||[])}`;
+  return `${heroBub}${assessTable}${rpSec}${nsSec}${specHtml}${renderSources(data.sources||[])}`;
 }
 
+// ── WELCOME ───────────────────────────────────────────────────────
 function welcomeHTML(){
   return `<div id="welcome">
     <div><svg width="240" height="52" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
@@ -691,14 +931,14 @@ function welcomeHTML(){
     <div class="wt">EU regulatory scope analysis</div>
     <div class="ws">Symbolic reasoning engine + AI explanation.<br>Every verdict is cited, traceable and auditable.</div>
     <div class="hint-grid">
-      <button class="hint" onclick="setQ('Does our AI HR screening application require conformity assessment under the EU AI Act?'); send()"><div class="hint-l">Applicability</div>AI HR screening — does it require EU AI Act conformity assessment?</button>
-      <button class="hint" onclick="setQ('We are a US company selling AI diagnostic software to hospitals in Germany. Does GDPR and MDR apply?'); send()"><div class="hint-l">Multi-regulation</div>US company, AI diagnostics, German hospitals — GDPR & MDR?</button>
+      <button class="hint" onclick="setQ('We are a US company with an AI-powered HR screening application that automatically evaluates job applicants using machine learning. The system is deployed by a company in the EU on 30 March 2026 to support hiring decisions. Does the EU AI Act apply?'); send()"><div class="hint-l">UC1 — Applicability + Deferred</div>US company, AI HR screening, EU deployer, 30 March 2026 — does EU AI Act apply?</button>
+      <button class="hint" onclick="setQ('Our company has developed an AI-powered clinical decision support software that analyzes patient medical images and health records to generate diagnostic recommendations for doctors. We plan to offer it to hospitals in the EU. Can you assess whether the EU AI Act, GDPR, and the Medical Device Regulation apply?'); send()"><div class="hint-l">UC2 — Multi-regulation</div>AI clinical decision support for EU hospitals — EU AI Act, GDPR and MDR?</button>
       <button class="hint hint-full" onclick="setQ('What is the EU AI Act and when does it apply?'); send()"><div class="hint-l">Explanation</div>What is the EU AI Act and when does it apply?</button>
     </div>
   </div>`;
 }
 
-// ── RENDER MESSAGES ───────────────────────────────────────
+// ── RENDER MESSAGES ───────────────────────────────────────────────
 function renderMsgs(){
   const el=document.getElementById("msgs");
   if(!msgs.length){el.innerHTML=welcomeHTML();return;}
@@ -714,7 +954,7 @@ function renderActs(actions){
   const bar=document.getElementById("acts");
   if(!actions?.length){bar.style.display="none";return;}
   bar.style.display="flex";
-  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="setQ('${esc(a.replace(/→\s*/,"").replace(/\s*↗/,""))}')">${esc(a)}</button>`).join("");
+  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="setQ(${JSON.stringify(a)})">${esc(a)}</button>`).join("");
 }
 
 function updateHdr(t){
@@ -722,13 +962,13 @@ function updateHdr(t){
   document.getElementById("mhdr-m").textContent=`Today · ${msgCount} message${msgCount!==1?"s":""} · session active`;
 }
 
-// ── SESSIONS ──────────────────────────────────────────────
+// ── SESSIONS ──────────────────────────────────────────────────────
 function renderSessions(){document.getElementById("sess-list").innerHTML=sessions.map(s=>`<div class="sess-item${s.id===activeSess?" active":""}" onclick="switchSess('${s.id}')"><div class="sess-title">${esc(s.title)}</div><div class="sess-sub">${esc(s.sub)}</div></div>`).join("");}
 function addSession(t,s){if(activeSess==="new"){const id="s"+Date.now();sessions.unshift({id,title:t,sub:s});activeSess=id;}renderSessions();}
 function switchSess(id){activeSess=id;renderSessions();}
 function newSess(){activeSess="new";msgs=[];msgCount=0;SESSION_ID=crypto.randomUUID();document.getElementById("mhdr-t").textContent="New session";document.getElementById("mhdr-m").textContent="Ask a compliance question to begin";document.getElementById("acts").style.display="none";renderSessions();renderMsgs();}
 
-// ── SEND ──────────────────────────────────────────────────
+// ── SEND ──────────────────────────────────────────────────────────
 async function send(){
   const inp=document.getElementById("cin"),text=inp.value.trim();
   if(!text||loading) return;
@@ -738,23 +978,28 @@ async function send(){
   const url=extractUrl(text);
   if(url){
     const lid=nid();msgs.push({type:"loading",id:lid,status:"Fetching product profile…"});renderMsgs();
-    try{const d=await analyzeUrl(url);msgs=msgs.filter(m=>m.id!==lid);msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"general",verdict_line:`Product profile loaded: ${d.profile||"Profile generated."}`,full_analysis:"",legal_basis_cards:[],suggested_actions:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});renderMsgs();}
+    try{const d=await analyzeUrl(url);msgs=msgs.filter(m=>m.id!==lid);msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"general",verdict_line:`Product profile loaded: ${d.profile||"Profile generated."}`,full_analysis:"",legal_basis_cards:[],suggested_actions:[],next_steps:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});renderMsgs();}
     catch(e){msgs=msgs.filter(m=>m.id!==lid);}
   }
   const lid=nid();msgs.push({type:"loading",id:lid,status:"Running symbolic engine…"});renderMsgs();
   try{
-    const data=await callBackend(text);msgs=msgs.filter(m=>m.id!==lid);
+    const data=await callBackend(text);
+    msgs=msgs.filter(m=>m.id!==lid);
     msgs.push({role:"assistant",type:"response",id:nid(),data});
-    const n=data.narrative||{};addSession(n.session_title||text.slice(0,35),text.slice(0,50));updateHdr(n.session_title||text.slice(0,35));renderMsgs();renderActs(n.suggested_actions||[]);
+    const n=data.narrative||{};
+    addSession(n.session_title||text.slice(0,35),text.slice(0,50));
+    updateHdr(n.session_title||text.slice(0,35));
+    renderMsgs();
+    renderActs(n.suggested_actions||[]);
   }catch(err){
     msgs=msgs.filter(m=>m.id!==lid);
-    msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"cannot_determine",verdict_line:`Could not reach backend: ${err.message}`,full_analysis:`Ensure backend is running at ${BACKEND}`,legal_basis_cards:[],suggested_actions:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});
+    msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"cannot_determine",verdict_line:`Could not reach backend: ${err.message}`,full_analysis:`Ensure backend is running at ${BACKEND}`,legal_basis_cards:[],suggested_actions:[],next_steps:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});
     renderMsgs();
   }
   loading=false;document.getElementById("sbtn").disabled=false;
 }
 
-// ── CONTEXT EDITOR ────────────────────────────────────────
+// ── CONTEXT EDITOR ────────────────────────────────────────────────
 function editCtx(){
   const co=prompt("Company name:",document.getElementById("ctx-co").textContent);if(co)document.getElementById("ctx-co").textContent=co;
   const mkt=prompt("Markets:",document.getElementById("ctx-mkt").textContent);if(mkt)document.getElementById("ctx-mkt").textContent=mkt;
