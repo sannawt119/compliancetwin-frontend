@@ -564,7 +564,7 @@ function stageAsk(idx){
 function sendText(t){document.getElementById("cin").value=t;send();}
 const toggleEl=id=>document.getElementById(id)?.classList.toggle("open");
 
-function fmtDate(iso){
+function fmtIsoDate(iso){
   if(!iso) return iso;
   const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
   return String(iso).replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g,(_,y,m,d)=>`${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`);
@@ -826,8 +826,8 @@ function renderAssessmentTable(symbolic,sd){
       tempBadge=`<span class="atbl-badge ab-yes">✓ Satisfied</span>`;
       tempOutcome="In force — obligations active";
     } else if(tempR==="deferred"){
-      tempBadge=`<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtDate(dUntil):""}`;
-      tempOutcome=`No immediate obligation. Prepare now for ${dUntil?fmtDate(dUntil):"obligation date"}.`;
+      tempBadge=`<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtIsoDate(dUntil):""}`;
+      tempOutcome=`No immediate obligation. Prepare now for ${dUntil?fmtIsoDate(dUntil):"obligation date"}.`;
     } else if(tempR==="fail"){
       tempBadge=`<span class="atbl-badge ab-no">✗ Not satisfied</span>`;
       tempOutcome="Regulation not yet in force for this category";
@@ -890,14 +890,14 @@ function renderAssessmentTable(symbolic,sd){
     // Overall verdict row
     const verdictBadge={
       applies:         `<span class="atbl-badge ab-yes">✓ Applies</span>`,
-      deferred:        `<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtDate(dUntil):""}</span>`,
+      deferred:        `<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtIsoDate(dUntil):""}</span>`,
       does_not_apply:  `<span class="atbl-badge ab-no">✗ Does not apply</span>`,
       cannot_determine:`<span class="atbl-badge ab-unk">– Cannot determine</span>`,
       prohibited:      `<span class="atbl-badge ab-no">⛔ Prohibited</span>`,
     }[verdict]||`<span class="atbl-badge ab-unk">${esc(verdict)}</span>`;
     const verdictOutcome={
       applies:        "Full compliance required",
-      deferred:       `Prepare now — mandatory from ${dUntil?fmtDate(dUntil):"obligation date"}`,
+      deferred:       `Prepare now — mandatory from ${dUntil?fmtIsoDate(dUntil):"obligation date"}`,
       does_not_apply: "No obligations at this time",
       cannot_determine:"Provide missing facts to determine",
       prohibited:     "Deployment not permitted",
@@ -1163,9 +1163,8 @@ function renderComplianceResponse(data, msgId){
   const nextSteps = n.next_steps||[];
 
   // Stage-based layouts
-  if(vtype==="indicative")  return renderIndicative(n);
-  if(vtype==="gathering")   return renderGathering(n);
-  if(vtype==="preliminary") return renderPreliminary(n);
+  // All preliminary stages funnel to renderPreliminary
+  if(vtype==="indicative"||vtype==="gathering"||vtype==="preliminary") return renderPreliminary(n);
 
   // Simple / non-applicability layouts
   if(vtype==="general"||vtype==="context_update")
@@ -1309,11 +1308,11 @@ function welcomeHTML(){
       <circle cx="24" cy="24" r="3.5" fill="#2D6BE4"/>
       <text x="56" y="31" font-family="'Plus Jakarta Sans',Arial,sans-serif" font-size="18" font-weight="700" fill="#0f172a" letter-spacing="-0.3">ComplianceTwin</text>
     </svg></div>
-    <div class="wt">EU regulatory scope analysis</div>
-    <div class="ws">Symbolic reasoning engine + AI explanation.<br>Every verdict is cited, traceable and auditable.</div>
+    <div class="wt">Regulatory compliance assistant</div>
+    <div class="ws">Ask a question about your product or scenario and receive a structured scope analysis for EU regulations.</div>
     <div class="hint-grid">
-      <button class="hint" onclick="setQ('We are a US company with an AI-powered HR screening application that automatically evaluates job applicants using machine learning. The system is deployed by a company in the EU on 30 March 2026 to support hiring decisions. Does the EU AI Act apply?'); send()"><div class="hint-l">UC1 — Applicability + Deferred</div>US company, AI HR screening, EU deployer, 30 March 2026 — does EU AI Act apply?</button>
-      <button class="hint" onclick="setQ('Our company has developed an AI-powered clinical decision support software that analyzes patient medical images and health records to generate diagnostic recommendations for doctors. We plan to offer it to hospitals in the EU. Can you assess whether the EU AI Act, GDPR, and the Medical Device Regulation apply?'); send()"><div class="hint-l">UC2 — Multi-regulation</div>AI clinical decision support for EU hospitals — EU AI Act, GDPR and MDR?</button>
+      <button class="hint" onclick="setQ('We are a US company with an AI-powered HR screening application that automatically evaluates job applicants using machine learning. The system is deployed by a company in the EU on 30 March 2026 to support hiring decisions. Does the EU AI Act apply?'); send()"><div class="hint-l">Applicability — EU AI Act</div>US company, AI HR screening, EU deployer, 30 March 2026 — does EU AI Act apply?</button>
+      <button class="hint" onclick="setQ('Our company has developed an AI-powered clinical decision support software that analyzes patient medical images and health records to generate diagnostic recommendations for doctors. We plan to offer it to hospitals in the EU. Can you assess whether the EU AI Act, GDPR, and the Medical Device Regulation apply?'); send()"><div class="hint-l">Multi-regulation assessment</div>AI clinical decision support for EU hospitals — EU AI Act, GDPR and MDR?</button>
       <button class="hint hint-full" onclick="setQ('What is the EU AI Act and when does it apply?'); send()"><div class="hint-l">Explanation</div>What is the EU AI Act and when does it apply?</button>
     </div>
   </div>`;
