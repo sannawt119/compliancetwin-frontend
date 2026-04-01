@@ -380,6 +380,66 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .prelim-gap-item::before{content:"→";color:var(--txt4);flex-shrink:0;}
 .prelim-next-q{padding:9px 13px;background:linear-gradient(135deg,var(--blue-lt),rgba(255,255,255,.9));border:1px solid var(--bdr2);border-radius:var(--r);font-size:11.5px;color:var(--txt2);line-height:1.6;}
 .prelim-next-q strong{color:var(--blue);}
+
+/* ── OPTION-A VERDICT LAYOUT ──────────────────────────────────── */
+.verdict-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;padding:18px 20px;box-shadow:var(--sh-md);}
+.verdict-card.v-yes{border-left:3px solid var(--green);background:linear-gradient(135deg,rgba(5,150,105,.03) 0%,#fff 50%);}
+.verdict-card.v-no{border-left:3px solid var(--red);background:linear-gradient(135deg,rgba(220,38,38,.03) 0%,#fff 50%);}
+.verdict-card.v-unk{border-left:3px solid var(--amber);background:linear-gradient(135deg,rgba(217,119,6,.03) 0%,#fff 50%);}
+.verdict-card.v-def{border-left:3px solid var(--indigo);background:linear-gradient(135deg,rgba(55,48,163,.03) 0%,#fff 50%);}
+.verdict-card.v-info{border-left:3px solid var(--blue);background:linear-gradient(135deg,rgba(45,107,228,.03) 0%,#fff 50%);}
+.vc-verdict-line{font-size:14px;font-weight:500;color:var(--txt);line-height:1.65;margin:8px 0 10px;}
+.vc-analysis{font-size:13px;color:var(--txt2);line-height:1.78;}
+.vc-more{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(45,107,228,.1);font-size:13px;color:var(--txt2);line-height:1.78;}
+.vc-expand{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0;}
+.vc-expand:hover{opacity:.7;}
+.vc-lex{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(45,107,228,.09);}
+.vc-lex-link{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:1px solid var(--bdr2);border-radius:20px;font-size:10px;font-weight:600;color:var(--blue);text-decoration:none;background:var(--blue-lt);transition:.12s;}
+.vc-lex-link:hover{background:rgba(45,107,228,.14);}
+.vc-sep{height:1px;background:var(--bdr);margin:14px 0;}
+
+/* ── REGULATION TAB BUTTONS ───────────────────────────────────── */
+.reg-tab-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.reg-tab-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:24px;border:1px solid var(--bdr);background:rgba(255,255,255,.7);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;color:var(--txt3);transition:.12s;backdrop-filter:blur(8px);}
+.reg-tab-btn:hover{background:var(--blue-lt);border-color:var(--bdr2);}
+.reg-tab-btn.rtb-active-gdpr{background:#185FA5;color:#fff;border-color:#185FA5;}
+.reg-tab-btn.rtb-active-mdr{background:#27500A;color:#fff;border-color:#27500A;}
+.reg-tab-btn.rtb-active-aia{background:#3C3489;color:#fff;border-color:#3C3489;}
+.reg-tab-btn.rtb-active-gdpr .rtb-dot{background:rgba(255,255,255,.5);}
+.reg-tab-btn.rtb-active-mdr .rtb-dot{background:rgba(255,255,255,.5);}
+.reg-tab-btn.rtb-active-aia .rtb-dot{background:rgba(255,255,255,.5);}
+.rtb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.rtb-gdpr .rtb-dot{background:#185FA5;}
+.rtb-mdr .rtb-dot{background:#27500A;}
+.rtb-aia .rtb-dot{background:#3C3489;}
+.rtb-pill{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:20px;}
+.rtb-pill-ok{background:#EAF3DE;color:#27500A;}
+.rtb-pill-def{background:#E6F1FB;color:#0C447C;}
+.rtb-pill-no{background:#FCEBEB;color:#791F1F;}
+.rtb-pill-unk{background:#FAEEDA;color:#633806;}
+.reg-tab-btn.rtb-active-gdpr .rtb-pill,.reg-tab-btn.rtb-active-mdr .rtb-pill,.reg-tab-btn.rtb-active-aia .rtb-pill{background:rgba(255,255,255,.2);color:#fff;}
+
+/* ── TRACE PANEL (tab content) ────────────────────────────────── */
+.trace-panel-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
+.trace-dim-row{display:grid;grid-template-columns:120px 118px 1fr;border-bottom:1px solid var(--bdr);}
+.trace-dim-row:last-child{border-bottom:none;}
+.tdr-dim{padding:10px 14px;border-right:1px solid var(--bdr);}
+.tdr-dim-name{font-size:12px;font-weight:700;color:var(--txt);}
+.tdr-dim-art{font-size:9.5px;color:var(--txt4);font-family:var(--mono);margin-top:2px;}
+.tdr-badge{padding:10px 12px;border-right:1px solid var(--bdr);display:flex;align-items:flex-start;padding-top:12px;}
+.tdr-detail{padding:10px 14px;}
+.tdr-reason{font-size:11.5px;color:var(--txt2);line-height:1.65;margin-bottom:3px;}
+.tdr-cite{font-size:9.5px;color:var(--txt4);font-family:var(--mono);}
+.tdr-badge-ok{background:var(--green-l);color:var(--green);border:1px solid rgba(5,150,105,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.tdr-badge-def{background:var(--indigo-l);color:var(--indigo);border:1px solid var(--indigo-m);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.tdr-badge-no{background:var(--red-l);color:var(--red);border:1px solid rgba(220,38,38,.15);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.tdr-badge-unk{background:var(--amber-l);color:var(--amber);border:1px solid rgba(217,119,6,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.trace-overall-row{padding:9px 14px;background:var(--cloud1);display:flex;align-items:center;gap:10px;border-top:1px solid var(--bdr);}
+.tor-note{font-size:11px;color:var(--txt4);line-height:1.5;flex:1;}
+.deferred-prep{margin-top:8px;padding:9px 13px;border-radius:9px;background:var(--indigo-l);border:1px solid var(--indigo-m);}
+.dp-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo);margin-bottom:4px;}
+.dp-text{font-size:11px;color:#4338ca;line-height:1.6;}
+
 </style>
 </head>
 <body>
@@ -895,158 +955,303 @@ function vbadge(vtype){
   const v=M[vtype]||M.cannot_determine;
   return `<div class="vbadge ${v.cls}">${v.i?v.i+" ":""}${v.t}</div>`;
 }
-const vbubCls=vtype=>({
+const vbubCls=vtype=>({deferred:"v-def",
   applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",
   general:"v-info",context_update:"v-info",
   deferred:"v-def",   /* NEW */
   prohibited:"v-no",
 }[vtype]||"v-info");
 
-// ── MAIN RENDER ───────────────────────────────────────────────────
-function renderComplianceResponse(data,msgId){
-  if(data.answer&&!data.narrative)
-    return `<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
+// ── REGULATION TAB STATE ──────────────────────────────────────────
+const _activeTab = {};   // msgId → iid
 
-  const n=data.narrative||{},sym=data.symbolic||{},sd=data.scope_display||{};
-  const vtype=n.verdict_type||"cannot_determine";
-  const vline=n.verdict_line||"";
-  const full=n.full_analysis||"";
-  const cards=n.legal_basis_cards||[];
-  const nextSteps=n.next_steps||[];
-  const deferredUntil=n.deferred_until||null;
-  const deferred=sym.deferred_instruments||[];
-  const applies=sym.instruments_that_apply||[];
+function regTabBtnCls(iid){
+  return {GDPR:"rtb-gdpr",EU_AI_ACT:"rtb-aia",MDR:"rtb-mdr"}[iid]||"rtb-gdpr";
+}
+function regTabActiveCls(iid){
+  return {GDPR:"rtb-active-gdpr",EU_AI_ACT:"rtb-active-aia",MDR:"rtb-active-mdr"}[iid]||"rtb-active-gdpr";
+}
 
-  // Stage-based progressive assessment layouts
-  if(vtype==="indicative") return renderIndicative(n);
-  if(vtype==="gathering")  return renderGathering(n);
-  if(vtype==="preliminary") return renderPreliminary(n);
+function switchRegTab(msgId, iid){
+  _activeTab[msgId] = iid;
+  // Update button states
+  document.querySelectorAll(`.reg-tab-btn[data-msg="${msgId}"]`).forEach(btn=>{
+    btn.classList.remove("rtb-active-gdpr","rtb-active-mdr","rtb-active-aia");
+    if(btn.dataset.iid === iid) btn.classList.add(regTabActiveCls(iid));
+  });
+  // Show correct trace panel
+  document.querySelectorAll(`.reg-trace-panel[data-msg="${msgId}"]`).forEach(p=>{
+    p.style.display = p.dataset.iid === iid ? "block" : "none";
+  });
+}
 
-  // Simple / general layouts
-  if(vtype==="general"||vtype==="context_update")
-    return `<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
+// ── BUILD TRACE PANEL FOR ONE INSTRUMENT ─────────────────────────
+function buildTracePanel(msgId, iid, res){
+  const scope   = res.scope||{};
+  const trace   = res.trace||[];
+  const verdict = res.verdict||"cannot_determine";
+  const dUntil  = res.deferred_until;
+  const obligations = res.obligations||{};
 
-  const allRes=sym.applicability_results||{};
-  const nInst=Object.keys(allRes).length;
-
-  // Scope check counts
-  let passCount=0,totalDims=0;
-  for(const iid of Object.keys(allRes)){
-    const scope=(allRes[iid]||{}).scope||{};
-    for(const d of ["temporal","territorial","material"]){
-      if(scope[d]&&scope[d]!=="not_reached"){
-        totalDims++;
-        if(scope[d]==="pass"||scope[d]==="deferred") passCount++;
-      }
-    }
+  function dimBadge(r, label){
+    if(r==="pass")     return `<span class="tdr-badge-ok">✓ ${label||"Satisfied"}</span>`;
+    if(r==="deferred") return `<span class="tdr-badge-def">◷ ${label||"Deferred"}</span>`;
+    if(r==="fail")     return `<span class="tdr-badge-no">✗ ${label||"Not satisfied"}</span>`;
+    return `<span class="tdr-badge-unk">– ${label||"Unknown"}</span>`;
   }
 
-  // EUR-Lex chips from legal_basis_cards
-  const lexChips=cards.length?`<div class="lex-chips">${cards.map(c=>{
-    const url=c.eurlex_url||(EURLEX[c.instrument_id]||"https://eur-lex.europa.eu");
-    const label=`${c.instrument_short||c.instrument_id}${c.eurlex_article?" · "+c.eurlex_article:""}`;
-    return `<a class="lex-chip" href="${esc(url)}" target="_blank">${esc(label)} ↗</a>`;
-  }).join("")}</div>`:"";
-
-  // Multi-reg summary strip (only when multiple instruments evaluated)
-  const regSummary=nInst>1?renderRegSummary(sym):"";
-
-  // Deferred date chip (inside verdict bubble for DEFERRED)
-  let deferredChip="";
-  if(vtype==="deferred"&&deferredUntil){
-    deferredChip=`<div class="deferred-chip">
-      <span class="deferred-chip-label">Obligations active from</span>
-      <span class="deferred-chip-date">${fmtDate(deferredUntil)}</span>
-    </div>`;
+  // Helper: find best trace entry for a dimension
+  function traceFor(dim, predicateHint){
+    return trace.find(e=>e.dimension===dim && (!predicateHint || (e.predicate||"").includes(predicateHint)))
+        || trace.find(e=>e.dimension===dim && e.result!=="not_reached");
   }
 
-  // ── HERO VERDICT BUBBLE ──────────────────────────────────────────
-  const heroBub=`<div class="vbub ${vbubCls(vtype)}">
-    ${regSummary}
-    ${vbadge(vtype)}
-    <div class="verdict-line">${fmt(vline)}</div>
-    ${deferredChip}
-    ${full?`<div id="fa-${msgId}" class="full-a">${fmt(full)}</div>
-    <div><span class="fa-toggle" id="fb-${msgId}" onclick="toggleFA('${msgId}')">Collapse ↑</span></div>`:""}
-    ${lexChips}
-    <div class="expand-meta">
-      <span>${nInst} instrument${nInst!==1?"s":""} evaluated</span>
-      ${totalDims?`<span class="em-dot"></span><span>${passCount}/${totalDims} scope checks confirmed</span>`:""}
+  let rows = "";
+
+  // ── Temporal ──
+  const tempE = traceFor("temporal");
+  const tempR = scope.temporal||"cannot_determine";
+  let tempBadgeLabel = tempR==="deferred" && dUntil ? `Deferred until ${fmtIsoDate(dUntil)}` : null;
+  rows += `<div class="trace-dim-row">
+    <div class="tdr-dim"><div class="tdr-dim-name">Temporal scope</div><div class="tdr-dim-art">${iid==="EU_AI_ACT"?"Art. 113":iid==="MDR"?"Art. 123(1)":"Art. 99(2)"}</div></div>
+    <div class="tdr-badge">${dimBadge(tempR, tempBadgeLabel)}</div>
+    <div class="tdr-detail">
+      <div class="tdr-reason">${esc((tempE?.evidence||"").slice(0,220))}</div>
+      <div class="tdr-cite">${(tempE?.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
     </div>
   </div>`;
 
-  // ── ASSESSMENT TABLE ─────────────────────────────────────────────
-  const assessTable=nInst?`<div>
-    <div class="sec-toggle" onclick="toggleSec('at-${msgId}')">
-      <span class="sec-lbl"><span class="sec-pip pip-blue"></span>Assessment table</span>
-      <span class="sec-right"><span class="sec-tag">per dimension</span><span class="sec-arr" id="arr-at-${msgId}">▾</span></span>
+  // ── Territorial ──
+  const terrE = traceFor("territorial","territorial_connector_satisfied") || traceFor("territorial");
+  const terrR = scope.territorial||"cannot_determine";
+  rows += `<div class="trace-dim-row">
+    <div class="tdr-dim"><div class="tdr-dim-name">Territorial scope</div><div class="tdr-dim-art">${iid==="EU_AI_ACT"?"Art. 2(1)":iid==="MDR"?"Art. 2(28)":"Art. 3"}</div></div>
+    <div class="tdr-badge">${dimBadge(terrR)}</div>
+    <div class="tdr-detail">
+      <div class="tdr-reason">${esc((terrE?.evidence||"").slice(0,220))}</div>
+      <div class="tdr-cite">${(terrE?.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
     </div>
-    <div id="sec-at-${msgId}" class="sec-body">
-      ${renderAssessmentTable(sym,sd)}
+  </div>`;
+
+  // ── Material: AI system / personal data / medical device ──
+  const matE = traceFor("material","is_ai_system")||traceFor("material","is_personal_data")||traceFor("material","manufacturer_claims")||traceFor("material");
+  const matR = scope.material||"cannot_determine";
+  const matLabel = {EU_AI_ACT:"AI system (Art. 3(1))",GDPR:"Personal data (Art. 4(1))",MDR:"Medical device (Art. 2(1))"}[iid]||"Material scope";
+  rows += `<div class="trace-dim-row">
+    <div class="tdr-dim"><div class="tdr-dim-name">${matLabel}</div><div class="tdr-dim-art">${{EU_AI_ACT:"Art. 3(1)",GDPR:"Art. 4(1), 9",MDR:"Art. 2(1)"}[iid]||""}</div></div>
+    <div class="tdr-badge">${dimBadge(matR, matR==="pass"?"In scope":null)}</div>
+    <div class="tdr-detail">
+      <div class="tdr-reason">${esc((matE?.evidence||"").slice(0,220))}</div>
+      <div class="tdr-cite">${(matE?.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
     </div>
-  </div>`:"";
+  </div>`;
 
-  // ── SCOPE ANALYSIS (collapsible) ─────────────────────────────────
-  let scopeRows="";
-  for(const iid of Object.keys(allRes)){
-    const res=allRes[iid]||{};
-    const verdict=res.verdict||"cannot_determine";
-    const dUntil=res.deferred_until;
-    const obligations=res.obligations||sd[iid]?.obligations||{};
-    const panelId=`trace-${msgId}-${iid}`,togId=`ttog-${msgId}-${iid}`;
-    const dotCls=verdict==="applies"?"idot-yes":verdict==="deferred"?"idot-def":verdict==="does_not_apply"?"idot-no":"idot-unk";
-    const th=renderTracePanel(iid,res,panelId);
+  // ── AI Act: risk classification ──
+  if(iid==="EU_AI_ACT"){
+    const riskE = traceFor("material","risk_classification");
+    if(riskE){
+      const riskCat = res.risk_category||"";
+      const RISK_LABELS = {high_risk_annex_III:"High-risk · Annex III §5",high_risk_annex_I_sector_products:"High-risk · Annex I",GPAI_model:"GPAI model",prohibited:"Prohibited"};
+      rows += `<div class="trace-dim-row">
+        <div class="tdr-dim"><div class="tdr-dim-name">Risk classification</div><div class="tdr-dim-art">Art. 6(2), Annex III</div></div>
+        <div class="tdr-badge"><span class="tdr-badge-ok">${esc(RISK_LABELS[riskCat]||riskCat||"High-risk")}</span></div>
+        <div class="tdr-detail">
+          <div class="tdr-reason">${esc((riskE.evidence||"").slice(0,220))}</div>
+          <div class="tdr-cite">${(riskE.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
+        </div>
+      </div>`;
+    }
+    // Art. 5 prohibited check
+    const art5E = trace.find(e=>(e.predicate||"").includes("prohibited_practices_check"));
+    if(art5E){
+      const art5Pass = art5E.result==="pass";
+      rows += `<div class="trace-dim-row">
+        <div class="tdr-dim"><div class="tdr-dim-name">Art. 5 check</div><div class="tdr-dim-art">Prohibited practices</div></div>
+        <div class="tdr-badge">${art5Pass?`<span class="tdr-badge-ok">✓ Not prohibited</span>`:`<span class="tdr-badge-no">⛔ Prohibited</span>`}</div>
+        <div class="tdr-detail">
+          <div class="tdr-reason">${art5Pass?"None of the Art. 5 prohibited conditions were triggered. This system is classified as high-risk, not prohibited.":"A prohibited AI practice has been identified under Art. 5."}</div>
+          <div class="tdr-cite">Art. 5 EU AI Act</div>
+        </div>
+      </div>`;
+    }
+  }
 
-    // Obligations tabs for this instrument
-    const obWrapId=`ob-${msgId}-${iid}`;
-    const obTabs=renderObligationTabs(obligations,obWrapId);
+  // ── MDR: SaMD + Rule 11 ──
+  if(iid==="MDR"){
+    const rule11E = trace.find(e=>(e.predicate||"").toLowerCase().includes("rule_11"));
+    if(rule11E){
+      rows += `<div class="trace-dim-row">
+        <div class="tdr-dim"><div class="tdr-dim-name">Rule 11 — SaMD</div><div class="tdr-dim-art">Annex VIII</div></div>
+        <div class="tdr-badge"><span class="tdr-badge-ok">Class IIa min.</span></div>
+        <div class="tdr-detail">
+          <div class="tdr-reason">${esc((rule11E.evidence||"").slice(0,220))}</div>
+          <div class="tdr-cite">${(rule11E.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
+        </div>
+      </div>`;
+    }
+  }
 
-    scopeRows+=`<div class="inst-row">
-      <div class="inst-hdr">
-        <div class="idot ${dotCls}"></div>
-        <span class="inst-name">${esc(INST_LABELS[iid]||iid)}</span>
-        ${verdict==="deferred"&&dUntil?`<span class="inst-deferred-tag">active from ${fmtDate(dUntil)}</span>`:""}
-      </div>
-      <div class="pills">${renderScopePills(iid,sd,res)}</div>
-      ${th?`<span class="trace-toggle" id="${togId}" onclick="toggleTrace('${panelId}','${togId}')">▼ View scope detail</span>${th}`:""}
-      ${obTabs}
+  // ── GDPR: Art. 9 special category ──
+  if(iid==="GDPR"){
+    const art9E = trace.find(e=>(e.predicate||"").includes("special_category"));
+    if(art9E && art9E.result==="pass"){
+      rows += `<div class="trace-dim-row">
+        <div class="tdr-dim"><div class="tdr-dim-name">Art. 9 — Health data</div><div class="tdr-dim-art">Special category</div></div>
+        <div class="tdr-badge"><span class="tdr-badge-ok">✓ Flagged</span></div>
+        <div class="tdr-detail">
+          <div class="tdr-reason">Health data confirmed — Art. 9 processing prohibition applies. Primary exception for clinical AI: Art. 9(2)(h) healthcare purposes. DPIA mandatory under Art. 35(3)(b).</div>
+          <div class="tdr-cite">Art. 9, Art. 35(3)(b) GDPR · Recital 51</div>
+        </div>
+      </div>`;
+    }
+  }
+
+  // ── Overall row ──
+  const overallE = trace.find(e=>e.dimension==="overall");
+  const VERDICT_BADGE = {
+    applies:`<span class="tdr-badge-ok">✓ Appears to apply — on the facts provided</span>`,
+    deferred:`<span class="tdr-badge-def">◷ In scope — obligations deferred until ${fmtIsoDate(dUntil)}</span>`,
+    does_not_apply:`<span class="tdr-badge-no">✗ Does not appear to apply on these facts</span>`,
+    cannot_determine:`<span class="tdr-badge-unk">– Cannot determine — see missing facts above</span>`,
+    prohibited:`<span class="tdr-badge-no">⛔ Prohibited under Art. 5</span>`,
+  }[verdict]||`<span class="tdr-badge-unk">${esc(verdict)}</span>`;
+
+  let overallNote = "This assessment depends on the accuracy and completeness of the information provided.";
+  if(verdict==="deferred") overallNote = `No immediate obligation arises on these facts. The system is in scope — providers should begin compliance preparation now.`;
+  if(verdict==="does_not_apply") overallNote = "A different intended use, market location, or product type could change this conclusion.";
+
+  // Deferred preparation box
+  let prepBox = "";
+  if(verdict==="deferred" && obligations.provider?.length){
+    const items = obligations.provider.slice(0,6).map(o=>typeof o==="object"?o.label:o).join(" · ");
+    prepBox = `<div class="deferred-prep">
+      <div class="dp-label">Begin preparing now — obligations active from ${fmtIsoDate(dUntil)}</div>
+      <div class="dp-text">${esc(items)}</div>
     </div>`;
   }
 
-  const rpSec=nInst?`<div>
-    <div class="sec-toggle" onclick="toggleSec('rp-${msgId}')">
-      <span class="sec-lbl"><span class="sec-pip pip-green"></span>Scope analysis · ${nInst} instrument${nInst!==1?"s":""}</span>
-      <span class="sec-right"><span class="sec-tag">${passCount}/${totalDims} confirmed</span><span class="sec-arr" id="arr-rp-${msgId}">▾</span></span>
+  return `<div class="reg-trace-panel" data-msg="${msgId}" data-iid="${iid}" style="display:none;">
+    <div class="trace-panel-wrap">
+      ${rows}
+      <div class="trace-overall-row">
+        ${VERDICT_BADGE}
+        <span class="tor-note">${overallNote}</span>
+      </div>
     </div>
-    <div id="sec-rp-${msgId}" class="sec-body">
-      <div class="rcard"><div class="rcard-body">${scopeRows}</div></div>
-    </div>
-  </div>`:"";
+    ${prepBox}
+  </div>`;
+}
 
-  // ── NEXT STEPS ───────────────────────────────────────────────────
-  let nsSec="";
+// ── MAIN RENDER ───────────────────────────────────────────────────
+function renderComplianceResponse(data, msgId){
+  if(data.answer&&!data.narrative)
+    return `<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
+
+  const n   = data.narrative||{};
+  const sym = data.symbolic||{};
+  const vtype = n.verdict_type||"cannot_determine";
+  const vline = n.verdict_line||"";
+  const full  = n.full_analysis||"";
+  const cards = n.legal_basis_cards||[];
+  const nextSteps = n.next_steps||[];
+
+  // Stage-based layouts
+  if(vtype==="indicative")  return renderIndicative(n);
+  if(vtype==="gathering")   return renderGathering(n);
+  if(vtype==="preliminary") return renderPreliminary(n);
+
+  // Simple / non-applicability layouts
+  if(vtype==="general"||vtype==="context_update")
+    return `<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
+
+  const allRes = sym.applicability_results||{};
+  const iids   = Object.keys(allRes);
+
+  // ── Verdict card class ─────────────────────────────────────────
+  const vcCls = {applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",deferred:"v-def",prohibited:"v-no"}[vtype]||"v-info";
+
+  // ── Split full_analysis into first para (always visible) + rest ──
+  const paras    = (full||"").split(/\n\n+/);
+  const firstPara = paras[0]||"";
+  const restPara  = paras.slice(1).join("\n\n");
+
+  // ── EUR-Lex source links ───────────────────────────────────────
+  // Build from legal_basis_cards first, fall back to per-instrument defaults
+  const EURLEX_DEFAULTS = {
+    GDPR:      {label:"GDPR — Regulation (EU) 2016/679",     url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
+    EU_AI_ACT: {label:"EU AI Act — Regulation (EU) 2024/1689", url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689"},
+    MDR:       {label:"MDR — Regulation (EU) 2017/745",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32017R0745"},
+  };
+  const lexLinks = [];
+  // From cards
+  cards.forEach(c=>{
+    const url = c.eurlex_url || (EURLEX_DEFAULTS[c.instrument_id]?.url||"");
+    const label = c.instrument_short||c.instrument_id;
+    const art   = c.eurlex_article||"";
+    if(url) lexLinks.push({url, label: art ? `${label} · ${art}` : label});
+  });
+  // Add defaults for any instruments not already in cards
+  iids.forEach(iid=>{
+    if(!cards.find(c=>c.instrument_id===iid) && EURLEX_DEFAULTS[iid]){
+      const d = EURLEX_DEFAULTS[iid];
+      lexLinks.push({url:d.url, label:d.label});
+    }
+  });
+  const lexHtml = lexLinks.length
+    ? `<div class="vc-lex">${lexLinks.map(l=>`<a class="vc-lex-link" href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join("")}</div>`
+    : "";
+
+  // ── Regulation tab buttons ─────────────────────────────────────
+  const INST_ORDER = ["GDPR","EU_AI_ACT","MDR"];
+  const orderedIids = [...INST_ORDER.filter(i=>iids.includes(i)), ...iids.filter(i=>!INST_ORDER.includes(i))];
+
+  // Set default active tab: first that applies, else first deferred, else first
+  const firstApply   = orderedIids.find(i=>allRes[i]?.verdict==="applies");
+  const firstDeferred= orderedIids.find(i=>allRes[i]?.verdict==="deferred");
+  const defaultTab   = firstApply||firstDeferred||orderedIids[0];
+  _activeTab[msgId]  = defaultTab;
+
+  function verdictPillCls(v){ return {applies:"rtb-pill-ok",deferred:"rtb-pill-def",does_not_apply:"rtb-pill-no",prohibited:"rtb-pill-no"}[v]||"rtb-pill-unk"; }
+  function verdictPillLabel(v,d){ return {applies:"✓ Applies",deferred:`◷ Deferred${d?" — "+fmtIsoDate(d):""}`,does_not_apply:"✗ Not applicable",prohibited:"⛔ Prohibited",cannot_determine:"– Uncertain"}[v]||v; }
+
+  const tabButtons = orderedIids.map(iid=>{
+    const res     = allRes[iid]||{};
+    const verdict = res.verdict||"cannot_determine";
+    const dUntil  = res.deferred_until;
+    const isActive= iid===defaultTab;
+    const baseCls = `reg-tab-btn rtb-${iid==="EU_AI_ACT"?"aia":iid.toLowerCase()}`;
+    const activeCls = isActive ? " "+regTabActiveCls(iid) : "";
+    return `<button class="${baseCls}${activeCls}" data-msg="${msgId}" data-iid="${iid}" onclick="switchRegTab('${msgId}','${iid}')">
+      <span class="rtb-dot"></span>
+      ${esc(INST_LABELS[iid]||iid)}
+      <span class="rtb-pill ${verdictPillCls(verdict)}">${verdictPillLabel(verdict,dUntil)}</span>
+    </button>`;
+  }).join("");
+
+  // ── Trace panels (one per instrument) ─────────────────────────
+  const tracePanels = orderedIids.map(iid=>{
+    const panel = buildTracePanel(msgId, iid, allRes[iid]||{});
+    return panel;
+  }).join("");
+
+  // ── Next steps ────────────────────────────────────────────────
+  let nsSec = "";
   if(nextSteps.length){
-    const TIMING_MAP=(t)=>{
+    const TIMING_CLS=(t)=>{
       if(!t) return "st-ongoing";
       const tl=t.toLowerCase();
       if(tl.includes("immediate")) return "st-immediate";
-      if(tl.includes("before")) return vtype==="deferred"?"st-deferred":"st-before";
-      if(tl.includes("ongoing")) return "st-ongoing";
-      // If it contains a date — treat as deferred
-      if(/\d{4}/.test(t)) return "st-deferred";
-      return "st-before";
+      if(tl.includes("before")||/\d{4}/.test(t)) return "st-before";
+      return "st-ongoing";
     };
     const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
       <div class="step-num">${i+1}</div>
       <div><div class="step-action">${fmt(s.action||"")}</div><div class="step-basis">${esc(s.basis||"")}</div></div>
-      <div class="step-timing ${TIMING_MAP(s.timing)}">${esc(s.timing||"Ongoing")}</div>
+      <div class="step-timing ${TIMING_CLS(s.timing)}">${esc(s.timing||"Ongoing")}</div>
     </div>`).join("");
-
-    const stepLabel=vtype==="deferred"?"Preparation steps — begin now":"Recommended next steps";
-    const stepPip=vtype==="deferred"?"pip-def":"pip-blue";
     nsSec=`<div>
       <div class="sec-toggle" onclick="toggleSec('ns-${msgId}')">
-        <span class="sec-lbl"><span class="sec-pip ${stepPip}"></span>${stepLabel} · ${nextSteps.length}</span>
+        <span class="sec-lbl"><span class="sec-pip pip-blue"></span>Next steps · ${nextSteps.length}</span>
         <span class="sec-right"><span class="sec-arr" id="arr-ns-${msgId}">▾</span></span>
       </div>
       <div id="sec-ns-${msgId}" class="sec-body">
@@ -1055,10 +1260,37 @@ function renderComplianceResponse(data,msgId){
     </div>`;
   }
 
-  // ── ALERTS ───────────────────────────────────────────────────────
-  const specHtml=sym.special_category_flag?`<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data detected</div><div class="alert-q">Processing is prohibited unless an Art. 9(2) exception applies. For healthcare contexts, Art. 9(2)(h) (medical diagnosis/treatment under professional responsibility) is the most relevant exception. A DPIA under Art. 35 GDPR is mandatory.</div></div>`:"";
+  // ── Art. 9 alert ──────────────────────────────────────────────
+  const art9Alert = sym.special_category_flag
+    ? `<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data</div><div class="alert-q">Health data confirmed. Processing requires an Art. 9(2) exception. For clinical AI, Art. 9(2)(h) — healthcare purposes under professional responsibility — is the primary exception. DPIA mandatory under Art. 35(3)(b).</div></div>`
+    : "";
 
-  return `${heroBub}${assessTable}${rpSec}${nsSec}${specHtml}${renderSources(data.sources||[])}`;
+  // ── Assemble ──────────────────────────────────────────────────
+  return `
+    <div class="verdict-card ${vcCls}">
+      ${vbadge(vtype)}
+      <div class="vc-verdict-line">${fmt(vline)}</div>
+      <div class="vc-analysis" id="vc-p1-${msgId}">${fmt(firstPara)}</div>
+      ${restPara?`<div class="vc-more" id="vc-more-${msgId}">${fmt(restPara)}</div>
+      <button class="vc-expand" id="vc-exp-${msgId}" onclick="toggleVcMore('${msgId}')">Read full analysis ↓</button>`:""}
+      ${lexHtml}
+      ${iids.length?`<div class="vc-sep"></div>
+      <div class="reg-tab-strip">${tabButtons}</div>
+      ${tracePanels}`:""}
+    </div>
+    ${nsSec}
+    ${art9Alert}
+    ${renderSources(data.sources||[])}
+  `;
+}
+
+function toggleVcMore(msgId){
+  const more = document.getElementById("vc-more-"+msgId);
+  const btn  = document.getElementById("vc-exp-"+msgId);
+  if(!more) return;
+  const open = more.style.display==="block";
+  more.style.display = open?"none":"block";
+  btn.textContent = open?"Read full analysis ↓":"Collapse ↑";
 }
 
 // ── WELCOME ───────────────────────────────────────────────────────
@@ -1096,7 +1328,7 @@ function renderActs(actions){
   const bar=document.getElementById("acts");
   if(!actions?.length){bar.style.display="none";return;}
   bar.style.display="flex";
-  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="setQ(${JSON.stringify(a)})">${esc(a)}</button>`).join("");
+  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="setQ(${JSON.stringify(a)});send()">${esc(a)}</button>`).join("");
 }
 
 function updateHdr(t){
