@@ -440,6 +440,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .dp-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo);margin-bottom:4px;}
 .dp-text{font-size:11px;color:#4338ca;line-height:1.6;}
 
+
+/* ── INFO FOOTER ────────────────────────────────────────────────── */
+.info-footer{margin-top:10px;padding:12px 16px;border-radius:10px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);}
+.if-note{font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:10px;}
+.if-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.if-btn{padding:6px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:12px;font-weight:500;cursor:pointer;color:var(--color-text-secondary);font-family:inherit;transition:.1s;}
+.if-btn:hover{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+.if-btn.primary{background:var(--color-background-primary);color:var(--color-text-primary);border-color:var(--color-border-primary);}
+
 </style>
 </head>
 <body>
@@ -692,6 +701,21 @@ function renderPreliminary(n){
       ${gapItems}
     </div>`:""}
     ${nextQ?`<div class="prelim-next-q">${fmt(nextQ)}</div>`:""}
+  </div>`;
+}
+
+
+// ── INFO FOOTER ───────────────────────────────────────────────────
+function renderInfoFooter(n){
+  const note = n.info_note||"";
+  if(!note) return "";
+  return `<div class="info-footer">
+    <div class="if-note">${esc(note)}</div>
+    <div class="if-actions">
+      <button class="if-btn primary" onclick="sendText('I would like to provide more information about our product')">Provide more information ↗</button>
+      <button class="if-btn" onclick="sendText('Can I upload our intended use statement?')">Upload intended use statement</button>
+      <button class="if-btn" onclick="sendText('Can I connect our company documents?')">Connect company documents</button>
+    </div>
   </div>`;
 }
 
@@ -1287,6 +1311,7 @@ function renderComplianceResponse(data, msgId){
     ${nsSec}
     ${art9Alert}
     ${renderSources(data.sources||[])}
+    ${renderInfoFooter(n)}
   `;
 }
 
