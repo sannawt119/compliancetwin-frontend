@@ -343,6 +343,43 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hint:hover{border-color:var(--blue);background:var(--cloud0);box-shadow:0 0 0 3px rgba(45,107,228,.08),var(--sh-xs);transform:translateY(-1px);}
 .hint-l{font-size:8.5px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
 .hint-full{grid-column:1/-1;}
+
+/* ── STAGE: INDICATIVE / GATHERING / PRELIMINARY ───────────────────────── */
+.stage-wrap{display:flex;flex-direction:column;gap:8px;}
+.stage-bub{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;padding:15px 18px;box-shadow:var(--sh-md);border-left:3px solid var(--blue);}
+.stage-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;background:var(--blue-lt);color:var(--blue);}
+.stage-verdict{font-size:14px;line-height:1.65;color:var(--txt);font-weight:500;margin-bottom:10px;}
+.sig-grid{display:flex;flex-direction:column;gap:5px;margin:10px 0;}
+.sig-row{display:grid;grid-template-columns:120px 80px 1fr;gap:10px;align-items:start;padding:7px 11px;border-radius:8px;background:var(--cloud1);border:1px solid var(--bdr);font-size:11.5px;}
+.sig-inst{font-weight:700;color:var(--txt);}
+.sig-signal{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.sig-yes{background:var(--green-l);color:var(--green);}
+.sig-no{background:var(--red-l);color:var(--red);}
+.sig-unk{background:var(--amber-l);color:var(--amber);}
+.sig-reason{font-size:11px;color:var(--txt2);line-height:1.45;}
+.stage-ask{margin-top:6px;padding:11px 14px;border-radius:10px;background:var(--blue-lt);border:1px solid var(--bdr2);}
+.stage-ask-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:8px;}
+.stage-ask-list{display:flex;flex-direction:column;gap:4px;}
+.stage-ask-item{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:var(--txt2);line-height:1.5;}
+.stage-ask-num{min-width:18px;height:18px;background:var(--blue);color:#fff;border-radius:50%;font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.stage-q-block{margin-top:6px;padding:10px 14px;border-radius:10px;background:var(--amber-l);border:1px solid rgba(217,119,6,.2);}
+.stage-q-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#92400e;margin-bottom:7px;}
+.stage-q-item{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:#78350f;line-height:1.5;padding:3px 0;font-weight:500;}
+.stage-q-num{min-width:18px;height:18px;background:#d97706;color:#fff;border-radius:50%;font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.stage-doc-req{font-size:11px;color:#78350f;font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid rgba(217,119,6,.2);}
+.prelim-reg-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
+.prelim-reg-hdr{padding:7px 13px;border-bottom:1px solid var(--bdr);background:var(--cloud1);display:flex;align-items:center;justify-content:space-between;}
+.prelim-reg-name{font-size:10px;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.08em;}
+.prelim-reg-signal{font-size:9.5px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.prelim-reg-body{padding:10px 13px;}
+.prelim-analysis{font-size:12px;line-height:1.7;color:var(--txt2);margin-bottom:6px;}
+.prelim-remains{font-size:10.5px;color:var(--txt3);font-style:italic;padding-top:5px;border-top:1px dashed var(--bdr);}
+.prelim-gap-list{padding:9px 13px;background:var(--cloud1);border:1px solid var(--bdr);border-radius:var(--r);}
+.prelim-gap-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--txt4);margin-bottom:6px;}
+.prelim-gap-item{font-size:11px;color:var(--txt2);line-height:1.5;padding:3px 0;display:flex;gap:7px;}
+.prelim-gap-item::before{content:"→";color:var(--txt4);flex-shrink:0;}
+.prelim-next-q{padding:9px 13px;background:linear-gradient(135deg,var(--blue-lt),rgba(255,255,255,.9));border:1px solid var(--bdr2);border-radius:var(--r);font-size:11.5px;color:var(--txt2);line-height:1.6;}
+.prelim-next-q strong{color:var(--blue);}
 </style>
 </head>
 <body>
@@ -489,6 +526,106 @@ function toggleTrace(pid,tid){
 function switchObTab(wrap,role){
   wrap.querySelectorAll(".ob-tab").forEach(t=>t.classList.toggle("active",t.dataset.role===role));
   wrap.querySelectorAll(".ob-panel").forEach(p=>p.classList.toggle("active",p.dataset.role===role));
+}
+
+
+// ── STAGE RENDERS ─────────────────────────────────────────────────────────────
+
+function signalCls(s){
+  const sl=(s||"").toLowerCase();
+  if(sl.includes("likely yes")||sl.includes("likely in scope")||sl.includes("strong"))return"sig-yes";
+  if(sl.includes("likely no")||sl.includes("unlikely"))return"sig-no";
+  return"sig-unk";
+}
+
+function renderIndicative(n){
+  const bullets=n.indicative_bullets||[];
+  const docs=n.document_requests||[];
+  const qs=n.threshold_questions||[];
+  const bulletRows=bullets.map(b=>`
+    <div class="sig-row">
+      <span class="sig-inst">${esc(b.instrument||b.instrument_id||"")}</span>
+      <span class="sig-signal ${signalCls(b.signal)}">${esc(b.signal||"")}</span>
+      <span class="sig-reason">${esc(b.reason||"")}</span>
+    </div>`).join("");
+  const docItems=docs.map((d,i)=>`<div class="stage-ask-item"><div class="stage-ask-num">${i+1}</div>${esc(d)}</div>`).join("");
+  const qItems=qs.map((q,i)=>`<div class="stage-q-item"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
+  return`<div class="stage-wrap">
+    <div class="stage-bub">
+      <div class="stage-badge">◎ Indicative assessment</div>
+      <div class="stage-verdict">${fmt(n.verdict_line||"")}</div>
+      ${n.opening?`<div style="font-size:11.5px;color:var(--txt3);margin-bottom:8px;">${esc(n.opening)}</div>`:""}
+      <div class="sig-grid">${bulletRows}</div>
+    </div>
+    ${docs.length?`<div class="stage-ask">
+      <div class="stage-ask-title">Documents that would help — provide any that are available</div>
+      <div class="stage-ask-list">${docItems}</div>
+    </div>`:""}
+    ${qs.length?`<div class="stage-q-block">
+      <div class="stage-q-title">Please answer these threshold questions</div>
+      ${qItems}
+    </div>`:""}
+  </div>`;
+}
+
+function renderGathering(n){
+  const bullets=n.indicative_bullets||[];
+  const qs=n.focused_questions||[];
+  const docReq=n.document_excerpt_request||"";
+  const ack=n.acknowledgement||"";
+  const bulletRows=bullets.map(b=>`
+    <div class="sig-row">
+      <span class="sig-inst">${esc(b.instrument||b.instrument_id||"")}</span>
+      <span class="sig-signal ${signalCls(b.signal)}">${esc(b.signal||"")}</span>
+      <span class="sig-reason">${esc(b.reason||"")}</span>
+    </div>`).join("");
+  const qItems=qs.map((q,i)=>`<div class="stage-q-item"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
+  return`<div class="stage-wrap">
+    <div class="stage-bub">
+      <div class="stage-badge">◎ Gathering information</div>
+      <div class="stage-verdict">${fmt(n.verdict_line||"")}</div>
+      ${ack?`<div style="font-size:11.5px;color:var(--txt3);margin-bottom:8px;">${esc(ack)}</div>`:""}
+      <div class="sig-grid">${bulletRows}</div>
+    </div>
+    ${qs.length||docReq?`<div class="stage-q-block">
+      <div class="stage-q-title">Focused follow-up questions</div>
+      ${qItems}
+      ${docReq?`<div class="stage-doc-req">${esc(docReq)}</div>`:""}
+    </div>`:""}
+  </div>`;
+}
+
+function renderPreliminary(n){
+  const regs=n.per_regulation||[];
+  const gaps=n.remaining_gaps||[];
+  const nextQ=n.next_prompt||"";
+  const SIG_CLS={"likely yes":"sig-yes","likely in scope":"sig-yes","likely no":"sig-no"};
+  const regCards=regs.map(r=>{
+    const sc=SIG_CLS[(r.indicative_verdict||"").toLowerCase()]||"sig-unk";
+    return`<div class="prelim-reg-card">
+      <div class="prelim-reg-hdr">
+        <span class="prelim-reg-name">${esc(r.instrument||r.instrument_id||"")}</span>
+        <span class="sig-signal ${sc}">${esc(r.indicative_verdict||"")}</span>
+      </div>
+      <div class="prelim-reg-body">
+        <div class="prelim-analysis">${fmt(r.analysis||"")}</div>
+        ${r.what_remains?`<div class="prelim-remains">Still needed: ${esc(r.what_remains)}</div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+  const gapItems=gaps.map(g=>`<div class="prelim-gap-item">${esc(g)}</div>`).join("");
+  return`<div class="stage-wrap">
+    <div class="stage-bub">
+      <div class="stage-badge">◎ Preliminary assessment</div>
+      <div class="stage-verdict">${fmt(n.verdict_line||"")}</div>
+    </div>
+    ${regCards}
+    ${gaps.length?`<div class="prelim-gap-list">
+      <div class="prelim-gap-title">Information still needed for a complete assessment</div>
+      ${gapItems}
+    </div>`:""}
+    ${nextQ?`<div class="prelim-next-q">${fmt(nextQ)}</div>`:""}
+  </div>`;
 }
 
 // ── BACKEND ───────────────────────────────────────────────────────
@@ -779,6 +916,11 @@ function renderComplianceResponse(data,msgId){
   const deferredUntil=n.deferred_until||null;
   const deferred=sym.deferred_instruments||[];
   const applies=sym.instruments_that_apply||[];
+
+  // Stage-based progressive assessment layouts
+  if(vtype==="indicative") return renderIndicative(n);
+  if(vtype==="gathering")  return renderGathering(n);
+  if(vtype==="preliminary") return renderPreliminary(n);
 
   // Simple / general layouts
   if(vtype==="general"||vtype==="context_update")
