@@ -1148,18 +1148,8 @@ function buildTracePanel(msgId, iid, res){
   }[verdict]||`<span class="tdr-badge-unk">${esc(verdict)}</span>`;
 
   let overallNote = "This assessment depends on the accuracy and completeness of the information provided.";
-  if(verdict==="deferred") overallNote = `No immediate obligation arises on these facts. The system is in scope — providers should begin compliance preparation now.`;
+  if(verdict==="deferred") overallNote = "No immediate obligation arises on these facts.";
   if(verdict==="does_not_apply") overallNote = "A different intended use, market location, or product type could change this conclusion.";
-
-  // Deferred preparation box
-  let prepBox = "";
-  if(verdict==="deferred" && obligations.provider?.length){
-    const items = obligations.provider.slice(0,6).map(o=>typeof o==="object"?o.label:o).join(" · ");
-    prepBox = `<div class="deferred-prep">
-      <div class="dp-label">Begin preparing now — obligations active from ${fmtIsoDate(dUntil)}</div>
-      <div class="dp-text">${esc(items)}</div>
-    </div>`;
-  }
 
   return `<div class="reg-trace-panel" data-msg="${msgId}" data-iid="${iid}" style="display:none;">
     <div class="trace-panel-wrap">
@@ -1169,9 +1159,7 @@ function buildTracePanel(msgId, iid, res){
         <span class="tor-note">${overallNote}</span>
       </div>
     </div>
-    ${prepBox}
   </div>`;
-}
 
 // ── MAIN RENDER ───────────────────────────────────────────────────
 function renderComplianceResponse(data, msgId){
