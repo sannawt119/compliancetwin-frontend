@@ -17,7 +17,6 @@
   --red:#dc2626;--red-l:rgba(220,38,38,.08);
   --amber:#d97706;--amber-l:rgba(217,119,6,.09);
   --purple:#7c3aed;--purple-l:rgba(124,58,237,.09);
-  /* NEW: deferred — navy/indigo, distinct from cannot_determine amber */
   --def:#1e3a8a;--def-mid:#2d55c8;--def-l:rgba(30,58,138,.08);--def-lt:#eef2ff;
   --bdr:rgba(45,107,228,.11);--bdr2:rgba(45,107,228,.2);
   --glass:rgba(255,255,255,.8);
@@ -88,7 +87,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .vbub.v-no  {border-left:3px solid var(--red);   background:linear-gradient(135deg,rgba(220,38,38,.04) 0%,#fff 45%);}
 .vbub.v-unk {border-left:3px solid var(--amber);  background:linear-gradient(135deg,rgba(217,119,6,.04) 0%,#fff 45%);}
 .vbub.v-info{border-left:3px solid var(--blue);   background:linear-gradient(135deg,rgba(45,107,228,.04) 0%,#fff 45%);}
-/* NEW: DEFERRED — navy left border, indigo tint */
 .vbub.v-def {border-left:3px solid var(--def);    background:linear-gradient(135deg,rgba(30,58,138,.04) 0%,#fff 45%);}
 
 .vbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;}
@@ -96,7 +94,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .vb-no  {background:var(--red-l);   color:var(--red);}
 .vb-unk {background:var(--amber-l); color:var(--amber);}
 .vb-info,.vb-ctx{background:var(--blue-lt);color:var(--blue);}
-/* NEW */
 .vb-def {background:var(--def-l);   color:var(--def); border:1px solid rgba(30,58,138,.2);}
 
 .verdict-line{font-size:14px;line-height:1.65;color:var(--txt);font-weight:500;}
@@ -107,13 +104,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .expand-meta{margin-top:10px;font-size:10px;color:var(--txt4);display:flex;align-items:center;gap:7px;}
 .em-dot{width:3px;height:3px;border-radius:50%;background:var(--txt4);}
 
-/* NEW: deferred date chip inside verdict bubble */
 .deferred-chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 12px;
   border-radius:8px;background:var(--def-lt);border:1px solid rgba(30,58,138,.18);}
 .deferred-chip-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--def);opacity:.7;}
 .deferred-chip-date{font-size:12px;font-weight:700;color:var(--def);font-family:var(--mono);}
 
-/* NEW: multi-regulation summary strip */
 .reg-summary{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .reg-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
   font-size:10px;font-weight:700;border:1px solid transparent;}
@@ -138,30 +133,36 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .sec-body{display:none;flex-direction:column;gap:7px;padding:3px 0 2px;}
 .sec-body.open{display:flex;}
 
-/* ── ASSESSMENT TABLE (NEW) ─────────────────────────────── */
-.atbl-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
-.atbl{width:100%;border-collapse:collapse;font-size:11px;}
+/* ── ASSESSMENT TABLE ─────────────────────────────────────── */
+.atbl-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);width:100%;}
+.atbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;}
 .atbl thead th{padding:7px 11px;background:var(--cloud1);border-bottom:1px solid var(--bdr);
   font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--txt4);
-  text-align:left;white-space:nowrap;}
+  text-align:left;white-space:nowrap;overflow:hidden;}
+/* Fixed column widths so nothing overflows */
+.atbl colgroup col:nth-child(1){width:22%;}
+.atbl colgroup col:nth-child(2){width:18%;}
+.atbl colgroup col:nth-child(3){width:18%;}
+.atbl colgroup col:nth-child(4){width:24%;}
+.atbl colgroup col:nth-child(5){width:18%;}
 .atbl tbody tr{border-bottom:1px solid var(--bdr);}
 .atbl tbody tr:last-child{border-bottom:none;}
 .atbl tbody tr:hover{background:var(--cloud1);}
-.atbl td{padding:8px 11px;vertical-align:top;line-height:1.5;}
-.atbl-cat{font-weight:600;color:var(--txt);font-size:11px;min-width:130px;}
+.atbl td{padding:8px 11px;vertical-align:top;line-height:1.5;overflow:hidden;word-break:break-word;overflow-wrap:break-word;}
+.atbl-cat{font-weight:600;color:var(--txt);font-size:11px;}
 .atbl-sub{font-size:9.5px;color:var(--txt4);margin-top:2px;}
-.atbl-assess{min-width:80px;}
+.atbl-assess{}
 .atbl-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;
-  font-size:9px;font-weight:700;white-space:nowrap;}
+  font-size:9px;font-weight:700;white-space:normal;word-break:break-word;}
 .ab-yes {background:var(--green-l); color:var(--green);}
 .ab-no  {background:var(--red-l);   color:var(--red);}
 .ab-unk {background:var(--amber-l); color:var(--amber);}
 .ab-def {background:var(--def-l);   color:var(--def);}
 .ab-pass{background:rgba(5,150,105,.07);color:var(--green);}
 .ab-na  {background:var(--cloud2);  color:var(--txt4);}
-.atbl-basis{font-family:var(--mono);font-size:9.5px;color:var(--blue);min-width:120px;}
-.atbl-reason{font-size:11px;color:var(--txt2);max-width:220px;}
-.atbl-outcome{font-size:10.5px;color:var(--txt2);max-width:160px;}
+.atbl-basis{font-family:var(--mono);font-size:9.5px;color:var(--blue);display:block;word-break:break-all;overflow-wrap:break-word;}
+.atbl-reason{font-size:11px;color:var(--txt2);overflow:hidden;word-break:break-word;overflow-wrap:break-word;}
+.atbl-outcome{font-size:10.5px;color:var(--txt2);overflow:hidden;word-break:break-word;overflow-wrap:break-word;}
 .atbl-section-hdr td{background:var(--cloud2);padding:5px 11px;
   font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);}
 
@@ -185,9 +186,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .idot-yes{background:var(--green);box-shadow:0 0 0 2px var(--green-l);}
 .idot-no {background:var(--red);  box-shadow:0 0 0 2px var(--red-l);}
 .idot-unk{background:var(--amber);box-shadow:0 0 0 2px var(--amber-l);}
-.idot-def{background:var(--def);  box-shadow:0 0 0 2px var(--def-l);}   /* NEW */
+.idot-def{background:var(--def);  box-shadow:0 0 0 2px var(--def-l);}
 .inst-name{font-size:11px;font-weight:700;color:var(--txt);}
-/* NEW: deferred date tag inline with inst name */
 .inst-deferred-tag{margin-left:6px;padding:1px 7px;border-radius:6px;
   font-size:8px;font-weight:700;background:var(--def-lt);color:var(--def);font-family:var(--mono);}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;}
@@ -195,7 +195,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .pill.ok  {background:var(--green-l);color:var(--green);border-color:rgba(5,150,105,.18);}
 .pill.fail{background:var(--red-l);  color:var(--red);  border-color:rgba(220,38,38,.14);}
 .pill.unk {background:var(--amber-l);color:var(--amber);border-color:rgba(217,119,6,.14);}
-.pill.def {background:var(--def-l);  color:var(--def);  border-color:rgba(30,58,138,.18);}  /* NEW */
+.pill.def {background:var(--def-l);  color:var(--def);  border-color:rgba(30,58,138,.18);}
 .pill.excl{background:var(--cloud2); color:var(--txt3); border-color:var(--bdr);}
 .risk-badge{padding:1px 8px;border-radius:5px;font-size:9px;font-weight:700;background:var(--blue-lt);color:var(--blue);border:1px solid rgba(45,107,228,.2);font-family:var(--mono);}
 .risk-badge.ai{background:var(--purple-l);color:var(--purple);border-color:rgba(124,58,237,.2);}
@@ -214,12 +214,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-note{font-size:9.5px;color:var(--blue);margin-top:2px;}
 .trace-cite{font-size:9px;color:var(--txt4);margin-top:1px;font-family:var(--mono);}
 
-/* NEW: Art.5 prohibited check pass chip */
 .art5-pass{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:3px 10px;
   border-radius:20px;background:var(--green-l);border:1px solid rgba(5,150,105,.18);
   font-size:9.5px;font-weight:600;color:var(--green);}
 
-/* ── OBLIGATIONS TABS (NEW) ─────────────────────────────── */
+/* ── OBLIGATIONS TABS ─────────────────────────────────────── */
 .ob-tabs-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
 .ob-tab-bar{display:flex;border-bottom:1px solid var(--bdr);background:var(--cloud1);}
 .ob-tab{padding:7px 14px;font-size:10px;font-weight:700;color:var(--txt3);cursor:pointer;
@@ -259,7 +258,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .st-immediate{background:var(--red-l);  color:var(--red);}
 .st-before   {background:var(--amber-l);color:var(--amber);}
 .st-ongoing  {background:var(--green-l);color:var(--green);}
-/* NEW: deferred timing */
 .st-deferred {background:var(--def-l);  color:var(--def);}
 
 /* ── CANNOT-DETERMINE CARD ──────────────────────────────── */
@@ -282,22 +280,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .trace-overall.overall-pass{background:var(--green-l);border-color:rgba(5,150,105,.2);}
 .trace-overall.overall-fail{background:var(--red-l);border-color:rgba(220,38,38,.15);}
 .trace-overall.overall-unk{background:var(--amber-l);border-color:rgba(217,119,6,.15);}
-.trace-overall.overall-def{background:var(--def-l);border-color:rgba(30,58,138,.2);}   /* NEW */
+.trace-overall.overall-def{background:var(--def-l);border-color:rgba(30,58,138,.2);}
 .overall-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
 .trace-overall.overall-pass .overall-lbl{color:var(--green);}
 .trace-overall.overall-fail .overall-lbl{color:var(--red);}
 .trace-overall.overall-unk  .overall-lbl{color:var(--amber);}
-.trace-overall.overall-def  .overall-lbl{color:var(--def);}   /* NEW */
+.trace-overall.overall-def  .overall-lbl{color:var(--def);}
 .overall-text{font-size:11px;line-height:1.65;color:var(--txt2);}
-
-/* ── ALERTS ─────────────────────────────────────────────── */
-.alert-card{padding:10px 14px;border-radius:10px;border:1px solid;}
-.alert-clarify{background:linear-gradient(135deg,var(--amber-l),#fff);border-color:rgba(217,119,6,.22);}
-.alert-art9   {background:linear-gradient(135deg,var(--red-l),#fff);  border-color:rgba(220,38,38,.18);}
-.alert-lbl{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px;}
-.alert-clarify .alert-lbl{color:#92400e;}.alert-art9 .alert-lbl{color:#991b1b;}
-.alert-q{font-size:11.5px;margin-bottom:2px;}
-.alert-clarify .alert-q{color:#78350f;}.alert-art9 .alert-q{color:#7f1d1d;}
 
 /* ── SOURCES ─────────────────────────────────────────────── */
 .src-toggle{padding:4px 11px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.6);font-size:10px;color:var(--txt3);cursor:pointer;font-family:var(--font);transition:.12s;font-weight:500;}
@@ -344,7 +333,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hint-l{font-size:8.5px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
 .hint-full{grid-column:1/-1;}
 
-/* ── STAGE: INDICATIVE / GATHERING / PRELIMINARY ───────────────────────── */
+/* ── STAGE ─────────────────────────────────────────────── */
 .stage-wrap{display:flex;flex-direction:column;gap:8px;}
 .stage-bub{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;padding:15px 18px;box-shadow:var(--sh-md);border-left:3px solid var(--blue);}
 .stage-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px;background:var(--blue-lt);color:var(--blue);}
@@ -381,12 +370,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .prelim-next-q{padding:9px 13px;background:linear-gradient(135deg,var(--blue-lt),rgba(255,255,255,.9));border:1px solid var(--bdr2);border-radius:var(--r);font-size:11.5px;color:var(--txt2);line-height:1.6;}
 .prelim-next-q strong{color:var(--blue);}
 
-/* ── OPTION-A VERDICT LAYOUT ──────────────────────────────────── */
+/* ── VERDICT CARD ─────────────────────────────────────────── */
 .verdict-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:4px 16px 16px 16px;padding:18px 20px;box-shadow:var(--sh-md);}
 .verdict-card.v-yes{border-left:3px solid var(--green);background:linear-gradient(135deg,rgba(5,150,105,.03) 0%,#fff 50%);}
 .verdict-card.v-no{border-left:3px solid var(--red);background:linear-gradient(135deg,rgba(220,38,38,.03) 0%,#fff 50%);}
 .verdict-card.v-unk{border-left:3px solid var(--amber);background:linear-gradient(135deg,rgba(217,119,6,.03) 0%,#fff 50%);}
-.verdict-card.v-def{border-left:3px solid var(--indigo);background:linear-gradient(135deg,rgba(55,48,163,.03) 0%,#fff 50%);}
+.verdict-card.v-def{border-left:3px solid var(--def);background:linear-gradient(135deg,rgba(30,58,138,.03) 0%,#fff 50%);}
 .verdict-card.v-info{border-left:3px solid var(--blue);background:linear-gradient(135deg,rgba(45,107,228,.03) 0%,#fff 50%);}
 .vc-verdict-line{font-size:14px;font-weight:500;color:var(--txt);line-height:1.65;margin:8px 0 10px;}
 .vc-analysis{font-size:13px;color:var(--txt2);line-height:1.78;}
@@ -398,7 +387,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .vc-lex-link:hover{background:rgba(45,107,228,.14);}
 .vc-sep{height:1px;background:var(--bdr);margin:14px 0;}
 
-/* ── REGULATION TAB BUTTONS ───────────────────────────────────── */
+/* ── REGULATION TABS ──────────────────────────────────────── */
 .reg-tab-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .reg-tab-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:24px;border:1px solid var(--bdr);background:rgba(255,255,255,.7);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;color:var(--txt3);transition:.12s;backdrop-filter:blur(8px);}
 .reg-tab-btn:hover{background:var(--blue-lt);border-color:var(--bdr2);}
@@ -419,36 +408,34 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .rtb-pill-unk{background:#FAEEDA;color:#633806;}
 .reg-tab-btn.rtb-active-gdpr .rtb-pill,.reg-tab-btn.rtb-active-mdr .rtb-pill,.reg-tab-btn.rtb-active-aia .rtb-pill{background:rgba(255,255,255,.2);color:#fff;}
 
-/* ── TRACE PANEL (tab content) ────────────────────────────────── */
+/* ── TRACE PANEL (tab content) ───────────────────────────── */
 .trace-panel-wrap{background:var(--cloud0);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs);}
-.trace-dim-row{display:grid;grid-template-columns:120px 118px 1fr;border-bottom:1px solid var(--bdr);}
+.trace-dim-row{display:grid;grid-template-columns:130px 130px 1fr;border-bottom:1px solid var(--bdr);}
 .trace-dim-row:last-child{border-bottom:none;}
 .tdr-dim{padding:10px 14px;border-right:1px solid var(--bdr);}
 .tdr-dim-name{font-size:12px;font-weight:700;color:var(--txt);}
 .tdr-dim-art{font-size:9.5px;color:var(--txt4);font-family:var(--mono);margin-top:2px;}
 .tdr-badge{padding:10px 12px;border-right:1px solid var(--bdr);display:flex;align-items:flex-start;padding-top:12px;}
-.tdr-detail{padding:10px 14px;}
+.tdr-detail{padding:10px 14px;overflow:hidden;word-break:break-word;}
 .tdr-reason{font-size:11.5px;color:var(--txt2);line-height:1.65;margin-bottom:3px;}
-.tdr-cite{font-size:9.5px;color:var(--txt4);font-family:var(--mono);}
-.tdr-badge-ok{background:var(--green-l);color:var(--green);border:1px solid rgba(5,150,105,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.tdr-badge-def{background:var(--indigo-l);color:var(--indigo);border:1px solid var(--indigo-m);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.tdr-badge-no{background:var(--red-l);color:var(--red);border:1px solid rgba(220,38,38,.15);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.tdr-badge-unk{background:var(--amber-l);color:var(--amber);border:1px solid rgba(217,119,6,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.tdr-cite{font-size:9.5px;color:var(--txt4);font-family:var(--mono);word-break:break-all;}
+.tdr-badge-ok{background:var(--green-l);color:var(--green);border:1px solid rgba(5,150,105,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:normal;word-break:break-word;}
+.tdr-badge-def{background:var(--def-lt);color:var(--def);border:1px solid rgba(30,58,138,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:normal;word-break:break-word;}
+.tdr-badge-no{background:var(--red-l);color:var(--red);border:1px solid rgba(220,38,38,.15);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:normal;word-break:break-word;}
+.tdr-badge-unk{background:var(--amber-l);color:var(--amber);border:1px solid rgba(217,119,6,.2);display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:normal;word-break:break-word;}
 .trace-overall-row{padding:9px 14px;background:var(--cloud1);display:flex;align-items:center;gap:10px;border-top:1px solid var(--bdr);}
 .tor-note{font-size:11px;color:var(--txt4);line-height:1.5;flex:1;}
-.deferred-prep{margin-top:8px;padding:9px 13px;border-radius:9px;background:var(--indigo-l);border:1px solid var(--indigo-m);}
-.dp-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--indigo);margin-bottom:4px;}
+.deferred-prep{margin-top:8px;padding:9px 13px;border-radius:9px;background:var(--def-lt);border:1px solid rgba(30,58,138,.2);}
+.dp-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--def);margin-bottom:4px;}
 .dp-text{font-size:11px;color:#4338ca;line-height:1.6;}
 
-
-/* ── INFO FOOTER ────────────────────────────────────────────────── */
-.info-footer{margin-top:10px;padding:12px 16px;border-radius:10px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);}
-.if-note{font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:10px;}
+/* ── INFO FOOTER ──────────────────────────────────────────── */
+.info-footer{margin-top:10px;padding:12px 16px;border-radius:10px;border:1px solid var(--bdr);background:var(--cloud1);}
+.if-note{font-size:12px;color:var(--txt3);line-height:1.65;margin-bottom:10px;}
 .if-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.if-btn{padding:6px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:12px;font-weight:500;cursor:pointer;color:var(--color-text-secondary);font-family:inherit;transition:.1s;}
-.if-btn:hover{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
-.if-btn.primary{background:var(--color-background-primary);color:var(--color-text-primary);border-color:var(--color-border-primary);}
-
+.if-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--bdr);background:var(--cloud0);font-size:12px;font-weight:500;cursor:pointer;color:var(--txt3);font-family:inherit;transition:.1s;}
+.if-btn:hover{background:var(--blue-lt);color:var(--blue);border-color:var(--bdr2);}
+.if-btn.primary{background:var(--cloud0);color:var(--blue);border-color:var(--bdr2);font-weight:600;}
 </style>
 </head>
 <body>
@@ -544,11 +531,6 @@ const ICON_SVG=`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/20
 
 // ── CONFIG ────────────────────────────────────────────────────────
 const BACKEND="https://sannawt-compliancetwin.hf.space";
-const EURLEX={
-  GDPR:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679",
-  EU_AI_ACT: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689",
-  MDR:       "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745",
-};
 const INST_LABELS={
   GDPR:      "General Data Protection Regulation",
   EU_AI_ACT: "EU Artificial Intelligence Act",
@@ -602,9 +584,7 @@ function switchObTab(wrap,role){
   wrap.querySelectorAll(".ob-panel").forEach(p=>p.classList.toggle("active",p.dataset.role===role));
 }
 
-
-// ── STAGE RENDERS ─────────────────────────────────────────────────────────────
-
+// ── STAGE RENDERS ─────────────────────────────────────────────────
 function signalCls(s){
   const sl=(s||"").toLowerCase();
   if(sl.includes("likely yes")||sl.includes("likely in scope")||sl.includes("strong"))return"sig-yes";
@@ -704,12 +684,11 @@ function renderPreliminary(n){
   </div>`;
 }
 
-
 // ── INFO FOOTER ───────────────────────────────────────────────────
 function renderInfoFooter(n){
-  const note = n.info_note||"";
+  const note=n.info_note||"";
   if(!note) return "";
-  return `<div class="info-footer">
+  return`<div class="info-footer">
     <div class="if-note">${esc(note)}</div>
     <div class="if-actions">
       <button class="if-btn primary" onclick="sendText('I would like to provide more information about our product')">Provide more information ↗</button>
@@ -768,7 +747,7 @@ function renderTracePanel(iid,result,panelId){
   }
   if(overallEntry){
     const r=overallEntry.result||"cannot_determine";
-    const overallCls=r==="pass"?"overall-pass":r==="fail"?"overall-fail":r==="deferred"?"overall-def":"overall-unk";
+    const overallCls=r==="pass"?"overall-pass":r==="deferred"?"overall-def":r==="fail"?"overall-fail":"overall-unk";
     const overallLbl=r==="pass"?"Regulation applies":r==="deferred"?"In scope — obligations deferred":r==="fail"?"Regulation does not apply":"Cannot determine";
     html+=`<div class="trace-overall ${overallCls}">
       <div class="overall-lbl">${overallLbl}</div>
@@ -802,7 +781,6 @@ function renderObligationTabs(obligations,wrapId){
   const roles=Object.keys(obligations);
   if(!roles.length) return "";
   const ROLE_LABEL={provider:"Provider obligations",deployer:"Deployer obligations",manufacturer:"Manufacturer obligations"};
-  const ROLE_COLOR={provider:"var(--blue)",deployer:"var(--purple)",manufacturer:"var(--green)"};
   let tabsHtml=roles.map((r,i)=>`<div class="ob-tab${i===0?" active":""}" data-role="${r}" onclick="switchObTab(document.getElementById('${wrapId}'),'${r}')">${ROLE_LABEL[r]||r} <span style="font-family:var(--mono);font-size:8px;color:var(--txt4)">(${obligations[r].length})</span></div>`).join("");
   let panelsHtml=roles.map((r,i)=>{
     const items=obligations[r]||[];
@@ -810,14 +788,14 @@ function renderObligationTabs(obligations,wrapId){
       const label=ob.label||ob;
       const desc=ob.description||"";
       const art=ob.article||"";
-      return `<div class="ob-item">
+      return`<div class="ob-item">
         <div><div class="ob-label">${esc(label)}</div>${desc?`<div class="ob-desc">${esc(desc.slice(0,100))}${desc.length>100?"…":""}</div>`:""}</div>
         ${art?`<div class="ob-art">${esc(art)}</div>`:""}
       </div>`;
     }).join("");
-    return `<div class="ob-panel${i===0?" active":""}" data-role="${r}"><div class="ob-list">${itemsHtml}</div></div>`;
+    return`<div class="ob-panel${i===0?" active":""}" data-role="${r}"><div class="ob-list">${itemsHtml}</div></div>`;
   }).join("");
-  return `<div class="ob-tabs-wrap" id="${wrapId}">
+  return`<div class="ob-tabs-wrap" id="${wrapId}">
     <div class="ob-tab-bar">${tabsHtml}</div>
     ${panelsHtml}
   </div>`;
@@ -826,22 +804,19 @@ function renderObligationTabs(obligations,wrapId){
 // ── ASSESSMENT TABLE ──────────────────────────────────────────────
 function renderAssessmentTable(symbolic,sd){
   const results=symbolic.applicability_results||{};
-  const deferred=symbolic.deferred_instruments||[];
   const rows=[];
 
   for(const iid of Object.keys(results)){
     const res=results[iid];
     const verdict=res.verdict||"cannot_determine";
     const scope=res.scope||{};
-    const risk=res.risk_category;
     const dUntil=res.deferred_until;
     const trace=res.trace||[];
     const inst=INST_SHORT[iid]||iid;
 
-    // Section header per instrument
     rows.push(`<tr class="atbl-section-hdr"><td colspan="5">${INST_LABELS[iid]||iid}</td></tr>`);
 
-    // Temporal row
+    // Temporal
     const tempR=scope.temporal||"cannot_determine";
     const tempEntry=trace.find(e=>e.dimension==="temporal"&&e.result!=="not_reached");
     const tempEvidence=tempEntry?.evidence||"";
@@ -851,7 +826,7 @@ function renderAssessmentTable(symbolic,sd){
       tempOutcome="In force — obligations active";
     } else if(tempR==="deferred"){
       tempBadge=`<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtIsoDate(dUntil):""}`;
-      tempOutcome=`No immediate obligation. Prepare now for ${dUntil?fmtIsoDate(dUntil):"obligation date"}.`;
+      tempOutcome=`Prepare now for ${dUntil?fmtIsoDate(dUntil):"obligation date"}.`;
     } else if(tempR==="fail"){
       tempBadge=`<span class="atbl-badge ab-no">✗ Not satisfied</span>`;
       tempOutcome="Regulation not yet in force for this category";
@@ -859,7 +834,7 @@ function renderAssessmentTable(symbolic,sd){
       tempBadge=`<span class="atbl-badge ab-unk">– Unknown</span>`;
       tempOutcome="Provide deployment date";
     }
-    const tempCites=(tempEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    const tempCites=(tempEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join("");
     rows.push(`<tr>
       <td class="atbl-cat">Temporal scope<div class="atbl-sub">Date of application</div></td>
       <td class="atbl-assess">${tempBadge}</td>
@@ -868,11 +843,11 @@ function renderAssessmentTable(symbolic,sd){
       <td class="atbl-outcome">${esc(tempOutcome)}</td>
     </tr>`);
 
-    // Territorial row
+    // Territorial
     const terrR=scope.territorial||"cannot_determine";
     const terrEntry=trace.find(e=>e.dimension==="territorial"&&e.result==="pass")||trace.find(e=>e.dimension==="territorial");
     const terrBadge=terrR==="pass"?`<span class="atbl-badge ab-yes">✓ Satisfied</span>`:terrR==="fail"?`<span class="atbl-badge ab-no">✗ Not satisfied</span>`:`<span class="atbl-badge ab-unk">– Unknown</span>`;
-    const terrCites=(terrEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    const terrCites=(terrEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join("");
     rows.push(`<tr>
       <td class="atbl-cat">Territorial scope<div class="atbl-sub">Geographic reach</div></td>
       <td class="atbl-assess">${terrBadge}</td>
@@ -881,12 +856,13 @@ function renderAssessmentTable(symbolic,sd){
       <td class="atbl-outcome">${terrR==="pass"?`${inst} applies regardless of provider location`:"No EU connection established"}</td>
     </tr>`);
 
-    // Material / risk row
+    // Material
     const matR=scope.material||"cannot_determine";
     const matEntry=trace.find(e=>e.dimension==="material"&&e.predicate&&e.predicate.includes("risk_classification"))||trace.find(e=>e.dimension==="material"&&e.result==="pass");
+    const risk=res.risk_category;
     const riskLabel=risk?({high_risk_annex_III:"High-risk (Annex III)",high_risk_annex_I_sector_products:"High-risk (Annex I)",GPAI_model:"GPAI model",prohibited:"PROHIBITED",limited_or_minimal_risk:"Limited risk"}[risk]||risk):"";
     const matBadge=matR==="pass"?`<span class="atbl-badge ab-yes">✓ ${riskLabel||"In scope"}</span>`:matR==="fail"?`<span class="atbl-badge ab-no">✗ Not in scope</span>`:`<span class="atbl-badge ab-unk">– Unknown</span>`;
-    const matCites=(matEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join(" ");
+    const matCites=(matEntry?.citations||[]).slice(0,2).map(c=>`<span class="atbl-basis">${esc(c)}</span>`).join("");
     rows.push(`<tr>
       <td class="atbl-cat">Material scope${riskLabel?`<div class="atbl-sub">${riskLabel}</div>`:"<div class='atbl-sub'>Subject-matter</div>"}</td>
       <td class="atbl-assess">${matBadge}</td>
@@ -895,7 +871,7 @@ function renderAssessmentTable(symbolic,sd){
       <td class="atbl-outcome">${matR==="pass"?(risk?"Risk category confirmed — obligations apply":inst+" in scope"):"Does not meet material requirements"}</td>
     </tr>`);
 
-    // Prohibited check (AI Act only)
+    // AI Act: Art.5
     if(iid==="EU_AI_ACT"){
       const art5Entry=trace.find(e=>e.predicate&&e.predicate.includes("prohibited_practices_check"));
       if(art5Entry){
@@ -911,7 +887,7 @@ function renderAssessmentTable(symbolic,sd){
       }
     }
 
-    // Overall verdict row
+    // Overall verdict
     const verdictBadge={
       applies:         `<span class="atbl-badge ab-yes">✓ Applies</span>`,
       deferred:        `<span class="atbl-badge ab-def">⏳ Deferred${dUntil?" until "+fmtIsoDate(dUntil):""}</span>`,
@@ -934,8 +910,11 @@ function renderAssessmentTable(symbolic,sd){
   }
 
   if(!rows.length) return "";
-  return `<div class="atbl-wrap">
+  return`<div class="atbl-wrap">
     <table class="atbl">
+      <colgroup>
+        <col><col><col><col><col>
+      </colgroup>
       <thead><tr>
         <th>Category</th><th>Assessment</th><th>Legal basis</th>
         <th>Reasoning</th><th>Outcome</th>
@@ -945,31 +924,11 @@ function renderAssessmentTable(symbolic,sd){
   </div>`;
 }
 
-// ── MULTI-REG SUMMARY STRIP ───────────────────────────────────────
-function renderRegSummary(symbolic){
-  const results=symbolic.applicability_results||{};
-  const deferred=symbolic.deferred_instruments||[];
-  const applies=symbolic.instruments_that_apply||[];
-  const nApply=symbolic.instruments_that_dont_apply||[];
-  const uncertain=symbolic.cannot_determine_instruments||[];
-
-  const chips=Object.keys(results).map(iid=>{
-    const verdict=results[iid]?.verdict||"cannot_determine";
-    const short=INST_SHORT[iid]||iid;
-    const cls=verdict==="applies"?"reg-chip-applies":verdict==="deferred"?"reg-chip-deferred":verdict==="does_not_apply"?"reg-chip-no":verdict==="prohibited"?"reg-chip-no":"reg-chip-unk";
-    const sym=verdict==="applies"?"✓":verdict==="deferred"?"⏳":verdict==="does_not_apply"?"✗":verdict==="prohibited"?"⛔":"?";
-    return `<span class="reg-chip ${cls}"><span class="reg-chip-dot"></span>${sym} ${short}</span>`;
-  }).join("");
-
-  if(!chips) return "";
-  return `<div class="reg-summary">${chips}</div>`;
-}
-
 // ── SOURCES ───────────────────────────────────────────────────────
 function renderSources(sources){
   if(!sources?.length) return "";
   const id="src-"+nid();
-  return `<button class="src-toggle" onclick="toggleEl('${id}')">📚 Transparency log (${sources.length} sources)</button><div id="${id}" class="src-list">${sources.map((s,i)=>`<div class="src-item"><span class="src-title">Source ${i+1}: ${esc(s.doc_title||"Document")}</span><span class="src-score">${((s.score||0)*100).toFixed(1)}%</span><div class="src-text">${esc((s.text||"").slice(0,160))}${(s.text?.length>160)?"…":""}</div></div>`).join("")}</div>`;
+  return`<button class="src-toggle" onclick="toggleEl('${id}')">📚 Transparency log (${sources.length} sources)</button><div id="${id}" class="src-list">${sources.map((s,i)=>`<div class="src-item"><span class="src-title">Source ${i+1}: ${esc(s.doc_title||"Document")}</span><span class="src-score">${((s.score||0)*100).toFixed(1)}%</span><div class="src-text">${esc((s.text||"").slice(0,160))}${(s.text?.length>160)?"…":""}</div></div>`).join("")}</div>`;
 }
 
 // ── VERDICT HELPERS ───────────────────────────────────────────────
@@ -980,82 +939,74 @@ function vbadge(vtype){
     cannot_determine:{cls:"vb-unk", i:"",   t:"More information needed"},
     general:         {cls:"vb-info",i:"",   t:"Information"},
     context_update:  {cls:"vb-ctx", i:"→",  t:"Context saved"},
-    deferred:        {cls:"vb-def", i:"⏳", t:"In scope — obligations deferred"},  /* NEW */
+    deferred:        {cls:"vb-def", i:"⏳", t:"In scope — obligations deferred"},
     prohibited:      {cls:"vb-no",  i:"⛔", t:"Prohibited"},
   };
   const v=M[vtype]||M.cannot_determine;
-  return `<div class="vbadge ${v.cls}">${v.i?v.i+" ":""}${v.t}</div>`;
+  return`<div class="vbadge ${v.cls}">${v.i?v.i+" ":""}${v.t}</div>`;
 }
-const vbubCls=vtype=>({deferred:"v-def",
+const vbubCls=vtype=>({
   applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",
   general:"v-info",context_update:"v-info",
-  deferred:"v-def",   /* NEW */
-  prohibited:"v-no",
+  deferred:"v-def",prohibited:"v-no",
 }[vtype]||"v-info");
 
 // ── REGULATION TAB STATE ──────────────────────────────────────────
-const _activeTab = {};   // msgId → iid
+const _activeTab={};
 
-function regTabBtnCls(iid){
-  return {GDPR:"rtb-gdpr",EU_AI_ACT:"rtb-aia",MDR:"rtb-mdr"}[iid]||"rtb-gdpr";
-}
 function regTabActiveCls(iid){
-  return {GDPR:"rtb-active-gdpr",EU_AI_ACT:"rtb-active-aia",MDR:"rtb-active-mdr"}[iid]||"rtb-active-gdpr";
+  return{GDPR:"rtb-active-gdpr",EU_AI_ACT:"rtb-active-aia",MDR:"rtb-active-mdr"}[iid]||"rtb-active-gdpr";
 }
 
-function switchRegTab(msgId, iid){
-  _activeTab[msgId] = iid;
-  // Update button states
+function switchRegTab(msgId,iid){
+  _activeTab[msgId]=iid;
   document.querySelectorAll(`.reg-tab-btn[data-msg="${msgId}"]`).forEach(btn=>{
     btn.classList.remove("rtb-active-gdpr","rtb-active-mdr","rtb-active-aia");
-    if(btn.dataset.iid === iid) btn.classList.add(regTabActiveCls(iid));
+    if(btn.dataset.iid===iid) btn.classList.add(regTabActiveCls(iid));
   });
-  // Show correct trace panel
   document.querySelectorAll(`.reg-trace-panel[data-msg="${msgId}"]`).forEach(p=>{
-    p.style.display = p.dataset.iid === iid ? "block" : "none";
+    p.style.display=p.dataset.iid===iid?"block":"none";
   });
 }
 
 // ── BUILD TRACE PANEL FOR ONE INSTRUMENT ─────────────────────────
-function buildTracePanel(msgId, iid, res){
-  const scope   = res.scope||{};
-  const trace   = res.trace||[];
-  const verdict = res.verdict||"cannot_determine";
-  const dUntil  = res.deferred_until;
-  const obligations = res.obligations||{};
+function buildTracePanel(msgId,iid,res){
+  const scope=res.scope||{};
+  const trace=res.trace||[];
+  const verdict=res.verdict||"cannot_determine";
+  const dUntil=res.deferred_until;
 
-  function dimBadge(r, label){
-    if(r==="pass")     return `<span class="tdr-badge-ok">✓ ${label||"Satisfied"}</span>`;
-    if(r==="deferred") return `<span class="tdr-badge-def">◷ ${label||"Deferred"}</span>`;
-    if(r==="fail")     return `<span class="tdr-badge-no">✗ ${label||"Not satisfied"}</span>`;
-    return `<span class="tdr-badge-unk">– ${label||"Unknown"}</span>`;
+  function dimBadge(r,label){
+    if(r==="pass")     return`<span class="tdr-badge-ok">✓ ${label||"Satisfied"}</span>`;
+    if(r==="deferred") return`<span class="tdr-badge-def">◷ ${label||"Deferred"}</span>`;
+    if(r==="fail")     return`<span class="tdr-badge-no">✗ ${label||"Not satisfied"}</span>`;
+    return`<span class="tdr-badge-unk">– ${label||"Unknown"}</span>`;
   }
 
-  // Helper: find best trace entry for a dimension
-  function traceFor(dim, predicateHint){
-    return trace.find(e=>e.dimension===dim && (!predicateHint || (e.predicate||"").includes(predicateHint)))
-        || trace.find(e=>e.dimension===dim && e.result!=="not_reached");
+  function traceFor(dim,predicateHint){
+    return trace.find(e=>e.dimension===dim&&(!predicateHint||(e.predicate||"").includes(predicateHint)))
+        ||trace.find(e=>e.dimension===dim&&e.result!=="not_reached");
   }
 
-  let rows = "";
+  let rows="";
 
-  // ── Temporal ──
-  const tempE = traceFor("temporal");
-  const tempR = scope.temporal||"cannot_determine";
-  let tempBadgeLabel = tempR==="deferred" && dUntil ? `Deferred until ${fmtIsoDate(dUntil)}` : null;
-  rows += `<div class="trace-dim-row">
+  // Temporal
+  const tempE=traceFor("temporal");
+  const tempR=scope.temporal||"cannot_determine";
+  const tempBadgeLabel=tempR==="deferred"&&dUntil?`Deferred until ${fmtIsoDate(dUntil)}`:null;
+  rows+=`<div class="trace-dim-row">
     <div class="tdr-dim"><div class="tdr-dim-name">Temporal scope</div><div class="tdr-dim-art">${iid==="EU_AI_ACT"?"Art. 113":iid==="MDR"?"Art. 123(1)":"Art. 99(2)"}</div></div>
-    <div class="tdr-badge">${dimBadge(tempR, tempBadgeLabel)}</div>
+    <div class="tdr-badge">${dimBadge(tempR,tempBadgeLabel)}</div>
     <div class="tdr-detail">
       <div class="tdr-reason">${esc((tempE?.evidence||"").slice(0,220))}</div>
       <div class="tdr-cite">${(tempE?.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
     </div>
   </div>`;
 
-  // ── Territorial ──
-  const terrE = traceFor("territorial","territorial_connector_satisfied") || traceFor("territorial");
-  const terrR = scope.territorial||"cannot_determine";
-  rows += `<div class="trace-dim-row">
+  // Territorial
+  const terrE=traceFor("territorial","territorial_connector_satisfied")||traceFor("territorial");
+  const terrR=scope.territorial||"cannot_determine";
+  rows+=`<div class="trace-dim-row">
     <div class="tdr-dim"><div class="tdr-dim-name">Territorial scope</div><div class="tdr-dim-art">${iid==="EU_AI_ACT"?"Art. 2(1)":iid==="MDR"?"Art. 2(28)":"Art. 3"}</div></div>
     <div class="tdr-badge">${dimBadge(terrR)}</div>
     <div class="tdr-detail">
@@ -1064,26 +1015,26 @@ function buildTracePanel(msgId, iid, res){
     </div>
   </div>`;
 
-  // ── Material: AI system / personal data / medical device ──
-  const matE = traceFor("material","is_ai_system")||traceFor("material","is_personal_data")||traceFor("material","manufacturer_claims")||traceFor("material");
-  const matR = scope.material||"cannot_determine";
-  const matLabel = {EU_AI_ACT:"AI system (Art. 3(1))",GDPR:"Personal data (Art. 4(1))",MDR:"Medical device (Art. 2(1))"}[iid]||"Material scope";
-  rows += `<div class="trace-dim-row">
+  // Material
+  const matE=traceFor("material","is_ai_system")||traceFor("material","is_personal_data")||traceFor("material","manufacturer_claims")||traceFor("material");
+  const matR=scope.material||"cannot_determine";
+  const matLabel={EU_AI_ACT:"AI system (Art. 3(1))",GDPR:"Personal data (Art. 4(1))",MDR:"Medical device (Art. 2(1))"}[iid]||"Material scope";
+  rows+=`<div class="trace-dim-row">
     <div class="tdr-dim"><div class="tdr-dim-name">${matLabel}</div><div class="tdr-dim-art">${{EU_AI_ACT:"Art. 3(1)",GDPR:"Art. 4(1), 9",MDR:"Art. 2(1)"}[iid]||""}</div></div>
-    <div class="tdr-badge">${dimBadge(matR, matR==="pass"?"In scope":null)}</div>
+    <div class="tdr-badge">${dimBadge(matR,matR==="pass"?"In scope":null)}</div>
     <div class="tdr-detail">
       <div class="tdr-reason">${esc((matE?.evidence||"").slice(0,220))}</div>
       <div class="tdr-cite">${(matE?.citations||[]).slice(0,2).map(c=>esc(String(c))).join(" · ")}</div>
     </div>
   </div>`;
 
-  // ── AI Act: risk classification ──
+  // AI Act: risk classification & Art.5
   if(iid==="EU_AI_ACT"){
-    const riskE = traceFor("material","risk_classification");
+    const riskE=traceFor("material","risk_classification");
     if(riskE){
-      const riskCat = res.risk_category||"";
-      const RISK_LABELS = {high_risk_annex_III:"High-risk · Annex III §5",high_risk_annex_I_sector_products:"High-risk · Annex I",GPAI_model:"GPAI model",prohibited:"Prohibited"};
-      rows += `<div class="trace-dim-row">
+      const riskCat=res.risk_category||"";
+      const RISK_LABELS={high_risk_annex_III:"High-risk · Annex III §5",high_risk_annex_I_sector_products:"High-risk · Annex I",GPAI_model:"GPAI model",prohibited:"Prohibited"};
+      rows+=`<div class="trace-dim-row">
         <div class="tdr-dim"><div class="tdr-dim-name">Risk classification</div><div class="tdr-dim-art">Art. 6(2), Annex III</div></div>
         <div class="tdr-badge"><span class="tdr-badge-ok">${esc(RISK_LABELS[riskCat]||riskCat||"High-risk")}</span></div>
         <div class="tdr-detail">
@@ -1092,26 +1043,25 @@ function buildTracePanel(msgId, iid, res){
         </div>
       </div>`;
     }
-    // Art. 5 prohibited check
-    const art5E = trace.find(e=>(e.predicate||"").includes("prohibited_practices_check"));
+    const art5E=trace.find(e=>(e.predicate||"").includes("prohibited_practices_check"));
     if(art5E){
-      const art5Pass = art5E.result==="pass";
-      rows += `<div class="trace-dim-row">
+      const art5Pass=art5E.result==="pass";
+      rows+=`<div class="trace-dim-row">
         <div class="tdr-dim"><div class="tdr-dim-name">Art. 5 check</div><div class="tdr-dim-art">Prohibited practices</div></div>
         <div class="tdr-badge">${art5Pass?`<span class="tdr-badge-ok">✓ Not prohibited</span>`:`<span class="tdr-badge-no">⛔ Prohibited</span>`}</div>
         <div class="tdr-detail">
-          <div class="tdr-reason">${art5Pass?"None of the Art. 5 prohibited conditions were triggered. This system is classified as high-risk, not prohibited.":"A prohibited AI practice has been identified under Art. 5."}</div>
+          <div class="tdr-reason">${art5Pass?"None of the Art. 5 prohibited conditions were triggered.":"A prohibited AI practice has been identified under Art. 5."}</div>
           <div class="tdr-cite">Art. 5 EU AI Act</div>
         </div>
       </div>`;
     }
   }
 
-  // ── MDR: SaMD + Rule 11 ──
+  // MDR: Rule 11
   if(iid==="MDR"){
-    const rule11E = trace.find(e=>(e.predicate||"").toLowerCase().includes("rule_11"));
+    const rule11E=trace.find(e=>(e.predicate||"").toLowerCase().includes("rule_11"));
     if(rule11E){
-      rows += `<div class="trace-dim-row">
+      rows+=`<div class="trace-dim-row">
         <div class="tdr-dim"><div class="tdr-dim-name">Rule 11 — SaMD</div><div class="tdr-dim-art">Annex VIII</div></div>
         <div class="tdr-badge"><span class="tdr-badge-ok">Class IIa min.</span></div>
         <div class="tdr-detail">
@@ -1122,24 +1072,8 @@ function buildTracePanel(msgId, iid, res){
     }
   }
 
-  // ── GDPR: Art. 9 special category ──
-  if(iid==="GDPR"){
-    const art9E = trace.find(e=>(e.predicate||"").includes("special_category"));
-    if(art9E && art9E.result==="pass"){
-      rows += `<div class="trace-dim-row">
-        <div class="tdr-dim"><div class="tdr-dim-name">Art. 9 — Health data</div><div class="tdr-dim-art">Special category</div></div>
-        <div class="tdr-badge"><span class="tdr-badge-ok">✓ Flagged</span></div>
-        <div class="tdr-detail">
-          <div class="tdr-reason">Health data confirmed — Art. 9 processing prohibition applies. Primary exception for clinical AI: Art. 9(2)(h) healthcare purposes. DPIA mandatory under Art. 35(3)(b).</div>
-          <div class="tdr-cite">Art. 9, Art. 35(3)(b) GDPR · Recital 51</div>
-        </div>
-      </div>`;
-    }
-  }
-
-  // ── Overall row ──
-  const overallE = trace.find(e=>e.dimension==="overall");
-  const VERDICT_BADGE = {
+  // Overall
+  const VERDICT_BADGE={
     applies:`<span class="tdr-badge-ok">✓ Appears to apply — on the facts provided</span>`,
     deferred:`<span class="tdr-badge-def">◷ In scope — obligations deferred until ${fmtIsoDate(dUntil)}</span>`,
     does_not_apply:`<span class="tdr-badge-no">✗ Does not appear to apply on these facts</span>`,
@@ -1147,11 +1081,11 @@ function buildTracePanel(msgId, iid, res){
     prohibited:`<span class="tdr-badge-no">⛔ Prohibited under Art. 5</span>`,
   }[verdict]||`<span class="tdr-badge-unk">${esc(verdict)}</span>`;
 
-  let overallNote = "This assessment depends on the accuracy and completeness of the information provided.";
-  if(verdict==="deferred") overallNote = "No immediate obligation arises on these facts.";
-  if(verdict==="does_not_apply") overallNote = "A different intended use, market location, or product type could change this conclusion.";
+  let overallNote="This assessment depends on the accuracy and completeness of the information provided.";
+  if(verdict==="deferred") overallNote="No immediate obligation arises on these facts.";
+  if(verdict==="does_not_apply") overallNote="A different intended use, market location, or product type could change this conclusion.";
 
-  return `<div class="reg-trace-panel" data-msg="${msgId}" data-iid="${iid}" style="display:none;">
+  return`<div class="reg-trace-panel" data-msg="${msgId}" data-iid="${iid}" style="display:none;">
     <div class="trace-panel-wrap">
       ${rows}
       <div class="trace-overall-row">
@@ -1160,107 +1094,95 @@ function buildTracePanel(msgId, iid, res){
       </div>
     </div>
   </div>`;
+}
 
 // ── MAIN RENDER ───────────────────────────────────────────────────
-function renderComplianceResponse(data, msgId){
+function renderComplianceResponse(data,msgId){
   if(data.answer&&!data.narrative)
-    return `<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
+    return`<div class="vbub v-info"><div class="verdict-line">${fmt(data.answer)}</div></div>${renderSources(data.sources)}`;
 
-  const n   = data.narrative||{};
-  const sym = data.symbolic||{};
-  const vtype = n.verdict_type||"cannot_determine";
-  const vline = n.verdict_line||"";
-  const full  = n.full_analysis||"";
-  const cards = n.legal_basis_cards||[];
-  const nextSteps = n.next_steps||[];
+  const n=data.narrative||{};
+  const sym=data.symbolic||{};
+  const vtype=n.verdict_type||"cannot_determine";
+  const vline=n.verdict_line||"";
+  const full=n.full_analysis||"";
+  const cards=n.legal_basis_cards||[];
+  const nextSteps=n.next_steps||[];
 
-  // Stage-based layouts
-  // All preliminary stages funnel to renderPreliminary
-  if(vtype==="indicative"||vtype==="gathering"||vtype==="preliminary") return renderPreliminary(n);
+  if(vtype==="indicative") return renderIndicative(n);
+  if(vtype==="gathering")  return renderGathering(n);
+  if(vtype==="preliminary") return renderPreliminary(n);
 
-  // Simple / non-applicability layouts
   if(vtype==="general"||vtype==="context_update")
-    return `<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
+    return`<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
 
-  const allRes = sym.applicability_results||{};
-  const iids   = Object.keys(allRes);
+  const allRes=sym.applicability_results||{};
+  const iids=Object.keys(allRes);
 
-  // ── Verdict card class ─────────────────────────────────────────
-  const vcCls = {applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",deferred:"v-def",prohibited:"v-no"}[vtype]||"v-info";
+  const vcCls={applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",deferred:"v-def",prohibited:"v-no"}[vtype]||"v-info";
 
-  // ── Split full_analysis into first para (always visible) + rest ──
-  const paras    = (full||"").split(/\n\n+/);
-  const firstPara = paras[0]||"";
-  const restPara  = paras.slice(1).join("\n\n");
+  const paras=(full||"").split(/\n\n+/);
+  const firstPara=paras[0]||"";
+  const restPara=paras.slice(1).join("\n\n");
 
-  // ── EUR-Lex source links ───────────────────────────────────────
-  // Build from legal_basis_cards first, fall back to per-instrument defaults
-  const EURLEX_DEFAULTS = {
-    GDPR:      {label:"GDPR — Regulation (EU) 2016/679",     url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
+  const EURLEX_DEFAULTS={
+    GDPR:      {label:"GDPR — Regulation (EU) 2016/679",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
     EU_AI_ACT: {label:"EU AI Act — Regulation (EU) 2024/1689", url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689"},
-    MDR:       {label:"MDR — Regulation (EU) 2017/745",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32017R0745"},
+    MDR:       {label:"MDR — Regulation (EU) 2017/745",         url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32017R0745"},
   };
-  const lexLinks = [];
-  // From cards
+  const lexLinks=[];
   cards.forEach(c=>{
-    const url = c.eurlex_url || (EURLEX_DEFAULTS[c.instrument_id]?.url||"");
-    const label = c.instrument_short||c.instrument_id;
-    const art   = c.eurlex_article||"";
-    if(url) lexLinks.push({url, label: art ? `${label} · ${art}` : label});
+    const url=c.eurlex_url||(EURLEX_DEFAULTS[c.instrument_id]?.url||"");
+    const label=c.instrument_short||c.instrument_id;
+    const art=c.eurlex_article||"";
+    if(url) lexLinks.push({url,label:art?`${label} · ${art}`:label});
   });
-  // Add defaults for any instruments not already in cards
   iids.forEach(iid=>{
-    if(!cards.find(c=>c.instrument_id===iid) && EURLEX_DEFAULTS[iid]){
-      const d = EURLEX_DEFAULTS[iid];
-      lexLinks.push({url:d.url, label:d.label});
+    if(!cards.find(c=>c.instrument_id===iid)&&EURLEX_DEFAULTS[iid]){
+      const d=EURLEX_DEFAULTS[iid];
+      lexLinks.push({url:d.url,label:d.label});
     }
   });
-  const lexHtml = lexLinks.length
-    ? `<div class="vc-lex">${lexLinks.map(l=>`<a class="vc-lex-link" href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join("")}</div>`
-    : "";
+  const lexHtml=lexLinks.length
+    ?`<div class="vc-lex">${lexLinks.map(l=>`<a class="vc-lex-link" href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join("")}</div>`
+    :"";
 
-  // ── Regulation tab buttons ─────────────────────────────────────
-  const INST_ORDER = ["GDPR","EU_AI_ACT","MDR"];
-  const orderedIids = [...INST_ORDER.filter(i=>iids.includes(i)), ...iids.filter(i=>!INST_ORDER.includes(i))];
+  const INST_ORDER=["GDPR","EU_AI_ACT","MDR"];
+  const orderedIids=[...INST_ORDER.filter(i=>iids.includes(i)),...iids.filter(i=>!INST_ORDER.includes(i))];
 
-  // Set default active tab: first that applies, else first deferred, else first
-  const firstApply   = orderedIids.find(i=>allRes[i]?.verdict==="applies");
-  const firstDeferred= orderedIids.find(i=>allRes[i]?.verdict==="deferred");
-  const defaultTab   = firstApply||firstDeferred||orderedIids[0];
-  _activeTab[msgId]  = defaultTab;
+  const firstApply=orderedIids.find(i=>allRes[i]?.verdict==="applies");
+  const firstDeferred=orderedIids.find(i=>allRes[i]?.verdict==="deferred");
+  const defaultTab=firstApply||firstDeferred||orderedIids[0];
+  _activeTab[msgId]=defaultTab;
 
-  function verdictPillCls(v){ return {applies:"rtb-pill-ok",deferred:"rtb-pill-def",does_not_apply:"rtb-pill-no",prohibited:"rtb-pill-no"}[v]||"rtb-pill-unk"; }
-  function verdictPillLabel(v,d){ return {applies:"✓ Applies",deferred:`◷ Deferred${d?" — "+fmtIsoDate(d):""}`,does_not_apply:"✗ Not applicable",prohibited:"⛔ Prohibited",cannot_determine:"– Uncertain"}[v]||v; }
+  function verdictPillCls(v){return{applies:"rtb-pill-ok",deferred:"rtb-pill-def",does_not_apply:"rtb-pill-no",prohibited:"rtb-pill-no"}[v]||"rtb-pill-unk";}
+  function verdictPillLabel(v,d){return{applies:"✓ Applies",deferred:`◷ Deferred${d?" — "+fmtIsoDate(d):""}`,does_not_apply:"✗ Not applicable",prohibited:"⛔ Prohibited",cannot_determine:"– Uncertain"}[v]||v;}
 
-  const tabButtons = orderedIids.map(iid=>{
-    const res     = allRes[iid]||{};
-    const verdict = res.verdict||"cannot_determine";
-    const dUntil  = res.deferred_until;
-    const isActive= iid===defaultTab;
-    const baseCls = `reg-tab-btn rtb-${iid==="EU_AI_ACT"?"aia":iid.toLowerCase()}`;
-    const activeCls = isActive ? " "+regTabActiveCls(iid) : "";
-    return `<button class="${baseCls}${activeCls}" data-msg="${msgId}" data-iid="${iid}" onclick="switchRegTab('${msgId}','${iid}')">
+  const tabButtons=orderedIids.map(iid=>{
+    const res=allRes[iid]||{};
+    const verdict=res.verdict||"cannot_determine";
+    const dUntil=res.deferred_until;
+    const isActive=iid===defaultTab;
+    const baseCls=`reg-tab-btn rtb-${iid==="EU_AI_ACT"?"aia":iid.toLowerCase()}`;
+    const activeCls=isActive?" "+regTabActiveCls(iid):"";
+    return`<button class="${baseCls}${activeCls}" data-msg="${msgId}" data-iid="${iid}" onclick="switchRegTab('${msgId}','${iid}')">
       <span class="rtb-dot"></span>
       ${esc(INST_LABELS[iid]||iid)}
       <span class="rtb-pill ${verdictPillCls(verdict)}">${verdictPillLabel(verdict,dUntil)}</span>
     </button>`;
   }).join("");
 
-  // ── Trace panels (one per instrument) ─────────────────────────
-  const tracePanels = orderedIids.map(iid=>{
-    const panel = buildTracePanel(msgId, iid, allRes[iid]||{});
-    return panel;
-  }).join("");
+  const tracePanels=orderedIids.map(iid=>buildTracePanel(msgId,iid,allRes[iid]||{})).join("");
 
-  // ── Next steps ────────────────────────────────────────────────
-  let nsSec = "";
+  // Next steps
+  let nsSec="";
   if(nextSteps.length){
     const TIMING_CLS=(t)=>{
-      if(!t) return "st-ongoing";
+      if(!t) return"st-ongoing";
       const tl=t.toLowerCase();
-      if(tl.includes("immediate")) return "st-immediate";
-      if(tl.includes("before")||/\d{4}/.test(t)) return "st-before";
-      return "st-ongoing";
+      if(tl.includes("immediate")) return"st-immediate";
+      if(tl.includes("before")||/\d{4}/.test(t)) return"st-before";
+      return"st-ongoing";
     };
     const stepRows=nextSteps.map((s,i)=>`<div class="step-row">
       <div class="step-num">${i+1}</div>
@@ -1278,17 +1200,11 @@ function renderComplianceResponse(data, msgId){
     </div>`;
   }
 
-  // ── Art. 9 alert ──────────────────────────────────────────────
-  const art9Alert = sym.special_category_flag
-    ? `<div class="alert-card alert-art9"><div class="alert-lbl">GDPR Art. 9 — Special category data</div><div class="alert-q">Health data confirmed. Processing requires an Art. 9(2) exception. For clinical AI, Art. 9(2)(h) — healthcare purposes under professional responsibility — is the primary exception. DPIA mandatory under Art. 35(3)(b).</div></div>`
-    : "";
-
-  // ── Assemble ──────────────────────────────────────────────────
-  return `
+  return`
     <div class="verdict-card ${vcCls}">
       ${vbadge(vtype)}
       <div class="vc-verdict-line">${fmt(vline)}</div>
-      <div class="vc-analysis" id="vc-p1-${msgId}">${fmt(firstPara)}</div>
+      <div class="vc-analysis">${fmt(firstPara)}</div>
       ${restPara?`<div class="vc-more" id="vc-more-${msgId}">${fmt(restPara)}</div>
       <button class="vc-expand" id="vc-exp-${msgId}" onclick="toggleVcMore('${msgId}')">Read full analysis ↓</button>`:""}
       ${lexHtml}
@@ -1297,24 +1213,23 @@ function renderComplianceResponse(data, msgId){
       ${tracePanels}`:""}
     </div>
     ${nsSec}
-    ${art9Alert}
     ${renderSources(data.sources||[])}
     ${renderInfoFooter(n)}
   `;
 }
 
 function toggleVcMore(msgId){
-  const more = document.getElementById("vc-more-"+msgId);
-  const btn  = document.getElementById("vc-exp-"+msgId);
+  const more=document.getElementById("vc-more-"+msgId);
+  const btn=document.getElementById("vc-exp-"+msgId);
   if(!more) return;
-  const open = more.style.display==="block";
-  more.style.display = open?"none":"block";
-  btn.textContent = open?"Read full analysis ↓":"Collapse ↑";
+  const open=more.style.display==="block";
+  more.style.display=open?"none":"block";
+  btn.textContent=open?"Read full analysis ↓":"Collapse ↑";
 }
 
 // ── WELCOME ───────────────────────────────────────────────────────
 function welcomeHTML(){
-  return `<div id="welcome">
+  return`<div id="welcome">
     <div><svg width="240" height="52" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
       <path d="M18 6 L8 6 L8 42 L18 42" fill="none" stroke="#0F1D4E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M30 6 L40 6 L40 42 L30 42" fill="none" stroke="#2D6BE4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1336,9 +1251,9 @@ function renderMsgs(){
   const el=document.getElementById("msgs");
   if(!msgs.length){el.innerHTML=welcomeHTML();return;}
   el.innerHTML=msgs.map(m=>{
-    if(m.role==="user") return `<div class="msg-user"><div class="user-bub">${esc(m.content)}</div></div>`;
-    if(m.type==="loading") return `<div class="msg-ai"><div class="ai-icon">${ICON_SVG}</div><div class="ai-parts"><div class="vbub v-info" style="padding:12px 17px;"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span class="ld-status">${esc(m.status||"Analysing…")}</span></div></div></div></div>`;
-    return `<div class="msg-ai"><div class="ai-icon">${ICON_SVG}</div><div class="ai-parts">${renderComplianceResponse(m.data,m.id)}</div></div>`;
+    if(m.role==="user") return`<div class="msg-user"><div class="user-bub">${esc(m.content)}</div></div>`;
+    if(m.type==="loading") return`<div class="msg-ai"><div class="ai-icon">${ICON_SVG}</div><div class="ai-parts"><div class="vbub v-info" style="padding:12px 17px;"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span class="ld-status">${esc(m.status||"Analysing…")}</span></div></div></div></div>`;
+    return`<div class="msg-ai"><div class="ai-icon">${ICON_SVG}</div><div class="ai-parts">${renderComplianceResponse(m.data,m.id)}</div></div>`;
   }).join("");
   el.scrollTop=el.scrollHeight;
 }
@@ -1347,7 +1262,7 @@ function renderActs(actions){
   const bar=document.getElementById("acts");
   if(!actions?.length){bar.style.display="none";return;}
   bar.style.display="flex";
-  window._acts = actions;
+  window._acts=actions;
   bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="window._acts&&(document.getElementById('cin').value=window._acts[${i}]);send()">${esc(a)}</button>`).join("");
 }
 
@@ -1372,8 +1287,12 @@ async function send(){
   const url=extractUrl(text);
   if(url){
     const lid=nid();msgs.push({type:"loading",id:lid,status:"Fetching product profile…"});renderMsgs();
-    try{const d=await analyzeUrl(url);msgs=msgs.filter(m=>m.id!==lid);msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"general",verdict_line:`Product profile loaded: ${d.profile||"Profile generated."}`,full_analysis:"",legal_basis_cards:[],suggested_actions:[],next_steps:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});renderMsgs();}
-    catch(e){msgs=msgs.filter(m=>m.id!==lid);}
+    try{
+      const d=await analyzeUrl(url);
+      msgs=msgs.filter(m=>m.id!==lid);
+      msgs.push({role:"assistant",type:"response",id:nid(),data:{narrative:{verdict_type:"general",verdict_line:`Product profile loaded: ${d.profile||"Profile generated."}`,full_analysis:"",legal_basis_cards:[],suggested_actions:[],next_steps:[]},symbolic:{},scope_display:{},company_context:null,sources:[]}});
+      renderMsgs();
+    }catch(e){msgs=msgs.filter(m=>m.id!==lid);}
   }
   const lid=nid();msgs.push({type:"loading",id:lid,status:"Running symbolic engine…"});renderMsgs();
   try{
