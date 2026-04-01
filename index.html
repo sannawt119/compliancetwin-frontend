@@ -544,6 +544,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .rt-row-unk{background:rgba(245,158,11,.04);}
 .rt-row-unk .rt-dim-name{color:var(--txt);}
 
+/* ── FOLLOW-UP PROMPT CARD ────────────────────────────────── */
+.fu-card{background:var(--cloud0);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;box-shadow:var(--sh-xs);}
+.fu-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--txt4);margin-bottom:10px;}
+.fu-opts{display:flex;flex-direction:column;gap:8px;}
+.fu-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;border-radius:10px;border:1px solid var(--bdr);background:var(--cloud1);cursor:pointer;font-family:var(--font);text-align:left;transition:.15s;width:100%;}
+.fu-opt:hover{border-color:var(--bdr2);background:var(--blue-lt);transform:translateY(-1px);box-shadow:var(--sh-xs);}
+.fu-opt-context:hover{border-color:rgba(5,150,105,.3);background:rgba(5,150,105,.05);}
+.fu-opt-advance:hover{border-color:var(--bdr2);background:var(--blue-lt);}
+.fu-opt-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.fu-opt-title{font-size:12.5px;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.fu-opt-desc{font-size:11px;color:var(--txt3);line-height:1.5;}
+
 /* ── REASONING TRACE END ──────────────────────────────────── */
 
 /* ── INFO FOOTER ──────────────────────────────────────────── */
@@ -1602,9 +1614,32 @@ function renderComplianceResponse(data,msgId){
       ${lexHtml}
     </div>
     ${orderedIids.length ? renderReasoningTrace(msgId, orderedIids, allRes) : ""}
-    ${nsSec}
+    ${renderFollowUpCard()}
     ${renderSources(data.sources||[])}
   `;
+}
+
+// ── FOLLOW-UP PROMPT CARD ─────────────────────────────────────────
+function renderFollowUpCard(){
+  return`<div class="fu-card">
+    <div class="fu-label">Where would you like to go next?</div>
+    <div class="fu-opts">
+      <button class="fu-opt fu-opt-context" onclick="sendText('I would like to provide more context about our company and product to improve the analysis.')">
+        <div class="fu-opt-icon">🏢</div>
+        <div>
+          <div class="fu-opt-title">Add context or company profile</div>
+          <div class="fu-opt-desc">Share more about your product, markets, or intended use — or connect your company documents — for a more accurate and detailed analysis.</div>
+        </div>
+      </button>
+      <button class="fu-opt fu-opt-advance" onclick="sendText('Please advance the analysis to the obligations stage — what specific obligations apply and what evidence do I need to demonstrate compliance?')">
+        <div class="fu-opt-icon">📋</div>
+        <div>
+          <div class="fu-opt-title">Advance to obligations &amp; evidence</div>
+          <div class="fu-opt-desc">See the specific obligations that apply to your situation and the evidence you need to demonstrate compliance.</div>
+        </div>
+      </button>
+    </div>
+  </div>`;
 }
 
 function toggleRtCard(bodyId, arrId){
