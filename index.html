@@ -555,17 +555,35 @@ const nid=()=>"m"+(++midN);
 const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const fmt=s=>s?esc(s).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
 
-// Strip JSON artifact wrapper the backend sometimes injects into full_analysis
+// Strip JSON artifact wrapper the backend sometimes injects into full_analysis.
+// Strategy: find the first "N. " or "N) " numbered item and take everything from there.
 function sanitizeAnalysis(raw){
   if(!raw) return "";
   let s = String(raw).trim();
-  // Remove leading JSON object fragment: { "key": "value", ... followed by real text
-  // Pattern: starts with { and contains a JSON-like key before the actual content
-  s = s.replace(/^\s*\{[^}]*"[^"]+"\s*:\s*"[^"]*"[^}]*\}\s*/s, "");
-  // Remove trailing lone } that leaked from JSON
+
+  // Find first numbered list item: looks for \n1. or standalone 1. at start
+  const listStart = s.search(/(?:^|\n)\s*1[.)]\s+\S/);
+  if(listStart !== -1){
+    // Take from "1." onwards
+    const cut = s.slice(listStart).trim();
+    // If there was a preamble sentence before the list, prepend it
+    // by extracting the last plain sentence before the JSON/list block
+    const before = s.slice(0, listStart).trim();
+    // Strip JSON-like prefix from the preamble
+    const cleanBefore = before
+      .replace(/^\{[\s\S]*?"session_title"\s*:\s*"[^"]*"\s*/i, "")
+      .replace(/^\{[\s\S]*?"full_analysis"\s*:\s*"([^"]*)"\s*/i, "$1")
+      .replace(/^\{[^}]*\}\s*/s, "")
+      .replace(/^\{.*$/m, "")
+      .trim();
+    return (cleanBefore ? cleanBefore + "\n" : "") + cut;
+  }
+
+  // No numbered list found — just strip JSON wrapper
+  s = s.replace(/^\{[\s\S]*?"session_title"\s*:\s*"[^"]*"\s*/i, "");
+  s = s.replace(/^\{[\s\S]*?"full_analysis"\s*:\s*"([^"]*)"\s*/i, "$1");
+  s = s.replace(/^\{[^}]{0,400}\}\s*/s, "");
   s = s.replace(/\}\s*$/, "").trim();
-  // Remove a leading { ... } block that spans multiple lines but ends before the numbered list
-  s = s.replace(/^\{\s*(?:"[^"]*"\s*:\s*"[^"]*"\s*,?\s*)*\s*/s, "").trim();
   return s;
 }
 
@@ -573,7 +591,10 @@ function sanitizeAnalysis(raw){
 function fmtRich(raw){
   if(!raw) return "";
   const s = sanitizeAnalysis(raw);
-  const lines = s.split(/\n/);
+
+  // Split on real newlines; also split on \n literals in case they're escaped in the string
+  const lines = s.replace(/\\n/g, "\n").split(/\n/);
+
   let html = "";
   let inOl = false, inUl = false;
 
@@ -582,19 +603,35 @@ function fmtRich(raw){
     if(inUl){ html += "</ul>"; inUl = false; }
   };
 
-  const fmtLine = t => esc(t)
-    .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
-    .replace(/\*(.*?)\*/g,"<em>$1</em>");
+  const fmtLine = t => {
+    // Strip leading/trailing stray quotes or braces left from JSON
+    t = t.replace(/^["{\s]+/, "").replace(/[}"]+\s*$/, "").trim();
+    return esc(t)
+      .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g,"<em>$1</em>");
+  };
 
-  for(const raw of lines){
-    const line = raw.trim();
-    if(!line){ closeLists(); html += "<br>"; continue; }
+  for(let raw of lines){
+    // Strip leading quote artifact e.g. "1. foo → 1. foo
+    let line = raw.replace(/^["]+/, "").trim();
+    // Skip empty
+    if(!line || line === "}" || line === "{"){
+      if(!line) { closeLists(); }
+      continue;
+    }
 
-    // Numbered list: "1. " or "1) "
+    // Numbered list: "1. " or "1) " (with optional leading quote already stripped)
     const numMatch = line.match(/^(\d+)[.)]\s+(.+)$/);
     if(numMatch){
       if(!inOl){ closeLists(); html += '<ol class="rich-ol">'; inOl = true; }
-      html += `<li>${fmtLine(numMatch[2])}</li>`;
+      // Extract optional bold title before colon: **Title**: rest
+      const content = numMatch[2];
+      const boldTitle = content.match(/^\*\*(.+?)\*\*:\s*(.*)$/);
+      if(boldTitle){
+        html += `<li><strong>${esc(boldTitle[1])}</strong>: ${esc(boldTitle[2].replace(/[}"]+\s*$/,"").trim())}</li>`;
+      } else {
+        html += `<li>${fmtLine(content)}</li>`;
+      }
       continue;
     }
 
@@ -608,7 +645,8 @@ function fmtRich(raw){
 
     // Plain paragraph
     closeLists();
-    html += `<p class="rich-p">${fmtLine(line)}</p>`;
+    const cleaned = fmtLine(line);
+    if(cleaned) html += `<p class="rich-p">${cleaned}</p>`;
   }
   closeLists();
   return html;
@@ -765,6 +803,33 @@ function renderInfoFooter(n){
       <button class="if-btn" onclick="sendText('Can I connect our company documents?')">Connect company documents</button>
     </div>
   </div>`;
+}
+
+// Normalize malformed backend responses where full_analysis contains embedded JSON + list
+function normalizeBackendResponse(data){
+  if(!data) return data;
+  const n = data.narrative;
+  if(!n) return data;
+
+  // If full_analysis starts with a { it's a JSON-embedded blob — extract it
+  const fa = String(n.full_analysis || "").trim();
+  if(fa.startsWith("{")){
+    // Try to pull out the real preamble from inside full_analysis value
+    const innerMatch = fa.match(/"full_analysis"\s*:\s*"([^"]*)"/i);
+    const preamble = innerMatch ? innerMatch[1] : "";
+    // The list content comes after the last JSON key-value before the list
+    const listStart = fa.search(/(?:\n|")\s*"?\s*1[.)]\s+\S/);
+    const listContent = listStart !== -1 ? fa.slice(listStart).replace(/^["]+/,"").trim() : "";
+    n.full_analysis = [preamble, listContent].filter(Boolean).join("\n");
+  }
+
+  // If verdict_line also contains a JSON blob, clean it too
+  if((n.verdict_line || "").trim().startsWith("{")){
+    const m = (n.verdict_line || "").match(/"verdict_line"\s*:\s*"([^"]*)"/i);
+    if(m) n.verdict_line = m[1];
+  }
+
+  return data;
 }
 
 // ── BACKEND ───────────────────────────────────────────────────────
@@ -1367,7 +1432,7 @@ async function send(){
   }
   const lid=nid();msgs.push({type:"loading",id:lid,status:"Running symbolic engine…"});renderMsgs();
   try{
-    const data=await callBackend(text);
+    const data=normalizeBackendResponse(await callBackend(text));
     msgs=msgs.filter(m=>m.id!==lid);
     msgs.push({role:"assistant",type:"response",id:nid(),data});
     const n=data.narrative||{};
