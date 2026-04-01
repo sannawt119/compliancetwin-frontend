@@ -429,6 +429,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .dp-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--def);margin-bottom:4px;}
 .dp-text{font-size:11px;color:#4338ca;line-height:1.6;}
 
+/* ── RICH TEXT (numbered lists, bullets, paragraphs) ─────── */
+.rich-ol,.rich-ul{margin:6px 0 6px 18px;display:flex;flex-direction:column;gap:5px;}
+.rich-ol{list-style:decimal;}
+.rich-ul{list-style:disc;}
+.rich-ol li,.rich-ul li{font-size:12.5px;color:var(--txt2);line-height:1.65;padding-left:2px;}
+.rich-ol li strong,.rich-ul li strong{color:var(--txt);}
+.rich-p{font-size:13px;color:var(--txt2);line-height:1.78;margin:4px 0;}
+.rich-p:empty{display:none;}
+
 /* ── INFO FOOTER ──────────────────────────────────────────── */
 .info-footer{margin-top:10px;padding:12px 16px;border-radius:10px;border:1px solid var(--bdr);background:var(--cloud1);}
 .if-note{font-size:12px;color:var(--txt3);line-height:1.65;margin-bottom:10px;}
@@ -545,6 +554,66 @@ const nid=()=>"m"+(++midN);
 // ── UTILS ─────────────────────────────────────────────────────────
 const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const fmt=s=>s?esc(s).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"):"";
+
+// Strip JSON artifact wrapper the backend sometimes injects into full_analysis
+function sanitizeAnalysis(raw){
+  if(!raw) return "";
+  let s = String(raw).trim();
+  // Remove leading JSON object fragment: { "key": "value", ... followed by real text
+  // Pattern: starts with { and contains a JSON-like key before the actual content
+  s = s.replace(/^\s*\{[^}]*"[^"]+"\s*:\s*"[^"]*"[^}]*\}\s*/s, "");
+  // Remove trailing lone } that leaked from JSON
+  s = s.replace(/\}\s*$/, "").trim();
+  // Remove a leading { ... } block that spans multiple lines but ends before the numbered list
+  s = s.replace(/^\{\s*(?:"[^"]*"\s*:\s*"[^"]*"\s*,?\s*)*\s*/s, "").trim();
+  return s;
+}
+
+// Rich formatter: renders numbered lists as <ol>, bullet lists as <ul>, bold, line breaks
+function fmtRich(raw){
+  if(!raw) return "";
+  const s = sanitizeAnalysis(raw);
+  const lines = s.split(/\n/);
+  let html = "";
+  let inOl = false, inUl = false;
+
+  const closeLists = () => {
+    if(inOl){ html += "</ol>"; inOl = false; }
+    if(inUl){ html += "</ul>"; inUl = false; }
+  };
+
+  const fmtLine = t => esc(t)
+    .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g,"<em>$1</em>");
+
+  for(const raw of lines){
+    const line = raw.trim();
+    if(!line){ closeLists(); html += "<br>"; continue; }
+
+    // Numbered list: "1. " or "1) "
+    const numMatch = line.match(/^(\d+)[.)]\s+(.+)$/);
+    if(numMatch){
+      if(!inOl){ closeLists(); html += '<ol class="rich-ol">'; inOl = true; }
+      html += `<li>${fmtLine(numMatch[2])}</li>`;
+      continue;
+    }
+
+    // Bullet list: "- " or "• "
+    const bulMatch = line.match(/^[-•]\s+(.+)$/);
+    if(bulMatch){
+      if(!inUl){ closeLists(); html += '<ul class="rich-ul">'; inUl = true; }
+      html += `<li>${fmtLine(bulMatch[1])}</li>`;
+      continue;
+    }
+
+    // Plain paragraph
+    closeLists();
+    html += `<p class="rich-p">${fmtLine(line)}</p>`;
+  }
+  closeLists();
+  return html;
+}
+
 const autoH=el=>{el.style.height="auto";el.style.height=Math.min(el.scrollHeight,100)+"px";};
 const onKey=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
 const setQ=q=>{document.getElementById("cin").value=q;document.getElementById("cin").focus();};
@@ -1114,7 +1183,7 @@ function renderComplianceResponse(data,msgId){
   if(vtype==="preliminary") return renderPreliminary(n);
 
   if(vtype==="general"||vtype==="context_update")
-    return`<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmt(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
+    return`<div class="vbub ${vbubCls(vtype)}">${vbadge(vtype)}<div class="verdict-line">${fmt(vline)}</div>${full?`<div class="full-a">${fmtRich(full)}</div>`:""}</div>${renderSources(data.sources||[])}`;
 
   const allRes=sym.applicability_results||{};
   const iids=Object.keys(allRes);
@@ -1122,8 +1191,10 @@ function renderComplianceResponse(data,msgId){
   const vcCls={applies:"v-yes",does_not_apply:"v-no",cannot_determine:"v-unk",deferred:"v-def",prohibited:"v-no"}[vtype]||"v-info";
 
   const paras=(full||"").split(/\n\n+/);
-  const firstPara=paras[0]||"";
-  const restPara=paras.slice(1).join("\n\n");
+  const firstParaRaw=sanitizeAnalysis(paras[0]||"");
+  const restParaRaw=sanitizeAnalysis(paras.slice(1).join("\n\n"));
+  const firstPara=fmtRich(firstParaRaw);
+  const restPara=fmtRich(restParaRaw);
 
   const EURLEX_DEFAULTS={
     GDPR:      {label:"GDPR — Regulation (EU) 2016/679",       url:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679"},
@@ -1204,8 +1275,8 @@ function renderComplianceResponse(data,msgId){
     <div class="verdict-card ${vcCls}">
       ${vbadge(vtype)}
       <div class="vc-verdict-line">${fmt(vline)}</div>
-      <div class="vc-analysis">${fmt(firstPara)}</div>
-      ${restPara?`<div class="vc-more" id="vc-more-${msgId}">${fmt(restPara)}</div>
+      <div class="vc-analysis">${firstPara}</div>
+      ${restPara?`<div class="vc-more" id="vc-more-${msgId}">${restPara}</div>
       <button class="vc-expand" id="vc-exp-${msgId}" onclick="toggleVcMore('${msgId}')">Read full analysis ↓</button>`:""}
       ${lexHtml}
       ${iids.length?`<div class="vc-sep"></div>
