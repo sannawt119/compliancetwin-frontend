@@ -557,6 +557,11 @@ const fmt=s=>s?esc(s).replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\
 const autoH=el=>{el.style.height="auto";el.style.height=Math.min(el.scrollHeight,100)+"px";};
 const onKey=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
 const setQ=q=>{document.getElementById("cin").value=q;document.getElementById("cin").focus();};
+function stageAsk(idx){
+  const q=window._stageQs&&window._stageQs[idx];
+  if(q){document.getElementById("cin").value=q;send();}
+}
+function sendText(t){document.getElementById("cin").value=t;send();}
 const toggleEl=id=>document.getElementById(id)?.classList.toggle("open");
 
 function fmtDate(iso){
@@ -609,7 +614,8 @@ function renderIndicative(n){
       <span class="sig-reason">${esc(b.reason||"")}</span>
     </div>`).join("");
   const docItems=docs.map((d,i)=>`<div class="stage-ask-item"><div class="stage-ask-num">${i+1}</div>${esc(d)}</div>`).join("");
-  const qItems=qs.map((q,i)=>`<div class="stage-q-item"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
+  window._stageQs=qs;
+  const qItems=qs.map((q,i)=>`<div class="stage-q-item" style="cursor:pointer;" onclick="stageAsk(${i})"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
   return`<div class="stage-wrap">
     <div class="stage-bub">
       <div class="stage-badge">◎ Indicative assessment</div>
@@ -639,7 +645,8 @@ function renderGathering(n){
       <span class="sig-signal ${signalCls(b.signal)}">${esc(b.signal||"")}</span>
       <span class="sig-reason">${esc(b.reason||"")}</span>
     </div>`).join("");
-  const qItems=qs.map((q,i)=>`<div class="stage-q-item"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
+  window._stageQs=qs;
+  const qItems=qs.map((q,i)=>`<div class="stage-q-item" style="cursor:pointer;" onclick="stageAsk(${i})"><div class="stage-q-num">${i+1}</div>${esc(q)}</div>`).join("");
   return`<div class="stage-wrap">
     <div class="stage-bub">
       <div class="stage-badge">◎ Gathering information</div>
@@ -1328,7 +1335,8 @@ function renderActs(actions){
   const bar=document.getElementById("acts");
   if(!actions?.length){bar.style.display="none";return;}
   bar.style.display="flex";
-  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="setQ(${JSON.stringify(a)});send()">${esc(a)}</button>`).join("");
+  window._acts = actions;
+  bar.innerHTML=actions.map((a,i)=>`<button class="act ${i===0?"pri":"sec"}" onclick="window._acts&&(document.getElementById('cin').value=window._acts[${i}]);send()">${esc(a)}</button>`).join("");
 }
 
 function updateHdr(t){
